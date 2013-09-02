@@ -2,7 +2,7 @@
 
 set -e
 
-FROM=`whoami`@science.ru.nl
+FROM=`whoami`@student.ru.nl
 BCC="$FROM"
 
 USERLIST="${0%/*}/userlist"
@@ -49,8 +49,7 @@ for file in "$@"; do
 		exit 1
 	fi
 
-	SUBJECT="BFCA-IBC001-1A-2011: [A&D] Feedback $ASSIGNMENT"
-
+	SUBJECT="NWI-IBC006-2012-KW1-V: [FP] Feedback $ASSIGNMENT"
 	MIME="Content-Type: text/plain; charset=utf-8"
 	TO=`for id in $TOID; do
 		(grep "$id" "$USERLIST" || echo >&2 "$id not registered") | cut -f2

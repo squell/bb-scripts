@@ -27,3 +27,9 @@ done
 
 echo "${1:+$1/}grades.csv" is ready for manual upload
 
+MIME="Content-Type: text/plain; charset=utf-8"
+for fulldir in "${1:+$1/}"s*; do
+	dir="${fulldir##*/}"
+	pr -F "${fulldir}/${dir}.txt"
+done | mail -a "$MIME" -n -s "feedback `pwd` $1" mschool 
+
