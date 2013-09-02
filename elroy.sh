@@ -4,11 +4,10 @@
 # en het download van BB (als je wil)
 
 declare -A email
-email[marc]="mschool@science.ru.nl"
-email[ko]="kostoffelen@student.ru.nl"
+email[marc]="m.schoolderman@student.science.ru.nl"
 email[pol]="p.vanaubel@student.science.ru.nl"
 
-SUBJECT="[A&D]"
+SUBJECT="[FP]"
 
 set -e
 
@@ -58,22 +57,37 @@ antifmt.sh
 
 echo 
 echo Trial compilation
-trialc.sh s* 
+trial.sh s* > /dev/null
+
+echo Received `find s* -name "*.icl" | wc -l` programs by `ls -d s* | wc -l` users.
+echo Found `find s* -name "*.ERROR" | wc -l` compilation goofs. Tsk tsk.
+echo Tested `grep 'Passed after [0-9]\+ tests' s*/gast_results.txt | wc -l` programs with flying colors.
+echo Had to put `grep '*** killed' s*/gast_results.txt | wc -l` out of their misery.
+rm -f s*/Clean\ System\ Files/*
+rmdir s*/Clean\ System\ Files
 
 echo Groupcheck 
 groepjes.sh s* | grep "<with>" || true
 
 echo
+echo Fraud check 1
+plaggen.sh s* > /dev/null
+
+echo Fraud check 2
+dupes.sh s* > /dev/null
+
+echo
 echo Balancing workload 
 
-hak2.sh "${!email[@]}" 
+hak2.sh "${!email[@]}"
 
-humor=$(iching.sh)
+humor=$(boeket.sh)
+#humor=$(iching.sh)
 for ta in "${!email[@]}"
 do
     cp grades.csv "$ta"
     cp userlist "$ta"
-    cp -n feedback.sh grades.sh "$ta"
+    cp -n hanno.sh grades.sh "$ta"
     sed < mailto.sh > "${ta}/mailto.sh" "/^FROM=/c\
 FROM=${email[$ta]}"
     chmod +x "${ta}"/mailto.sh
