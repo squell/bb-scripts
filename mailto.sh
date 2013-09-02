@@ -2,7 +2,7 @@
 
 set -e
 
-FROM=`whoami`@student.ru.nl
+FROM=`whoami`@science.ru.nl
 BCC="$FROM"
 
 USERLIST="${0%/*}/userlist"
