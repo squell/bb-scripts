@@ -1,0 +1,108 @@
+=============================
+VOOR GEBRUIK AANPASSEN.
+
+1. mailto.sh
+
+De 'SUBJECT' regel (zoek op!), anders raken je studenten in de war.
+Fake het alsof de feedback vanuit BlackBoard komt.
+
+2. getsch.sh
+
+Bovenaan: "BBUSER" en "BBCOURSEID"
+
+3. verdeel.sh: 
+
+Bovenaan: SA info en mail-tag.
+
+4. bouw 'catdoc':
+
+ http://ftp.wagner.pp.ru/pub/catdoc/catdoc-0.94.2.tar.gz
+
+...of haal in antifmt.sh het gedeelte wat catdoc nodig heeft weg.
+
+=============================
+DISCLAIMER
+
+Hierna zou je in normaal gebruik genoeg moeten hebben aan 'verdeel.sh' en 'feedback.sh'. Gebruik de rest alleen als je weet wat ze doen.
+
+Als je dit op je eigen systeem wil draaien is dat op eigen risico. De scripts zijn bedoeld voor op lilo1/lilo2. Op elke andere recente Debian/Ubuntu zouden ze het ook moeten doen. Andere GNU distro's: untried (het "mail" commando is de zwakke schakel)
+
+BSD/OS X: werkt niet atm. verdeel.sh gebruikt een paar GNU extensies in sed; porten zou wel kunnen, maar meh. Voor 't feedbacken is wederom 'mail' de weak link.
+
+Als dit erg gewenst is kan ik voor'n tegenprestatie de scripts wél porten.
+
+=============================
+NOG EEN DISCLAIMER
+
+Het BlackBoard-gedeelte van deze scripts communiceren met'n website door, basically, HTML te parseren met regexes. Just cross your fingers.
+
+=============================
+MINI DOC
+
+De scripts die je nodig hebt (verdeel.sh, feedback.sh) zijn semi-interactief en bedoeld om gebruiksvriendelijk te zijn. Meestal een kwestie van "gewoon draaien", dus.
+
+[verdeel.sh] 
+Regelt de workflow voor het nakijkproces. begint met't downloaden vanuit Bb, eindigt met't versturen van werk aan studentassistenten; compleet met de scripts die ze nodig hebben om feedback te kunnen geven. 
+
+Als het misgaat zit het probleem misschien in de communicatie met BlackBoard; een alternatief is om met de hand de .zip uit Bb trekken en in de working directory zetten. Als het script een .zip vind probeert het namelijk niet zelf iets te downloaden. Meer waarschijnlijk is dat het probleem in BlackBoard zelf zit; in het verleden hebben we wel eens een submission gehad die roet in het eten gooide; als we die wisten deed Bb het weer. Onthoudt, als Bb goed werkte had je deze scripts niet nodig gehad.
+
+Belangrijke onderdelen:
+
+  - bblogin2: logt in op Bb met wget, nothing else.
+
+  - getsch: scraper/downloader; produceert ook een stub grades.csv (nodig voor feedback)
+      * getsch.sh users: produceer een userlist; 
+      * getsch.sh all  : haal ook reeds nagekeken zooi binnen
+
+  - bbfix: correct uitpakken van de zip de je van Bb krijgt
+      * dingen die niet herkend werden worden in 'attic' geplaatst
+      * elke student wordt 1 dir, met een response file van Bb erbij
+
+  - antifmt: cleanup
+      * pakt zips,rars,7z,xz,tarballs uit (maakt er een log van)
+      * probeert pdf/doc/docx/rtf/odt naar text te converten 
+        ! hiervoor heb je 'catdoc' nodig
+      * delete overbodige/riskante binary data
+
+  - trialc: voert'n trialcompilatie uit met gcc/javac
+      - jarify: probeer een .jar te maken van .java bestanden; gokt wat de juiste main() is.
+
+  - groepjes.sh: probeert groepjes te achterhalen
+      * mensen moet hiervoor de studentnummers vermelden bij het submitten
+        (of in de uitwerking)
+      * doet niets anders dan extra "Name: " regels genereren
+
+  - hak2: verdeelt nakijkwerk in stapels
+
+  - iching: ter inspiratie.
+
+  - boeket: iets voor in je .bash_profile
+
+
+[feedback.sh]
+Verstuurt den feedback en genereert een grades.csv.
+
+De grades.csv moet je handmatig uploaden naar Bb, helaas. 
+
+Het kan geen kwaad dit meerdere keren te draaien.
+
+  - mailto: script dat 'n responsefile vertaalt in een emailtje 
+     * meerdere recipients = meerdere "Name:" regels toevoegen.
+     * cijfers geven door "Current Grade" aan te passen
+     * feedback begin je onderaan met een "Feedback:" header.
+
+     * werkt op studentnummer; de lookuptable hiervoor staat in "userlist" 
+       ("getsch.sh users > userlist" wordt gedraaid als die niet bestaat)
+
+     * je krijgt zelf BCC's van alle feedback. valt uit zetten, but don't.
+
+  - grades.sh: verzamelt de cijfers tot een .csv
+
+[pol.sh]
+Een feedback macro *postprocessor*; als je vaak jezelf zit te herhalen in feedback wil ik dit wel uitleggen. Eigenlijk een gefaald experiment.
+
+=============================
+PRAISE AND BLAME
+
+m.schoolderman -at- student.science.ru.nl
+
