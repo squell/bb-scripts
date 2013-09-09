@@ -19,7 +19,8 @@ FILTER=" ()-"
 
 unzip -q -o -d "$TEMP" "$1"
 
-for bbfile in `ls "$TEMP"`; do
+for bbfile in "$TEMP"/*; do
+	bbfile="${bbfile#*/}"
 	basename="${bbfile#*attempt_20[0-9-]*_}"
 	studnr="${bbfile#*_s}"
 	studnr="${studnr%%[^0-9]*}"
