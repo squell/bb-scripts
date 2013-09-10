@@ -53,7 +53,7 @@ for file in "$@"; do
 
 	MIME="Content-Type: text/plain; charset=utf-8"
 	TO=`for id in $TOID; do
-		(grep "$id" "$USERLIST" || echo >&2 "$id not registered") | cut -f2
+		(grep "$id" "$USERLIST" || echo >&2 "$id not registered") | cut -f2 | tr -d '\r'
 	done`
 
 	if [ -e "${file}.sent" ]; then
