@@ -52,7 +52,7 @@ for file in "$@"; do
 	SUBJECT="NWI-IBC006-2012-KW1-V: [FP] Feedback $ASSIGNMENT"
 	MIME="Content-Type: text/plain; charset=utf-8"
 	TO=`for id in $TOID; do
-		(grep "$id" "$USERLIST" || echo >&2 "$id not registered") | cut -f2
+		(grep "$id" "$USERLIST" || echo >&2 "$id not registered") | cut -f2 | tr -d '\r'
 	done`
 
 	if [ -e "${file}.sent" ]; then
