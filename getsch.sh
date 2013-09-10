@@ -6,7 +6,8 @@
 # reverse-engineering informatie van BlackBoard;
 
 BBUSER=s0620866
-BBCOURSEID=77118
+BBCOURSEID=91125 # FP 2013
+#BBCOURSEID=77118 # FP 2012
 #BBCOURSEID=53637 # A&D 2011
 #BBCOURSEID=53641 # FP 2011
 #BBCOURSEID=41980 # FP 2010
@@ -29,7 +30,7 @@ WGET="wget --output-document=- --quiet --no-check-certificate --load-cookies bb.
 
 if [ "$1" == "users" ]; then
     echo 1>&2 Only showing list of studentnumbers and email addresses
-    $WGET "${BBUSERS}&showAll=true" | sed -n '/scope="row"/s/.*\([sue][0-9]\{6,7\}\).*/\1/p;/@/s/[[:space:]]*\([[:print:]]\+@[[:print:]]\+[.][[:print:]]\+\)<.td>.*/\1/p' | sed -n 'h;n;x;G;s/\n/\t/p'
+    $WGET "${BBUSERS}&showAll=true" | sed 's/<img[^>]*>//g;/^[[:space:]]*$/d' | sed -n '/profileCardAvatarThumb/{N;s/.*\([sue][0-9]\{6,7\}\).*/\1/p};/@/s/[[:space:]]*\([[:print:]]\+@[[:print:]]\+[.][[:print:]]\+\)<.td>.*/\1/p' | sed -n 'h;n;x;G;s/\n/\t/p'
     exit
 fi
 
