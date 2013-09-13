@@ -5,7 +5,8 @@
 
 declare -A email
 email[marc]="m.schoolderman@student.science.ru.nl"
-email[pol]="p.vanaubel@student.science.ru.nl"
+email[thom]="functioneelprogrammereniscool@thomwiggers.nl"
+email[tom]="mijnemailadresiscooler@tomsanders.nl"
 
 SUBJECT="[FP]"
 

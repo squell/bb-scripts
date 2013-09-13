@@ -49,7 +49,7 @@ for file in "$@"; do
 		exit 1
 	fi
 
-	SUBJECT="NWI-IBC006-2012-KW1-V: [FP] Feedback $ASSIGNMENT"
+	SUBJECT="NWI-IBC006-2013-KW1-V: [FP] Feedback $ASSIGNMENT"
 	MIME="Content-Type: text/plain; charset=utf-8"
 	TO=`for id in $TOID; do
 		(grep "$id" "$USERLIST" || echo >&2 "$id not registered") | cut -f2 | tr -d '\r'
