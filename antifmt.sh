@@ -21,7 +21,7 @@ unpack[application/x-7z-compressed]=de.7z
 unpack[application/x-rar]=de.rar
 
 # unzip & unrar
-echo UnZIP\(`ls s*/*.zip 2> /dev/null | wc -w`\)/UnRAR\(`ls s*/*.rar 2> /dev/null | wc -w`\)/Un7Z\(`ls s*/*.7z 2> /dev/null | wc -w`\)/UnTAR\(`ls s*/*.tar* s*/*.tgz 2> /dev/null | wc -w`\) nested files
+echo UnZIP\(`ls s*/*.zip 2> /dev/null | wc -l`\)/UnRAR\(`ls s*/*.rar 2> /dev/null | wc -l`\)/Un7Z\(`ls s*/*.7z 2> /dev/null | wc -l`\)/UnTAR\(`ls s*/*.tar* s*/*.tgz 2> /dev/null | wc -l`\) nested files
 for zip in s*/*.zip s*/*.rar s*/*.7z; do
 	if [ ! -e "$zip" ]; then continue; fi
 	#7z e -y -o"${zip%/*}" "$zip" > "${zip}.contents"
@@ -43,13 +43,13 @@ done
 #perl -pi -e 's/\r\n?/\n/g' s*/*.txt s*/*.[di]cl s/*.[Cc]*
 
 # unpdfize stuff
-echo Extracting text from PDF files \(`ls s*/*.pdf 2> /dev/null | wc -w`\)
+echo Extracting text from PDF files \(`ls s*/*.pdf 2> /dev/null | wc -l`\)
 for file in s*/*.pdf; do
 	[ "$file" != "s*/*.pdf" ] && pdftotext -layout "$file"
 done
 
 # complain about word
-echo Bashing text out of Word files \(`ls s*/*.doc s*/*.rtf s*/*.docx s*/*.odt 2> /dev/null | wc -w`\)
+echo Bashing text out of Word files \(`ls s*/*.doc s*/*.rtf s*/*.docx s*/*.odt 2> /dev/null | wc -l`\)
 for doc in doc rtf; do
     for file in s*/*.$doc; do
 	[ "$file" != "s*/*.$doc" ] && $CATDOC "${file}" > "${file%%.$doc}".txt
