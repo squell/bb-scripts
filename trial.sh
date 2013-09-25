@@ -2,7 +2,7 @@
 
 # test uitwerkingen; voer Gast-tests uit
 
-UITWERKINGEN=$HOME/FP2012/Uitwerkingen
+UITWERKINGEN=$HOME/FP2013/Uitwerkingen
 CLEANDIR="$HOME/Clean/clean64"
 LIB="${CLEANDIR}/lib"
 CLM="${CLEANDIR}/bin/clm -h 64m -s 8m"
