@@ -5,9 +5,10 @@
 
 EDITOR=vi
 
-VAR='^\$\([[:alnum:][:space:]]\+\)$'
+VAR='^\(\$[[:alnum:][:space:]]\+\)'
 TEMP=`mktemp`
-grep -ho "$VAR" "$@" | sort -u > "$TEMP"
+sed "/${VAR}:$/",'/^\$$/!d;/^\$/{s/://;/\$$/d}' "$@" >> "$TEMP"
+grep -ho "${VAR}$" "$@" | grep -Fvxf "$TEMP" - | sort -u >> "$TEMP"
 $EDITOR "$TEMP"
-sed -i -e "$(sed "s:$VAR:"'\n/^\$\1$/c:;s/$/\\/;${p;s/.*/\n#/}' "$TEMP")" "$@"
+sed -i -e "/${VAR}:$/d;/^\$$/s///;$(sed "s:${VAR}$:"'\n/^\1$/c:;s/$/\\/;$s/$/\n\n#/' "$TEMP")" "$@"
 rm -f "$TEMP"
