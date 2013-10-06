@@ -37,7 +37,7 @@ for file in "$@"; do
 	TOID=`sed -n '/^Name:/s/.*\(s[0-9]\{7\}\).*/\1/p' "$file"`
 	#TOID=`grep -o '\<s\?[0-9]\{7\}\>' "$file" | tr -d 's' | sort -u`
 	#TOID=`grep -ohI '\<s\?[0-9]\{7\}\>' "${file%%/*}"/* | tr -d 's' | sort -u`
-	GRADE=`sed -n '/^Current Grade:/s///p' "$file"`
+	GRADE=`sed -n '/^Current Grade:[[:space:]]*/s///p' "$file"`
 
 	if [ "$GRADE" = "Not Yet Graded" ] || ! grep -q "Feedback:" "$file"; then
 		echo "$file" grading not finished, stopping >& 2
