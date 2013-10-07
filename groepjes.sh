@@ -38,8 +38,8 @@ for dir in "$@"; do
 	# 3) select any studentnr's in any submitted file
 
 	#TOID=`sed -n '/Name:/s/.*\(s[0-9]\+\).*/\1/p' "$file"`
-	#TOID=`grep -o '\<s\?[0-9]\{7\}\>' "$file" | tr -d 's' | sort -u`
-	TOID=`grep -ohI '\<s\?[0-9]\{7\}\>' "${file%%/*}"/* | tr -d 's' | sort -u`
+	#TOID=`grep -o '\<[sS]\?[0-9]\{7\}\>' "$file" | tr -d 'sS' | sort -u`
+	TOID=`grep -ohI '\<[sS]\?[0-9]\{7\}\>' "${file%%/*}"/* | tr -d 'sS' | sort -u`
 	for id in $TOID; do
 		grep "$id" "$USERLIST" | cut -f1,2 | tr '\t\n' '  ' | sed 's/@[[:print:]]*\>//g'
 	done | sed 's/[^0-9] \</&<with> /g'
