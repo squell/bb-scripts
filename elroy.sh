@@ -60,15 +60,15 @@ echo
 echo Trial compilation
 trial.sh s* > /dev/null
 
-echo Received `find s* -name "*.icl" | wc -l` programs by `ls -d s* | wc -l` users.
+echo Groupcheck 
+groepjes.sh s* | grep "<with>" || true
+
+echo Received `find s* -name "*.icl" | wc -l` programs in `ls -d s* | wc -l` submissions by `cat s*/s*.txt | grep -hc ^Name:` students.
 echo Found `find s* -name "*.ERROR" | wc -l` compilation goofs. Tsk tsk.
 echo Tested `grep 'Passed after [0-9]\+ tests' s*/gast_results.txt | wc -l` programs with flying colors.
 echo Had to put `grep '*** killed' s*/gast_results.txt | wc -l` out of their misery.
 rm -f s*/Clean\ System\ Files/*
 rmdir s*/Clean\ System\ Files
-
-echo Groupcheck 
-groepjes.sh s* | grep "<with>" || true
 
 echo
 echo Fraud check 1
@@ -88,6 +88,7 @@ for ta in "${!email[@]}"
 do
     cp grades.csv "$ta"
     cp userlist "$ta"
+    cp pol.sh "$ta"
     cp -n hanno.sh grades.sh "$ta"
     sed < mailto.sh > "${ta}/mailto.sh" "/^FROM=/c\
 FROM=${email[$ta]}"
