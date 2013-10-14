@@ -57,7 +57,8 @@ gen_dcl()
 
 for dir in "$@"; do
 	rm -f "$dir/gast_results.txt"
-	for f in `ls "$dir"/*.icl 2> /dev/null`; do
+	for f in "$dir"/*.icl; do
+		[ -f "$f" ] || break
 		#grep -q -e "^implementation" -e '^Start' "$f" || (echo ; echo "Start = undef // ADDED BY trial.sh" >> "$f")
 		if $CLM -c -I "$dir" -I "$UITWERKINGEN" "${f%.icl}" 2> "$f".ERROR; then
 			rm "$f".ERROR
