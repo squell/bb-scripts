@@ -65,8 +65,8 @@ groepjes.sh s* | grep "<with>" || true
 
 echo Received `find s* -name "*.icl" | wc -l` programs in `ls -d s* | wc -l` submissions by `cat s*/s*.txt | grep -hc ^Name:` students.
 echo Found `find s* -name "*.ERROR" | wc -l` compilation goofs. Tsk tsk.
-echo Tested `grep 'Passed after [0-9]\+ tests' s*/gast_results.txt | wc -l` programs with flying colors.
-echo Had to put `grep '*** killed' s*/gast_results.txt | wc -l` out of their misery.
+echo Tested `cat s*/gast_results.txt | grep 'Passed after [0-9]\+ tests' | wc -l` programs with flying colors.
+echo Had to put `cat s*/gast_results.txt | grep '*** killed' | wc -l` out of their misery.
 rm -f s*/Clean\ System\ Files/*
 rmdir s*/Clean\ System\ Files
 
