@@ -98,8 +98,36 @@ Het kan geen kwaad dit meerdere keren te draaien.
 
   - grades.sh: verzamelt de cijfers tot een .csv
 
+*** EXPERIMENTEEL ***
+
+Er zijn 2 experimentele scriptjes die op dit moment niet automatisch in de
+"feedback" workflow zitten, maar dat mogelijk wel komen en nuttig zijn:
+
+[upload.sh]
+Upload een grades.csv naar BlackBoard.
+
+Doe dit de eerste keer vooral zelf, met de hand, door in te loggen op
+het grade center, zodat je weet wat er achter de schermen gebeurt.
+
+Dit script is interactief: het presenteert je met een confirmatiescherm
+waarna je moet aangeven dat alles inderdaad klopt. Als alles daarna goed
+is krijg je te zien hoeveel cijfers er daadwerkelijk zijn geupload.
+
 [pol.sh]
-Een feedback macro *postprocessor*; als je vaak jezelf zit te herhalen in feedback wil ik dit wel uitleggen. Eigenlijk een gefaald experiment.
+Een feedback macro *postprocessor*. Laat ergens in je feedback snippets
+achter van de vorm: (alles op een nieuwe regel)
+
+$foo:
+Foo!
+$
+
+Dan kan je op elke andere plek 
+
+$foo
+
+opschrijven, en wordt dit vervangen met "Foo!". Je kan ook dit soort macros achteraf definieren; pol.sh presenteert je dan met een editor om dit te doen.
+
+pol.sh wordt niet automatisch aangeroepen op het moment
 
 =============================
 PRAISE AND BLAME
