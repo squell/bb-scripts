@@ -37,7 +37,7 @@ review=`$CURL --form "$NONCE" --form "course_id=_${BBCOURSEID}_1" --form "action
 
 echo "Please verify this information:"
 echo "-----"
-echo "$review" | sed '\:table:,\:/table:!d' | html2text
+echo "$review" | tee review | sed '\:<table[^>]*>:,\:</table>:!d' | html2text
 echo "-----"
 
 select check in "This is expected" "WTF?"; do
