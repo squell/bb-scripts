@@ -89,6 +89,7 @@ do
     cp grades.csv "$ta"
     cp userlist "$ta"
     cp pol.sh "$ta"
+    cp bblogin2.sh upload.sh "$ta"
     cp -n hanno.sh grades.sh "$ta"
     sed < mailto.sh > "${ta}/mailto.sh" "/^FROM=/c\
 FROM=${email[$ta]}"

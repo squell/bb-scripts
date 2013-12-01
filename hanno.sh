@@ -26,6 +26,8 @@ for fulldir in "${1:+$1/}"s*; do
 done
 
 echo "${1:+$1/}grades.csv" is ready for manual upload
+echo "Use your Bb credentials:"
+"$MYDIR"/upload.sh "${1:+$1/}grades.csv"
 
 MIME="Content-Type: text/plain; charset=utf-8"
 for fulldir in "${1:+$1/}"s*; do
