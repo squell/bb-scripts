@@ -73,6 +73,7 @@ for ta in "${!email[@]}"
 do
     cp grades.csv "$ta"
     cp userlist "$ta"
+    cp -n bblogin2.sh upload.sh "$ta"
     cp -n feedback.sh grades.sh "$ta"
     sed < mailto.sh > "${ta}/mailto.sh" "/^FROM=/c\
 FROM=${email[$ta]}"

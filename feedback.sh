@@ -25,5 +25,5 @@ for fulldir in "${1:+$1/}"s*; do
 	"$MYDIR"/grades.sh "${fulldir}/${dir}.txt" >> "${1:+$1/}grades.csv"
 done
 
-echo "${1:+$1/}grades.csv" is ready for manual upload
-
+echo Supply your Bb login, or upload "${1:+$1/}grades.csv" manually.
+"$MYDIR"/upload.sh "${1:+$1/}grades.csv"
