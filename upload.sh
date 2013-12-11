@@ -3,9 +3,9 @@
 # Blackboard 9.1 upload-grades-csv script
 # - experimental!
 # - since we upload multipart data, this script uses curl, not wget
+# - might break if curl and wget cookiejars become incompatible
 
 BBCOURSEID=91125 # FP 2013
-#BBCOURSEID=91131 # FP 2013 KI
 
 # if this next variable is set, you will not be asked for your login
 #BBUSER=...
@@ -25,6 +25,7 @@ BBUPLOAD="https://blackboard.ru.nl/webapps/gradebook/do/instructor/uploadGradebo
 
 CURL="curl --silent --cookie bb.cookie --cookie-jar bb.cookie"
 
+export BBCOURSEID
 "${0%/*}"/bblogin2.sh "$BBUSER" 1>&2 || exit 1
 
 nonce() {

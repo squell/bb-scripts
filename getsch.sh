@@ -5,17 +5,11 @@
 # Met veel dank aan Ruben Nijveld en Marlon Baeten voor hun
 # reverse-engineering informatie van BlackBoard;
 
-BBUSER=s0620866
-BBCOURSEID=91125 # FP 2013
-#BBCOURSEID=91131 # FP 2013 KI
-#BBCOURSEID=77118 # FP 2012
-#BBCOURSEID=53637 # A&D 2011
-#BBCOURSEID=53641 # FP 2011
-#BBCOURSEID=41980 # FP 2010
-#BBCOURSEID=34652 # FP 2009
-#BBCOURSEID=27790 # FP 2008
-#BBCOURSEID=22533 # MLW 2007
-#BBCOURSEID=27621 # MLW 2008
+# Niet nodig om hier te zetten (maar kan ook geen kwaad)
+BBUSER=...
+
+# Voor het geval je getsch.sh met de hand wil draaien, edit deze regel!
+let ${BBCOURSEID:=91125} # FP 2013 
 
 BBLOGIN="https://blackboard.ru.nl/webapps/login/"
 BBGETTOKEN="https://blackboard.ru.nl/webapps/login/?action=relogin"

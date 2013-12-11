@@ -1,16 +1,25 @@
 #! /bin/bash
 
-# regelt de verdeling over de assistenten,
-# en het download van BB (als je wil)
+# ---------------------- configuratie ------------------------#
+
+BBUSER=s0620866
+BBCOURSEID=91125
 
 declare -A email
 email[marc]="mschool@science.ru.nl"
 email[ko]="kostoffelen@student.ru.nl"
 email[pol]="p.vanaubel@student.science.ru.nl"
 
-SUBJECT="[A&D]"
+SUBJECT="1314 Functioneel Programmeren (NWI-IBC006-2013-KW1-V):"
+
+# ---------------------- end of config -----------------------#
+
+# dit script regelt de verdeling over de assistenten,
+# en het downloaden van BB (dat laatste kan ook met de hand)
 
 set -e
+
+export BBUSER BBCOURSEID
 
 MYDIR="${0%/*}"
 PATH="${PATH}:${MYDIR}"
@@ -73,11 +82,19 @@ for ta in "${!email[@]}"
 do
     cp grades.csv "$ta"
     cp userlist "$ta"
-    cp -n bblogin2.sh upload.sh "$ta"
+    cp -n bblogin2.sh "$ta"
     cp -n feedback.sh grades.sh "$ta"
-    sed < mailto.sh > "${ta}/mailto.sh" "/^FROM=/c\
-FROM=${email[$ta]}"
-    chmod +x "${ta}"/mailto.sh
+    sed -f - upload.sh > "${ta}/upload.sh" <<...
+/^BBCOURSEID=/c\
+BBCOURSEID=$BBCOURSEID
+...
+    sed -f - mailto.sh > "${ta}/mailto.sh" <<...
+/^FROM=/c\
+FROM="${email[$ta]}"
+/^PREFIX=/c\
+PREFIX="$SUBJECT"
+...
+    chmod +x "${ta}"/mailto.sh "${ta}"/upload.sh
     if [ "${email[$ta]}" != "" ]; then
 	echo Mailing "$ta"
 	pkt="$ta-${zip%.zip}.7z"

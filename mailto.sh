@@ -5,6 +5,8 @@ set -e
 FROM=`whoami`@science.ru.nl
 BCC="$FROM"
 
+PREFIX="BFCA-IBC001-1A-2011: [A&D]"
+
 USERLIST="${0%/*}/userlist"
 
 if [ -z "$*" ]; then
@@ -49,7 +51,7 @@ for file in "$@"; do
 		exit 1
 	fi
 
-	SUBJECT="BFCA-IBC001-1A-2011: [A&D] Feedback $ASSIGNMENT"
+	SUBJECT="$PREFIX Feedback $ASSIGNMENT"
 
 	MIME="Content-Type: text/plain; charset=utf-8"
 	TO=`for id in $TOID; do
