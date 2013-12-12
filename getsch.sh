@@ -6,7 +6,7 @@
 # reverse-engineering informatie van BlackBoard;
 
 # Niet nodig om hier te zetten (maar kan ook geen kwaad)
-BBUSER=...
+#BBUSER=...
 
 # Voor het geval je getsch.sh met de hand wil draaien, edit deze regel!
 let ${BBCOURSEID:=91125} # FP 2013 
