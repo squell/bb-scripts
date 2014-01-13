@@ -1,20 +1,13 @@
 =============================
 VOOR GEBRUIK AANPASSEN.
 
-1. mailto.sh
+1. verdeel.sh
 
-De 'SUBJECT' regel (zoek op!), anders raken je studenten in de war.
-Fake het alsof de feedback vanuit BlackBoard komt.
+Vul hier je BlackBoard-gebruikersnummer in, de "BBCOURSEID" (zoek deze handmatig in de URL van de cursuspagina -- is niet moeilijk).
 
-2. getsch.sh
+Vul vervolgens voor elke assistent een naam + emailadres in, en pas de SUBJECT-regel aan zodat het lijkt alsof de mailtjes vanuit BlackBoard komen.
 
-Bovenaan: "BBUSER" en "BBCOURSEID"
-
-3. verdeel.sh: 
-
-Bovenaan: SA info en mail-tag.
-
-4. bouw 'catdoc':
+2. bouw 'catdoc':
 
  http://ftp.wagner.pp.ru/pub/catdoc/catdoc-0.94.2.tar.gz
 
