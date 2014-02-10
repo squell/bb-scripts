@@ -67,10 +67,10 @@ antifmt.sh
 
 echo 
 echo Trial compilation
-trialc.sh s* 
+trialc.sh [sez][0-9]*    # reminder: this also matches 's0abc' etc.
 
 echo Groupcheck 
-groepjes.sh s* | grep "<with>" || true
+groepjes.sh [sez][0-9]* | grep "<with>" || true
 
 echo
 echo Balancing workload 
