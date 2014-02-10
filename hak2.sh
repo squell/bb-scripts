@@ -18,6 +18,6 @@ until [ -z "$1" ]; do
 done
 
 i=0
-for stud in `ls -d s* | sort -R`; do
+for stud in `ls -d * | grep "s[0-9]\{7\}\|z[0-9]\{7\}\|e[0-9]\{7\}" | sort -R`; do
    mv "$stud" "${dir[$((i++%N))]}"
 done
