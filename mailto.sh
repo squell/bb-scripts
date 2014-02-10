@@ -36,9 +36,7 @@ for file in "$@"; do
 	fi
 
 	ASSIGNMENT=`sed -n '/^Assignment:/s///p' "$file"`
-	TOID=`sed -n '/^Name:/s/.*\(s[0-9]\{7\}\).*/\1/p' "$file"`
-	#TOID=`grep -o '\<s\?[0-9]\{7\}\>' "$file" | tr -d 's' | sort -u`
-	#TOID=`grep -ohI '\<s\?[0-9]\{7\}\>' "${file%%/*}"/* | tr -d 's' | sort -u`
+	TOID=`sed -n '/^Name:/s/.*\([sez][0-9]\{7\}\).*/\1/p' "$file"`
 	GRADE=`sed -n '/^Current Grade:[[:space:]]*/s///p' "$file"`
 
 	if [ "$GRADE" = "Not Yet Graded" ] || ! grep -q "Feedback:" "$file"; then
