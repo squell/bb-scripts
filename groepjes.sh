@@ -37,9 +37,9 @@ for dir in "$@"; do
 	# 2) select any studentnr's contained in the response file
 	# 3) select any studentnr's in any submitted file
 
-	#TOID=`sed -n '/Name:/s/.*\(s[0-9]\+\).*/\1/p' "$file"`
-	#TOID=`grep -o '\<[sS]\?[0-9]\{7\}\>' "$file" | tr -d 'sS' | sort -u`
-	TOID=`grep -ohI '\<[sS]\?[0-9]\{7\}\>' "${file%%/*}"/* | tr -d 'sS' | sort -u`
+	#TOID=`sed -n '/Name:/s/.*\([sez][0-9]\+\).*/\1/p' "$file"`
+	#TOID=`grep -oi '\<[sez]\?[0-9]\{7\}\>' "$file" | tr SEZ sez | sort -u`
+	TOID=`grep -oihI '\<[sez]\?[0-9]\{7\}\>' "${file%%/*}"/* | tr SEZ sez | sort -u`
 	for id in $TOID; do
 		grep "$id" "$USERLIST" | cut -f1,2 | tr '\t\n' '  ' | sed 's/@[[:print:]]*\>//g'
 	done | sed 's/[^0-9] \</&<with> /g'
