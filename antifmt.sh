@@ -12,7 +12,7 @@
 
 CATDOC="$HOME/catdoc/bin/catdoc"
 
-STUDDIRS="[sez][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"
+STUDDIRS="[sez][0-9]*"
 
 declare -A unpack
 de.zip() { unzip -a -n -j -d "${1%/*}" "$1"; }
