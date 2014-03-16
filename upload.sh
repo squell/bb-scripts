@@ -50,7 +50,7 @@ select check in "This is expected" "WTF?"; do
 done
 
 NONCE=`echo "$review" | nonce`
-$CURL --data "$NONCE" --data "course_id=_${BBCOURSEID}_1" --data "actionType=import" --data "bottom_Submit=Submit" --data "itemId=_${ITEMID}_1" --data "itemName=${ITEMNAME}" --data "items=0" --data "item_positions=,0" "$BBUPLOAD" | grep -o "Total Grades Uploaded:[[:space:]]*[[:digit:]]*" || echo "Woops!"
+$CURL --data "$NONCE" --data "course_id=_${BBCOURSEID}_1" --data "actionType=import" --data "bottom_Submit=Submit" --data "itemId=_${ITEMID}_1" --data "itemName=${ITEMNAME}" --data "items=0" --data "item_positions=,0" "$BBUPLOAD" | grep -o "Total Grades Uploaded:[[:space:]]*[[:digit:]]*" || echo "Could not fill in the grades in the Grade Center. If you're entering characters, this probably means the column's type is wrong. Try changing 'Primary Display' to 'Text'."
 
 # i'm not sure why item_positions should be ,0 ...
 
