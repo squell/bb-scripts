@@ -15,9 +15,9 @@ CATDOC="$HOME/catdoc/bin/catdoc"
 STUDDIRS="[sez][0-9]*"
 
 declare -A unpack
-de.zip() { unzip -a -n -j -d "${1%/*}" "$1"; }
-de.rar() { unrar e -o- "$1" "${1%/*}"; }
-de.7z()  { 7zr e -y -o"${1%/*}" "$1"; }
+de.zip() { unzip -a -n -d "${1%/*}" "$1"; }
+de.rar() { unrar x -o- "$1" "${1%/*}"; }
+de.7z()  { 7zr x -y -o"${1%/*}" "$1"; }
 unpack[application/zip]=de.zip
 unpack[application/x-7z-compressed]=de.7z
 unpack[application/x-rar]=de.rar
