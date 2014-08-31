@@ -1,18 +1,6 @@
 #! /bin/bash
 
-# ---------------------- configuratie ------------------------#
-
-BBUSER=s0620866
-BBCOURSEID=91125
-
-declare -A email
-email[marc]="mschool@science.ru.nl"
-email[ko]="kostoffelen@student.ru.nl"
-email[pol]="p.vanaubel@student.science.ru.nl"
-
-SUBJECT="1314 Functioneel Programmeren (NWI-IBC006-2013-KW1-V):"
-
-# ---------------------- end of config -----------------------#
+source "${0%/*}"/config.cfg
 
 # dit script regelt de verdeling over de assistenten,
 # en het downloaden van BB (dat laatste kan ook met de hand)
@@ -65,17 +53,17 @@ fi
 echo Trying to adjust for student creativity.
 antifmt.sh
 
-echo 
+echo
 echo Trial compilation
 trialc.sh [sez][0-9]*    # reminder: this also matches 's0abc' etc.
 
-echo Groupcheck 
+echo Groupcheck
 groepjes.sh [sez][0-9]* | grep "<with>" || true
 
 echo
-echo Balancing workload 
+echo Balancing workload
 
-hak2.sh "${!email[@]}" 
+hak2.sh "${!email[@]}"
 
 humor=$(iching.sh)
 for ta in "${!email[@]}"
@@ -99,9 +87,8 @@ PREFIX="$SUBJECT"
 	echo Mailing "$ta"
 	pkt="$ta-${zip%.zip}.7z"
 	7za a -ms=on -mx=9 "$pkt" "$ta" > /dev/null
-	#echo "$humor" | mailx -n -s "${SUBJECT} ${zip%.zip}" -a "$pkt" "${email[$ta]}" 
-	echo "$humor" | mutt -s "${SUBJECT} ${zip%.zip}" -a "$pkt" -- "${email[$ta]}" 
+	#echo "$humor" | mailx -n -s "${SUBJECT} ${zip%.zip}" -a "$pkt" "${email[$ta]}"
+	echo "$humor" | mutt -s "${SUBJECT} ${zip%.zip}" -a "$pkt" -- "${email[$ta]}"
 	rm -f "$pkt"
     fi
 done
-

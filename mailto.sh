@@ -2,12 +2,7 @@
 
 set -e
 
-FROM=`whoami`@science.ru.nl
-BCC="$FROM"
-
-PREFIX="BFCA-IBC001-1A-2011: [A&D]"
-
-USERLIST="${0%/*}/userlist"
+source "${0%/*}"/config.cfg
 
 if [ -z "$*" ]; then
 	echo "Usage: mailto.sh s[0-9]*/s[0-9]*.txt" >& 2
@@ -66,4 +61,3 @@ for file in "$@"; do
 		#sed -n '/^Date/p;/^Current Grade:/p;/^Feedback:/,$p' "$file" | tr -d '\r' | "${0%/*}"/xmail.sh -a "$MIME" -s "$SUBJECT" ${FROM:+-f "$FROM"} ${BCC:+-b "$BCC"} $TO && echo "$TO" > "${file}.sent"
 	fi
 done
-
