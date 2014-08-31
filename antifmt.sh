@@ -10,9 +10,7 @@
 
 # nodig: catdoc geinstalleerd, ergens
 
-CATDOC="$HOME/catdoc/bin/catdoc"
-
-STUDDIRS="[sez][0-9]*"
+source "${0%/*}"/config.cfg
 
 declare -A unpack
 de.zip() { unzip -a -n -j -d "${1%/*}" "$1"; }
@@ -82,4 +80,3 @@ for stupid in `ls ${STUDDIRS}/*.pdf ${STUDDIRS}/*.doc* ${STUDDIRS}/*.odt ${STUDD
 	fi
 	#echo "LEVER GEEN .DOC of .PDF IN!" >> "$stupid"
 done
-
