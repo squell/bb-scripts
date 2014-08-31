@@ -72,16 +72,19 @@ do
     cp userlist "$ta"
     cp -n bblogin2.sh "$ta"
     cp -n feedback.sh grades.sh "$ta"
-    sed -f - upload.sh > "${ta}/upload.sh" <<...
+		cp -n upload.sh mailto.sh "$ta"
+
+    sed -f - config.cfg > "${ta}/config.cfg" <<...
+/^BBUSER=/c\
+""
 /^BBCOURSEID=/c\
 BBCOURSEID=$BBCOURSEID
-...
-    sed -f - mailto.sh > "${ta}/mailto.sh" <<...
 /^FROM=/c\
 FROM="${email[$ta]}"
 /^PREFIX=/c\
 PREFIX="$SUBJECT"
 ...
+
     chmod +x "${ta}"/mailto.sh "${ta}"/upload.sh
     if [ "${email[$ta]}" != "" ]; then
 	echo Mailing "$ta"
