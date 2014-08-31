@@ -9,8 +9,7 @@
 
 BBUSER="$1"
 
-BBLOGIN="https://blackboard.ru.nl/webapps/login/"
-BBPORTAL="http://blackboard.ru.nl/webapps/portal/frameset.jsp"
+source "${0%/*}"/config.cfg
 
 WGET="wget --output-document=- --quiet --no-check-certificate --load-cookies bb.cookie --save-cookies bb.cookie --keep-session-cookies"
 
@@ -24,7 +23,7 @@ b64_uni() {
 	echo -n "$1" | sed -r 's/(.)(.)?/\1\n\2\n/g' | tr '\n' '\000' | $BASE64
 }
 
-if [ ! -e bb.cookie ]; then 
+if [ ! -e bb.cookie ]; then
 	if [ -z "$BBUSER" ]; then
 		read -p "User: " BBUSER
 	fi
@@ -46,4 +45,3 @@ if [ ! -e bb.cookie ]; then
 else
 	echo Still logged in!
 fi
-
