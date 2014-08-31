@@ -18,10 +18,6 @@ HEAD=`head -n1 "$1" | cut -d, -f2 | tr -d '"'`
 ITEMNAME="${HEAD%|*}"
 ITEMID="${HEAD#*|}"
 
-BBUPLOAD="https://blackboard.ru.nl/webapps/gradebook/do/instructor/uploadGradebook2?course_id=_${BBCOURSEID}_1"
-
-CURL="curl --silent --cookie bb.cookie --cookie-jar bb.cookie"
-
 export BBCOURSEID
 "$USERLIST"/bblogin2.sh "$BBUSER" 1>&2 || exit 1
 
