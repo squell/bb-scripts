@@ -7,7 +7,7 @@
 
 source "${0%/*}"/config.cfg
 
-"${0%/*}"/bblogin2.sh "$BBUSER" 1>&2 || exit 1
+"$MYDIR"/bblogin2.sh "$BBUSER" 1>&2 || exit 1
 
 if [ "$1" == "users" ]; then
     echo 1>&2 Only showing list of studentnumbers and email addresses
