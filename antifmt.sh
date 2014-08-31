@@ -50,11 +50,13 @@ done
 
 # complain about word
 echo Bashing text out of Word files \(`ls ${STUDDIRS}/*.doc ${STUDDIRS}/*.rtf ${STUDDIRS}/*.docx ${STUDDIRS}/*.odt 2> /dev/null | wc -l`\)
+if ["$CONVERT_DOC" = true]; then
 for doc in doc rtf; do
     for file in ${STUDDIRS}/*.$doc; do
 	[ "$file" != "${STUDDIRS}/*.$doc" ] && $CATDOC "${file}" > "${file%%.$doc}".txt
     done
 done
+fi
 for file in ${STUDDIRS}/*.docx; do
 	[ "$file" != "${STUDDIRS}/*.docx" ] && unzip -p "$file" word/document.xml | sed 's|<w:br/>|\n&|g;s|</w:p>|\n&|g;s|<[^>]*>||g' > "${file%%.docx}".txt
 done
