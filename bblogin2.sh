@@ -11,8 +11,6 @@ BBUSER="$1"
 
 source "${0%/*}"/config.cfg
 
-WGET="wget --output-document=- --quiet --no-check-certificate --load-cookies bb.cookie --save-cookies bb.cookie --keep-session-cookies"
-
 BASE64="base64 -w0"
 
 b64() {

@@ -5,21 +5,7 @@
 # Met veel dank aan Ruben Nijveld en Marlon Baeten voor hun
 # reverse-engineering informatie van BlackBoard;
 
-# Niet nodig om hier te zetten (maar kan ook geen kwaad)
-#BBUSER=...
-
-# Voor het geval je getsch.sh met de hand wil draaien, edit deze regel!
-let ${BBCOURSEID:=91125} # FP 2013 
-
-BBLOGIN="https://blackboard.ru.nl/webapps/login/"
-BBGETTOKEN="https://blackboard.ru.nl/webapps/login/?action=relogin"
-BBDOWNLOAD="https://blackboard.ru.nl/webapps/gradebook/do/instructor/downloadAssignment"
-BBGRADES="https://blackboard.ru.nl/webapps/gradebook/do/instructor/downloadGradebook"
-BBUSERS="https://blackboard.ru.nl/webapps/blackboard/execute/userManager?course_id=_${BBCOURSEID}_1"
-BBITEMVIEW="${BBGRADES}?dispatch=viewDownloadOptions&course_id=_${BBCOURSEID}_1"
-BBBASE="http://blackboard.ru.nl"
-
-WGET="wget --output-document=- --quiet --no-check-certificate --load-cookies bb.cookie --save-cookies bb.cookie --keep-session-cookies"
+source "${0%/*}"/config.cfg
 
 "${0%/*}"/bblogin2.sh "$BBUSER" 1>&2 || exit 1
 
