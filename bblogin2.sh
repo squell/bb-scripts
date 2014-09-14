@@ -21,7 +21,7 @@ b64_uni() {
 	echo -n "$1" | sed -r 's/(.)(.)?/\1\n\2\n/g' | tr '\n' '\000' | $BASE64
 }
 
-if [ ! -e bb.cookie ]; then
+if [ ! -e bb.cookie ] || $WGET "$BBPORTAL" | grep -q 'document.location.replace'; then
 	if [ -z "$BBUSER" ]; then
 		read -p "User: " BBUSER
 	fi
@@ -30,7 +30,7 @@ if [ ! -e bb.cookie ]; then
 	echo
 	echo Thank you. BlackBoard is being circumvented for your pleasure.
 
-	$WGET --post-data "login=Login&user_id=$BBUSER&encoded_pw=`b64 $pass`&encoded_pw_unicode=`b64_uni $pass`&password=&action=login&remote-user=&auth_type=&one_time_token=&new_loc=%26nbsp;" $BBLOGIN | grep 'document.location.replace' > /dev/null
+	$WGET --post-data "login=Login&user_id=$BBUSER&encoded_pw=`b64 $pass`&encoded_pw_unicode=`b64_uni $pass`&password=&action=login&remote-user=&auth_type=&one_time_token=&new_loc=%26nbsp;" $BBLOGIN | grep -q 'document.location.replace'
 
 	if [ $? -ne 0 ]; then
 		echo Failed.
