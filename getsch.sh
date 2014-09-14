@@ -25,7 +25,15 @@ WGET="wget --output-document=- --quiet --no-check-certificate --load-cookies bb.
 
 if [ "$1" == "users" ]; then
     echo 1>&2 Only showing list of studentnumbers and email addresses
-    $WGET "${BBUSERS}&showAll=true" | sed 's/<img[^>]*>//g;/^[[:space:]]*$/d' | sed -n '/profileCardAvatarThumb/{N;s/.*\([suezf][0-9]\{6,7\}\).*/\1/p};/@/s/[[:space:]]*\([[:print:]]\+@[[:print:]]\+[.][[:print:]]\+\)<.td>.*/\1/p' | sed -n 'h;n;x;G;s/\n/\t/p'
+
+    # first sed: remove avatars and empty lines, so the studentnr follows <span class="profileCardAvatarThumb">
+    # second sed: just extract the necessary info
+    # third sed: arrange the results on a single line
+
+    $WGET "${BBUSERS}&showAll=true" | 
+    	sed 's/<img[^>]*>//g;/^[[:space:]]*$/d' | 
+	sed -n '/profileCardAvatarThumb/{N;s/.*\([suezf][0-9]\{6,7\}\).*/\1/p};/mailto:/s/[[:space:]]\|<[^>]*>//gp' | sed -n 'h
+	;n;x;G;s/\n/\t/p'
     exit
 fi
 
