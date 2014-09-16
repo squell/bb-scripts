@@ -5,8 +5,6 @@ if [ -z "$*" ]; then
 	exit
 fi
 
-USERLIST="${0%/*}/userlist"
-
 if [ ! -e "$USERLIST" ]; then
         echo Cannot find "$USERLIST" file >& 2
         exit
@@ -23,4 +21,3 @@ for file in "$@"; do
 		fi
 	done
 done
-

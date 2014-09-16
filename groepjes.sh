@@ -1,7 +1,5 @@
 #! /bin/sh
 
-USERLIST="${0%/*}/userlist"
-
 if [ -z "$*" ]; then
 	echo "Usage: groepjes.sh s[0-9]*/s[0-9]*.txt" >& 2
 	exit 1
@@ -47,4 +45,3 @@ for dir in "$@"; do
 	#continue
 	addid | ed -s "$file"
 done
-

@@ -9,10 +9,7 @@
 
 BBUSER="$1"
 
-BBLOGIN="https://blackboard.ru.nl/webapps/login/"
-BBPORTAL="http://blackboard.ru.nl/webapps/portal/frameset.jsp"
-
-WGET="wget --output-document=- --quiet --no-check-certificate --load-cookies bb.cookie --save-cookies bb.cookie --keep-session-cookies"
+source "${0%/*}"/config.cfg
 
 BASE64="base64 -w0"
 
@@ -46,4 +43,3 @@ if [ ! -e bb.cookie ] || ! $WGET "$BBPORTAL" | grep -q '</iframe>'; then
 else
 	echo Still logged in!
 fi
-

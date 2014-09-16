@@ -5,7 +5,7 @@
 
 set -e
 
-MYDIR="${0%/*}"
+source "${0%/*}"/config.cfg
 
 if [ ! -e "$MYDIR"/userlist ]; then
 	echo Harvesting email addresses
