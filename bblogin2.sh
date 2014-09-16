@@ -24,7 +24,7 @@ b64_uni() {
 	echo -n "$1" | sed -r 's/(.)(.)?/\1\n\2\n/g' | tr '\n' '\000' | $BASE64
 }
 
-if [ ! -e bb.cookie ] || $WGET "$BBPORTAL" | grep -q 'document.location.replace'; then
+if [ ! -e bb.cookie ] || ! $WGET "$BBPORTAL" | grep -q '</iframe>'; then
 	if [ -z "$BBUSER" ]; then
 		read -p "User: " BBUSER
 	fi
