@@ -88,7 +88,6 @@ do
 done
 
 echo Randomly distributing workload 
-exit
 
 hak2.sh "${!email[@]}" 
 
