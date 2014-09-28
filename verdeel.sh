@@ -73,7 +73,22 @@ echo Groupcheck
 groepjes.sh [sez][0-9]* | grep "<with>" || true
 
 echo
-echo Balancing workload 
+
+# first read a list of students that are assigned fixed ta's (group_$name); the format of this file
+# can be the same as the userlist-file, but only the first column matters
+for ta in "${!email[@]}"
+do
+    listfile="group_${ta}"
+    test -e "$listfile" || continue
+    echo "Distributing workload to $ta"
+    mkdir -p "$ta"
+    while read stud trailing; do
+	[ -e "$stud" ] && mv "$stud" "$ta"
+    done < "$listfile"
+done
+
+echo Randomly distributing workload 
+exit
 
 hak2.sh "${!email[@]}" 
 
