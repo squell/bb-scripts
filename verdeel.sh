@@ -78,7 +78,7 @@ echo
 # can be the same as the userlist-file, but only the first column matters
 for ta in "${!email[@]}"
 do
-    listfile="group_${ta}"
+    listfile="$MYDIR/group_${ta}"
     test -e "$listfile" || continue
     echo "Distributing workload to $ta"
     mkdir -p "$ta"
