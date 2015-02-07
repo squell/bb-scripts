@@ -5,6 +5,8 @@ set -e
 FROM=`whoami`@science.ru.nl
 BCC="$FROM"
 
+PREFIX="BFCA-IBC001-1A-2011: [A&D]"
+
 USERLIST="${0%/*}/userlist"
 
 if [ -z "$*" ]; then
@@ -34,9 +36,7 @@ for file in "$@"; do
 	fi
 
 	ASSIGNMENT=`sed -n '/^Assignment:/s///p' "$file"`
-	TOID=`sed -n '/^Name:/s/.*\(s[0-9]\{7\}\).*/\1/p' "$file"`
-	#TOID=`grep -o '\<s\?[0-9]\{7\}\>' "$file" | tr -d 's' | sort -u`
-	#TOID=`grep -ohI '\<s\?[0-9]\{7\}\>' "${file%%/*}"/* | tr -d 's' | sort -u`
+	TOID=`sed -n '/^Name:/s/.*\([sez][0-9]\+\).*/\1/p' "$file"`
 	GRADE=`sed -n '/^Current Grade:[[:space:]]*/s///p' "$file"`
 
 	if [ "$GRADE" = "Not Yet Graded" ] || ! grep -q "Feedback:" "$file"; then
@@ -49,7 +49,7 @@ for file in "$@"; do
 		exit 1
 	fi
 
-	SUBJECT="NWI-IBC006-2013-KW1-V: [FP] Feedback $ASSIGNMENT"
+	SUBJECT="$PREFIX Feedback $ASSIGNMENT"
 	MIME="Content-Type: text/plain; charset=utf-8"
 	TO=`for id in $TOID; do
 		(grep "$id" "$USERLIST" || echo >&2 "$id not registered") | cut -f2 | tr -d '\r'

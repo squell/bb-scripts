@@ -22,10 +22,11 @@ unzip -q -o -d "$TEMP" "$1"
 for bbfile in "$TEMP"/*; do
 	bbfile="${bbfile#*/}"
 	basename="${bbfile#*attempt_20[0-9-]*_}"
-	studnr="${bbfile#*_s}"
-	studnr="${studnr%%[^0-9]*}"
-	dir="s${studnr}"
-	if [ -z "$studnr" ]; then
+	studnr="${bbfile#*_}"
+	studnr="${studnr%%_[^0-9]*}"
+	dir="${studnr}"
+	# move files that don't conform to the a seperate folder
+	if [ "${studnr##[sez]*}" ]; then
 		dir="attic"
 	elif [ "$basename" == "$bbfile" ]; then
 		basename="${dir}.txt"

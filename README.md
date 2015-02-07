@@ -3,7 +3,7 @@ bb-scripts
 
 bash scripts for the ELO of RU
 
-(c) Marc Schoolderman 2007-2013; see LICENSE for licensing details
+(c) Marc Schoolderman 2007-2014; see LICENSE for licensing details
 
 this repository is documented by oral tradition.
 

@@ -17,7 +17,9 @@ until [ -z "$1" ]; do
    shift
 done
 
+# de 'grep' is hier slechts een extra safety; zou eigenlijk niet nodig moeten zijn.
+# als je die aanpast wil je ook in groepjes.sh waarschijnlijk even rondneuzen.
 i=0
-for stud in `ls -d s* | sort -R`; do
+for stud in `ls -d [sez][0-9]* | grep "[sez][0-9]\{6,7\}" | sort -R`; do
    mv "$stud" "${dir[$((i++%N))]}"
 done

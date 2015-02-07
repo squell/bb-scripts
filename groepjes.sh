@@ -13,17 +13,14 @@ if [ ! -e "$USERLIST" ]; then
 fi
 
 addid() {
-	result=false
 	echo "1a"
 	for id in $TOID; do
-		if [ "s${id}.txt" != "${file##*/}" ]; then
+		if [ "${id}.txt" != "${file##*/}" ]; then
 			grep "$id" "$USERLIST" | sed 's/\(.*\)\t\(.*\)@.*/Name: \2 (\1)/g'
-			result=true
 		fi
-	done
+	done | sort -u
 	echo "."
 	echo "wq"
-	$result
 }
 
 for dir in "$@"; do
@@ -34,18 +31,20 @@ for dir in "$@"; do
 	fi
 
 	# 1) select only id's specified by the response file
-	# 2) select any studentnr's contained in the response file
-	# 3) select any studentnr's in any submitted file
+	# 2) select (what looks like) studentnr's contained in the response file
+	# 3) select (what looks like) studentnr's in any submitted file
 
-	#TOID=`sed -n '/Name:/s/.*\(s[0-9]\+\).*/\1/p' "$file"`
-	#TOID=`grep -o '\<[sS]\?[0-9]\{7\}\>' "$file" | tr -d 'sS' | sort -u`
-	TOID=`grep -ohI '\<[sS]\?[0-9]\{7\}\>' "${file%%/*}"/* | tr -d 'sS' | sort -u`
+	# is user mentions a studentnr without prefix, s- is assumed.
+
+	#TOID=`sed -n '/Name:/s/.*\([sez][0-9]\+\).*/\1/p' "$file"`
+	#TOID=`grep -oi '\<[sez]\?[0-9]\{6,7\}\>' "$file" | tr SEZ sez | sort -u`
+	TOID=`grep -oihI '\<[sez]\?[0-9]\{6,7\}\>' "${file%%/*}"/* | sed 's/\<[0-9]/s&/' | tr SEZ sez`
 	for id in $TOID; do
-		grep "$id" "$USERLIST" | cut -f1,2 | tr '\t\n' '  ' | sed 's/@[[:print:]]*\>//g'
-	done | sed 's/[^0-9] \</&<with> /g'
+		grep "$id" "$USERLIST" | cut -f1,2 | sed 's/@[[:print:]]*\>//g'
+	done | sort -u | tr '\t\n' ' ' | sed 's/[^0-9] \</&<with> /g'
 	echo
 
 	#continue
-	ed=`addid` && echo "$ed" | ed -s "$file"
+	addid | ed -s "$file"
 done
 

@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # pol maakt het geven van uitgebreide feedback aan meerdere
-# mensen gemakkelijker
+# mensen gemakkelijker (maar kijk niet hoe)
 
 EDITOR=vi
 

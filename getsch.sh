@@ -5,17 +5,11 @@
 # Met veel dank aan Ruben Nijveld en Marlon Baeten voor hun
 # reverse-engineering informatie van BlackBoard;
 
-BBUSER=s0620866
-BBCOURSEID=91125 # FP 2013
-#BBCOURSEID=91131 # FP 2013 KI
-#BBCOURSEID=77118 # FP 2012
-#BBCOURSEID=53637 # A&D 2011
-#BBCOURSEID=53641 # FP 2011
-#BBCOURSEID=41980 # FP 2010
-#BBCOURSEID=34652 # FP 2009
-#BBCOURSEID=27790 # FP 2008
-#BBCOURSEID=22533 # MLW 2007
-#BBCOURSEID=27621 # MLW 2008
+# Niet nodig om hier te zetten (maar kan ook geen kwaad)
+#BBUSER=...
+
+# Voor het geval je getsch.sh met de hand wil draaien, edit deze regel!
+let ${BBCOURSEID:=91125} # FP 2013 
 
 BBLOGIN="https://blackboard.ru.nl/webapps/login/"
 BBGETTOKEN="https://blackboard.ru.nl/webapps/login/?action=relogin"
@@ -31,7 +25,15 @@ WGET="wget --output-document=- --quiet --no-check-certificate --load-cookies bb.
 
 if [ "$1" == "users" ]; then
     echo 1>&2 Only showing list of studentnumbers and email addresses
-    $WGET "${BBUSERS}&showAll=true" | sed 's/<img[^>]*>//g;/^[[:space:]]*$/d' | sed -n '/profileCardAvatarThumb/{N;s/.*\([sue][0-9]\{6,7\}\).*/\1/p};/@/s/[[:space:]]*\([[:print:]]\+@[[:print:]]\+[.][[:print:]]\+\)<.td>.*/\1/p' | sed -n 'h;n;x;G;s/\n/\t/p'
+
+    # first sed: remove avatars and empty lines, so the studentnr follows <span class="profileCardAvatarThumb">
+    # second sed: just extract the necessary info
+    # third sed: arrange the results on a single line
+
+    $WGET "${BBUSERS}&showAll=true" | 
+    	sed 's/<img[^>]*>//g;/^[[:space:]]*$/d' | 
+	sed -n '/profileCardAvatarThumb/{N;s/.*\([suezf][0-9]\{6,7\}\).*/\1/p};/mailto:/s/[[:space:]]\|<[^>]*>//gp' | 
+	sed -n 'h;n;x;G;s/\n/\t/p'
     exit
 fi
 

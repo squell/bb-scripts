@@ -13,9 +13,7 @@ if [ ! -e "$USERLIST" ]; then
 fi
 
 for file in "$@"; do
-        TOID=`sed -n '/^Name:/s/.*\(s[0-9]\{7\}\).*/\1/p' "$file"`
-	#TOID=`grep -o '\<s\?[0-9]\{7\}\>' "$file" | tr -d 's' | sort -u`
-	#TOID=`grep -ohI '\<s\?[0-9]\{7\}\>' "${file%%/*}"/* | tr -d 's' | sort -u`
+        TOID=`sed -n '/^Name:/s/.*\([sez][0-9]\+\).*/\1/p' "$file"`
 	GRADE=`sed -n '/^Current Grade:[[:space:]]*/s///p' "$file"`
 
 	for id in $TOID; do

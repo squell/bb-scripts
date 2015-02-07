@@ -18,20 +18,12 @@ if [ ! -e "${1:+$1/}grades.csv" ]; then
 fi
 
 echo May spam.
-for fulldir in "${1:+$1/}"s*; do
+for fulldir in "${1:+$1/}"[sez][0-9]*; do
 	dir="${fulldir##*/}"
 	echo "$dir"
 	"$MYDIR"/mailto.sh "${fulldir}/${dir}.txt"
 	"$MYDIR"/grades.sh "${fulldir}/${dir}.txt" >> "${1:+$1/}grades.csv"
 done
 
-echo "${1:+$1/}grades.csv" is ready for manual upload
-echo "Use your Bb credentials:"
+echo Supply your Bb login, or upload "${1:+$1/}grades.csv" manually.
 "$MYDIR"/upload.sh "${1:+$1/}grades.csv"
-
-MIME="Content-Type: text/plain; charset=utf-8"
-for fulldir in "${1:+$1/}"s*; do
-	dir="${fulldir##*/}"
-	pr -F "${fulldir}/${dir}.txt"
-done | mail -a "$MIME" -n -s "feedback `pwd` $1" mschool 
-

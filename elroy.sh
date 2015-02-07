@@ -1,16 +1,25 @@
 #! /bin/bash
 
-# regelt de verdeling over de assistenten,
-# en het download van BB (als je wil)
+# ---------------------- configuratie ------------------------#
+
+BBUSER=s0620866
+BBCOURSEID=91125
 
 declare -A email
 email[marc]="m.schoolderman@student.science.ru.nl"
 email[thom]="functioneelprogrammereniscool@thomwiggers.nl"
 email[tom]="mijnemailadresiscooler@tomsanders.nl"
 
-SUBJECT="[FP]"
+SUBJECT="1314 Functioneel Programmeren (NWI-IBC006-2013-KW1-V):"
+
+# ---------------------- end of config -----------------------#
+
+# dit script regelt de verdeling over de assistenten,
+# en het downloaden van BB (dat laatste kan ook met de hand)
 
 set -e
+
+export BBUSER BBCOURSEID
 
 MYDIR="${0%/*}"
 PATH="${PATH}:${MYDIR}"
@@ -58,10 +67,10 @@ antifmt.sh
 
 echo 
 echo Trial compilation
-trial.sh s* > /dev/null
+trialc.sh [sez][0-9]*    # reminder: this also matches 's0abc' etc.
 
 echo Groupcheck 
-groepjes.sh s* | grep "<with>" || true
+groepjes.sh [sez][0-9]* | grep "<with>" || true
 
 echo Received `find s* -name "*.icl" | wc -l` programs in `ls -d s* | wc -l` submissions by `cat s*/s*.txt | grep -hc ^Name:` students.
 echo Found `find s* -name "*.ERROR" | wc -l` compilation goofs. Tsk tsk.
@@ -78,7 +87,21 @@ echo Fraud check 2
 dupes.sh s* > /dev/null
 
 echo
-echo Balancing workload 
+
+# first read a list of students that are assigned fixed ta's (group_$name); the format of this file
+# can be the same as the userlist-file, but only the first column matters
+for ta in "${!email[@]}"
+do
+    listfile="$MYDIR/group_${ta}"
+    test -e "$listfile" || continue
+    echo "Distributing workload to $ta"
+    mkdir -p "$ta"
+    while read stud trailing; do
+	[ -e "$stud" ] && mv "$stud" "$ta"
+    done < "$listfile"
+done
+
+echo Randomly distributing workload 
 
 hak2.sh "${!email[@]}"
 
@@ -89,11 +112,19 @@ do
     cp grades.csv "$ta"
     cp userlist "$ta"
     cp pol.sh "$ta"
-    cp bblogin2.sh upload.sh "$ta"
+    cp -n bblogin2.sh "$ta"
     cp -n hanno.sh grades.sh "$ta"
-    sed < mailto.sh > "${ta}/mailto.sh" "/^FROM=/c\
-FROM=${email[$ta]}"
-    chmod +x "${ta}"/mailto.sh
+    sed -f - upload.sh > "${ta}/upload.sh" <<...
+/^BBCOURSEID=/c\
+BBCOURSEID=$BBCOURSEID
+...
+    sed -f - mailto.sh > "${ta}/mailto.sh" <<...
+/^FROM=/c\
+FROM="${email[$ta]}"
+/^PREFIX=/c\
+PREFIX="$SUBJECT"
+...
+    chmod +x "${ta}"/mailto.sh "${ta}"/upload.sh
     if [ "${email[$ta]}" != "" ]; then
 	echo Mailing "$ta"
 	pkt="$ta-${zip%.zip}.7z"
