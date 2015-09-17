@@ -2,12 +2,12 @@
 
 # ---------------------- configuratie ------------------------#
 
-BBUSER=s1234567
-BBCOURSEID=...
+BBUSER=s0620866
+BBCOURSEID=107303
 
 # ---------------------- end of config -----------------------#
 
-# dit script regelt het printen
+# dit script regelt de verdeling over de assistenten,
 # en het downloaden van BB (dat laatste kan ook met de hand)
 
 set -e
@@ -38,7 +38,7 @@ done
 
 if [ -z "$zip" ]; then
 	getsch.sh
-	rm -f bb.cookie
+	#rm -f bb.cookie
 	for zip in *.zip; do
 		if [ ! -e "$zip" ]; then
 			echo That didn\'t work.

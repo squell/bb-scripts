@@ -46,8 +46,8 @@ read -p "What... is your favorite editor: " -i "$EDITOR" edit
 
 which "${edit:-vi}" || death
 
-sed -i "0,/^BBUSER=.*$/s//BBUSER=$BBUSER/" fetchprint.sh
-sed -i "0,/^BBCOURSEID=[0-9]\+/s//BBCOURSEID=$BBCOURSEID/" fetchprint.sh upload.sh
+sed -i "0,/^BBUSER=.*$/s//BBUSER=$BBUSER/" engelbert.sh
+sed -i "0,/^BBCOURSEID=[0-9]\+/s//BBCOURSEID=$BBCOURSEID/" engelbert.sh upload.sh
 sed -i "0,/BBCOURSEID:=[0-9]\+/s//BBCOURSEID:=$BBCOURSEID/" getsch.sh
 
 echo Go on. Off you go.

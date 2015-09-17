@@ -7,7 +7,7 @@ Use the configuration wizard.sh
 HANDMATIGE CONFIGURATIE
 =======================
 
-1. fetchprint.sh
+1. engelbert.sh
 
 Vul hier je BlackBoard-gebruikersnummer in, en de `BBCOURSEID` (zoek deze handmatig in de URL van de cursuspagina -- is niet moeilijk).
 
@@ -19,7 +19,7 @@ Idem met upload.sh, als je deze rechtstreeks uit je git repository wil draaien.
 DISCLAIMER
 ==========
 
-Hierna zou je in normaal gebruik genoeg moeten hebben aan 'fetchprint.sh'. Dit script download pdf'jes uit BlackBoard en print ze uit. Je kan de printer(s) waarop je het wil uitprinten als argument meegeven; anders vraagt hij erom.
+Hierna zou je in normaal gebruik genoeg moeten hebben aan 'engelbert.sh'. Engelbert download pdf'jes uit BlackBoard en print ze uit. Je kan de printer(s) waarop je het wil uitprinten als argument meegeven; anders vraagt hij erom.
 
 Als je dit op je eigen systeem wil draaien is dat op eigen risico. De scripts zijn bedoeld voor op lilo3/4/5. Op elke andere recente Debian/Ubuntu zouden ze het ook moeten doen. Andere GNU distro's: untried (tip: het `mail` commando is de zwakke schakel)
 
