@@ -43,20 +43,11 @@ done
 echo
 read -p "What... is your favorite editor: " -i "$EDITOR" edit
 
-grep '^email' verdeel.sh > bb.mail
 which "${edit:-vi}" || death
-${edit:-vi} bb.mail
 
-MAILFMT='email\[.*]=.*@.*'
-if grep -q -v "^\($MAILFMT\|\)$" bb.mail || ! grep -q "$MAILFMT" bb.mail; then
-	death
-fi
-
-sed -i "/^email/d;/^typeset -A email/rbb.mail" verdeel.sh
-sed -i "/^BBUSER=.*$/s//BBUSER=$BBUSER/" verdeel.sh
-sed -i "/^BBCOURSEID=[0-9]*$/s//BBCOURSEID=$BBCOURSEID/" verdeel.sh upload.sh
+sed -i "/^BBUSER=.*$/s//BBUSER=$BBUSER/" fetchprint.sh
+sed -i "/^BBCOURSEID=[0-9]*$/s//BBCOURSEID=$BBCOURSEID/" fetchprint.sh upload.sh
 sed -i "/BBCOURSEID:=[0-9]*/s//BBCOURSEID:=$BBCOURSEID/" getsch.sh
-sed -i "/^SUBJECT=.*$/s//SUBJECT=\"${course%|*}: \"/" verdeel.sh
 
 echo Go on. Off you go.
 rm -f bb.mail

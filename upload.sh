@@ -5,7 +5,7 @@
 # - since we upload multipart data, this script uses curl, not wget
 # - might break if curl and wget cookiejars become incompatible
 
-BBCOURSEID=91125 # FP 2013
+BBCOURSEID=107303
 
 # if this next variable is set, you will not be asked for your login
 #BBUSER=...

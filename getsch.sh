@@ -9,7 +9,7 @@
 #BBUSER=...
 
 # Voor het geval je getsch.sh met de hand wil draaien, edit deze regel!
-let ${BBCOURSEID:=91125} # FP 2013 
+let ${BBCOURSEID:=107303} # FP 2013 
 
 BBLOGIN="https://blackboard.ru.nl/webapps/login/"
 BBGETTOKEN="https://blackboard.ru.nl/webapps/login/?action=relogin"

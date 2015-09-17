@@ -6,21 +6,11 @@ Draai wizard.sh en beantwoord de gestelde vragen.
 =============================
 HANDMATIGE CONFIGURATIE
 
-1. verdeel.sh
+1. fetchprint.sh
 
 Vul hier je BlackBoard-gebruikersnummer in, de "BBCOURSEID" (zoek deze handmatig in de URL van de cursuspagina -- is niet moeilijk).
 
-Vul vervolgens voor elke assistent een naam + emailadres in, en pas de SUBJECT-regel aan zodat het lijkt alsof de mailtjes vanuit BlackBoard komen.
-
-Als je per studentassistent 'vaste' groepjes wil maken, maak dan per assistent een bestand van hetzelfde formaat als de output van ./getsch.sh users, met de naam group_<assistent>. Studenten die niet in zo'n bestand voorkomen worden willekeurig verdeeld.
-
-2. bouw 'catdoc' (optioneel)
-
- http://ftp.wagner.pp.ru/pub/catdoc/catdoc-0.94.2.tar.gz
-
-...en pas CATDOC in antifmt.sh aan. Je hebt dit alleen nodig voor de .doc->.txt conversie
-
-3. verdere aanpassingen (development/testing only)
+2. verdere aanpassingen (development/testing only)
 
 Als je met zelf om welke reden dan ook getsch.sh wil draaien, zal je ook hier BBCOURSEID moeten aanpassen. 
 Idem met upload.sh, als je deze rechtstreeks uit je git repository wil draaien.
@@ -28,7 +18,7 @@ Idem met upload.sh, als je deze rechtstreeks uit je git repository wil draaien.
 =============================
 DISCLAIMER
 
-Hierna zou je in normaal gebruik genoeg moeten hebben aan 'verdeel.sh' en 'feedback.sh'. Gebruik de rest alleen als je weet wat ze doen.
+Hierna zou je in normaal gebruik genoeg moeten hebben aan 'fetchprint.sh'. Dit script download pdf'jes uit BlackBoard en print ze uit. Je kan de printer(s) waarop je het wil uitprinten als argument meegeven; anders vraagt hij erom.
 
 Als je dit op je eigen systeem wil draaien is dat op eigen risico. De scripts zijn bedoeld voor op lilo1/lilo2. Op elke andere recente Debian/Ubuntu zouden ze het ook moeten doen. Andere GNU distro's: untried (het "mail" commando is de zwakke schakel)
 
@@ -63,71 +53,14 @@ Belangrijke onderdelen:
       * dingen die niet herkend werden worden in 'attic' geplaatst
       * elke student wordt 1 dir, met een response file van Bb erbij
 
-  - antifmt: cleanup
-      * pakt zips,rars,7z,xz,tarballs uit (maakt er een log van)
-      * probeert pdf/doc/docx/rtf/odt naar text te converten 
-        ! hiervoor heb je 'catdoc' nodig
-      * delete overbodige/riskante binary data
-
-  - trialc: voert'n trialcompilatie uit met gcc/javac
-      - jarify: probeer een .jar te maken van .java bestanden; gokt wat de juiste main() is.
-
-  - groepjes.sh: probeert groepjes te achterhalen
-      * mensen moet hiervoor de studentnummers vermelden bij het submitten
-        (of in de uitwerking)
-      * doet niets anders dan extra "Name: " regels genereren
-
   - hak2: verdeelt nakijkwerk in stapels
 
-  - iching: ter inspiratie.
+[upload.sh]
+Upload een grades.csv naar BlackBoard.
 
-  - boeket: iets voor in je .bash_profile [HELAAS IS DIT STUK]
-
-
-[feedback.sh]
-Verstuurt den feedback en genereert een grades.csv.
-
-De grades.csv moet je handmatig uploaden naar Bb, helaas. 
-
-Het kan geen kwaad dit meerdere keren te draaien.
-
-  - mailto: script dat 'n responsefile vertaalt in een emailtje 
-     * meerdere recipients = meerdere "Name:" regels toevoegen.
-     * cijfers geven door "Current Grade" aan te passen
-     * feedback begin je onderaan met een "Feedback:" header.
-
-     * werkt op studentnummer; de lookuptable hiervoor staat in "userlist" 
-       ("getsch.sh users > userlist" wordt gedraaid als die niet bestaat)
-
-     * je krijgt zelf BCC's van alle feedback. valt uit zetten, but don't.
-
-  - grades.sh: verzamelt de cijfers tot een .csv
-
-  - upload.sh: upload een grades.csv naar BlackBoard.
-     * doe dit de eerste keer vooral zelf, met de hand, door in te loggen op
-       het grade center, zodat je weet wat er achter de schermen gebeurt.
-
-     * dit script is interactief: het presenteert je met een confirmatiescherm
-       waarna je moet aangeven dat alles inderdaad klopt. Als alles daarna goed
-       is krijg je te zien hoeveel cijfers er daadwerkelijk zijn geupload.
-
-*** EXPERIMENTEEL ***
-
-[pol.sh]
-Een feedback macro *postprocessor*. Laat ergens in je feedback snippets
-achter van de vorm: (alles op een nieuwe regel)
-
-$foo:
-Foo!
-$
-
-Dan kan je op elke andere plek 
-
-$foo
-
-opschrijven, en wordt dit vervangen met "Foo!". Je kan ook dit soort macros achteraf definieren; pol.sh presenteert je dan met een editor om dit te doen.
-
-pol.sh wordt niet automatisch aangeroepen op het moment
+Dit script is interactief: het presenteert je met een confirmatiescherm
+waarna je moet aangeven dat alles inderdaad klopt. Als alles daarna goed
+is krijg je te zien hoeveel cijfers er daadwerkelijk zijn geupload.
 
 =============================
 PRAISE AND BLAME
