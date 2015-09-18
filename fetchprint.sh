@@ -47,3 +47,10 @@ if [ -z "$zip" ]; then
 	done
 	rm -f "$zip"
 fi
+
+prn="$1"
+if [ -z "$prn" ]; then
+	read -p "Print to (^C skips): " -e -i lazarus prn
+fi
+echo "Printing to ${prn}..."
+printhuiswerk.sh "$prn"
