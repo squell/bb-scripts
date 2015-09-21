@@ -12,6 +12,9 @@ BBCOURSEID=...
 
 set -e
 
+# controleer het kerberos ticket, voor de printer...
+klist -s || kinit
+
 export BBUSER BBCOURSEID
 
 MYDIR="${0%/*}"
