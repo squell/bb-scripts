@@ -51,9 +51,20 @@ if [ -z "$zip" ]; then
 	rm -f "$zip"
 fi
 
-prn="$1"
-if [ -z "$prn" ]; then
+# divide workload over printers (if none given: ask)
+MYDIR=`readlink -f "$MYDIR"`
+
+if [ -z "$1" ]; then
 	read -p "Print to (^C skips): " -e -i lazarus prn
+	printhuiswerk.sh "$prn"
+else
+	# eradicate students 'somehow' already printed
+	remprinted.sh
+	hak2.sh "$@"
+	for prn in "$@"; do
+		pushd "$prn" > /dev/null
+		echo "Printing to ${prn}..."
+		"$MYDIR"/printhuiswerk.sh "$prn"
+		popd > /dev/null
+	done
 fi
-echo "Printing to ${prn}..."
-printhuiswerk.sh "$prn"
