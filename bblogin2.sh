@@ -13,9 +13,9 @@
 BBUSER="$1"
 
 BBLOGIN="https://blackboard.ru.nl/webapps/login/"
-BBPORTAL="http://blackboard.ru.nl/webapps/portal/frameset.jsp"
+BBPORTAL="https://blackboard.ru.nl/webapps/portal/frameset.jsp"
 
-WGET="wget --output-document=- --quiet --no-check-certificate --load-cookies bb.cookie --save-cookies bb.cookie --keep-session-cookies"
+CURL="curl --silent --cookie bb.cookie --cookie-jar bb.cookie"
 
 BASE64="base64 -w0"
 
@@ -27,10 +27,9 @@ b64_uni() {
 	builtin echo -n "$1" | sed -r 's/(.)(.)?/\1\n\2\n/g' | tr '\n' '\000' | $BASE64
 }
 
-trap "rm -f bb.$$" EXIT
 umask 077
 
-if [ ! -e bb.cookie ] || $WGET "$BBPORTAL" | grep -q 'LoadLoginPage()'; then
+if [ ! -e bb.cookie ] || $CURL "$BBPORTAL" | grep -q 'LoadLoginPage()'; then
 	if [ -z "$BBUSER" ]; then
 		read -p "User: " BBUSER
 	fi
@@ -39,8 +38,7 @@ if [ ! -e bb.cookie ] || $WGET "$BBPORTAL" | grep -q 'LoadLoginPage()'; then
 	echo
 	echo Thank you. BlackBoard is being circumvented for your pleasure.
 
-	builtin echo "login=Login&user_id=$BBUSER&encoded_pw=`b64 $pass`&encoded_pw_unicode=`b64_uni $pass`&password=&action=login&remote-user=&auth_type=&one_time_token=&new_loc=%26nbsp;" > "bb.$$"
-	$WGET --post-file "bb.$$" $BBLOGIN | grep -q 'document.location.replace'
+	builtin echo "login=Login&user_id=$BBUSER&encoded_pw=`b64 $pass`&encoded_pw_unicode=`b64_uni $pass`&password=&action=login&remote-user=&auth_type=&one_time_token=&new_loc=%26nbsp;" | $CURL --data @- "$BBLOGIN" | grep -q 'document.location.replace'
 
 	if [ $? -ne 0 ]; then
 		echo Failed.

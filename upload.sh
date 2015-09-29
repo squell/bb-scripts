@@ -1,9 +1,6 @@
 #! /bin/bash
 
 # Blackboard 9.1 upload-grades-csv script
-# - experimental!
-# - since we upload multipart data, this script uses curl, not wget
-# - might break if curl and wget cookiejars become incompatible
 
 BBCOURSEID=91125 # FP 2013
 
