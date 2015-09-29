@@ -6,6 +6,9 @@
 #
 # (c) 2010 Marc Schoolderman
 # Aangepast aan de niewe Bb inlogmethode (zonder challenge-response)
+#
+# (c) 2015 Marc Schoolderman
+# Jeetje, een security patch voor bb-scripts. Wie had dat ooit gedacht.
 
 BBUSER="$1"
 
@@ -17,12 +20,15 @@ WGET="wget --output-document=- --quiet --no-check-certificate --load-cookies bb.
 BASE64="base64 -w0"
 
 b64() {
-	echo -n "$1" | $BASE64
+	builtin echo -n "$1" | $BASE64
 }
 
 b64_uni() {
-	echo -n "$1" | sed -r 's/(.)(.)?/\1\n\2\n/g' | tr '\n' '\000' | $BASE64
+	builtin echo -n "$1" | sed -r 's/(.)(.)?/\1\n\2\n/g' | tr '\n' '\000' | $BASE64
 }
+
+trap "rm -f bb.$$" EXIT
+umask 077
 
 if [ ! -e bb.cookie ] || ! $WGET "$BBPORTAL" | grep -q '</iframe>'; then
 	if [ -z "$BBUSER" ]; then
@@ -33,7 +39,8 @@ if [ ! -e bb.cookie ] || ! $WGET "$BBPORTAL" | grep -q '</iframe>'; then
 	echo
 	echo Thank you. BlackBoard is being circumvented for your pleasure.
 
-	$WGET --post-data "login=Login&user_id=$BBUSER&encoded_pw=`b64 $pass`&encoded_pw_unicode=`b64_uni $pass`&password=&action=login&remote-user=&auth_type=&one_time_token=&new_loc=%26nbsp;" $BBLOGIN | grep -q 'document.location.replace'
+	builtin echo "login=Login&user_id=$BBUSER&encoded_pw=`b64 $pass`&encoded_pw_unicode=`b64_uni $pass`&password=&action=login&remote-user=&auth_type=&one_time_token=&new_loc=%26nbsp;" > "bb.$$"
+	$WGET --post-file "bb.$$" $BBLOGIN | grep -q 'document.location.replace'
 
 	if [ $? -ne 0 ]; then
 		echo Failed.
