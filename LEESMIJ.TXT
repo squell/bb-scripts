@@ -1,6 +1,8 @@
 =============================
 VOOR GEBRUIK AANPASSEN.
 
+Probeer ook eens de wizard!
+
 1. verdeel.sh
 
 Vul hier je BlackBoard-gebruikersnummer in, de "BBCOURSEID" (zoek deze handmatig in de URL van de cursuspagina -- is niet moeilijk).
@@ -13,7 +15,7 @@ Als je per studentassistent 'vaste' groepjes wil maken, maak dan per assistent e
 
  http://ftp.wagner.pp.ru/pub/catdoc/catdoc-0.94.2.tar.gz
 
-...of haal in antifmt.sh het gedeelte wat catdoc nodig heeft weg.
+...en pas CATDOC in antifmt.sh aan; of leer je studenten geen .doc in te leveren.
 
 =============================
 DISCLAIMER
