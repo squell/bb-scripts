@@ -1,7 +1,10 @@
 =============================
-VOOR GEBRUIK AANPASSEN.
+AUTOMATISCHE CONFIGURATIE
 
-Probeer ook eens de wizard!
+Draai wizard.sh en beantwoord de gestelde vragen.
+
+=============================
+HANDMATIGE CONFIGURATIE
 
 1. verdeel.sh
 
@@ -11,11 +14,16 @@ Vul vervolgens voor elke assistent een naam + emailadres in, en pas de SUBJECT-r
 
 Als je per studentassistent 'vaste' groepjes wil maken, maak dan per assistent een bestand van hetzelfde formaat als de output van ./getsch.sh users, met de naam group_<assistent>. Studenten die niet in zo'n bestand voorkomen worden willekeurig verdeeld.
 
-2. bouw 'catdoc':
+2. bouw 'catdoc' (optioneel)
 
  http://ftp.wagner.pp.ru/pub/catdoc/catdoc-0.94.2.tar.gz
 
-...en pas CATDOC in antifmt.sh aan; of leer je studenten geen .doc in te leveren.
+...en pas CATDOC in antifmt.sh aan. Je hebt dit alleen nodig voor de .doc->.txt conversie
+
+3. verdere aanpassingen (development/testing only)
+
+Als je met zelf om welke reden dan ook getsch.sh wil draaien, zal je ook hier BBCOURSEID moeten aanpassen. 
+Idem met upload.sh, als je deze rechtstreeks uit je git repository wil draaien.
 
 =============================
 DISCLAIMER
@@ -73,7 +81,7 @@ Belangrijke onderdelen:
 
   - iching: ter inspiratie.
 
-  - boeket: iets voor in je .bash_profile
+  - boeket: iets voor in je .bash_profile [HELAAS IS DIT STUK]
 
 
 [feedback.sh]
@@ -95,20 +103,15 @@ Het kan geen kwaad dit meerdere keren te draaien.
 
   - grades.sh: verzamelt de cijfers tot een .csv
 
+  - upload.sh: upload een grades.csv naar BlackBoard.
+     * doe dit de eerste keer vooral zelf, met de hand, door in te loggen op
+       het grade center, zodat je weet wat er achter de schermen gebeurt.
+
+     * dit script is interactief: het presenteert je met een confirmatiescherm
+       waarna je moet aangeven dat alles inderdaad klopt. Als alles daarna goed
+       is krijg je te zien hoeveel cijfers er daadwerkelijk zijn geupload.
+
 *** EXPERIMENTEEL ***
-
-Er zijn 2 experimentele scriptjes die op dit moment niet automatisch in de
-"feedback" workflow zitten, maar dat mogelijk wel komen en nuttig zijn:
-
-[upload.sh]
-Upload een grades.csv naar BlackBoard.
-
-Doe dit de eerste keer vooral zelf, met de hand, door in te loggen op
-het grade center, zodat je weet wat er achter de schermen gebeurt.
-
-Dit script is interactief: het presenteert je met een confirmatiescherm
-waarna je moet aangeven dat alles inderdaad klopt. Als alles daarna goed
-is krijg je te zien hoeveel cijfers er daadwerkelijk zijn geupload.
 
 [pol.sh]
 Een feedback macro *postprocessor*. Laat ergens in je feedback snippets
