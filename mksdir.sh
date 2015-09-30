@@ -6,8 +6,11 @@
 set -e
 
 NAME="$1"
-shift
-DIR=`grep -i "$NAME" "${0%/*}/userlist"`
+
+select name in $(grep -i "$NAME" "${0%/*}/userlist" | tr '\t' '|'); do
+	DIR=`echo "$name" | cut -f1 -d'|'`
+	break
+done
 
 if [ -e "$DIR" ]; then
 	echo "$DIR" already exists!
@@ -19,16 +22,12 @@ if [ -z "$DIR" ]; then
 	exit 1
 fi
 
-select name in "$DIR"; do
-	DIR=`echo "$name" | cut -f1`
-	break
-done
-
 if [ -z "$DIR" ]; then
 	echo Aborted.
 	exit 1
 fi
 
+echo "creating $DIR"
 mkdir -p "$DIR"
 cat >> "$DIR/$DIR.txt" <<EOF
 Name: $NAME ($DIR)
@@ -41,7 +40,3 @@ gesubmit per email
 Files:
 $*
 EOF
-
-if [ "$#" -gt 0 ]; then
-    mv "$@" "$DIR"
-fi
