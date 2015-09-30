@@ -5,7 +5,7 @@
 BBUSER=s0620866
 BBCOURSEID=91125
 
-declare -A email
+typeset -A email
 email[marc]="mschool@science.ru.nl"
 email[ko]="kostoffelen@student.ru.nl"
 email[pol]="p.vanaubel@student.science.ru.nl"

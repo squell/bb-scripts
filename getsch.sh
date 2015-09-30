@@ -23,7 +23,7 @@ WGET="wget --output-document=- --quiet --no-check-certificate --load-cookies bb.
 
 "${0%/*}"/bblogin2.sh "$BBUSER" 1>&2 || exit 1
 
-if [ "$1" == "users" ]; then
+if [ "$1" = "users" ]; then
     echo 1>&2 Only showing list of studentnumbers and email addresses
 
     # first sed: remove avatars and empty lines, so the studentnr follows <span class="profileCardAvatarThumb">

@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
 URL=http://www.agfl.cs.ru.nl/cgi-bin/boeket/boeket.cgi
 
