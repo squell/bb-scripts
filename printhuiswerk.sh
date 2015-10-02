@@ -13,7 +13,7 @@ for pdf in ${STUDDIRS}/*.[pP][dD][fF]; do
   if [ ! -r "${pdf}.printed" ];
   then
     echo "$pdf"
-    pdftops "$pdf" - | lpr -J "$studnr" -P${PRINTER} ${OPTIONS}
+    pdftops -paper A4 "$pdf" - | lpr -J "$studnr" -P${PRINTER} ${OPTIONS}
     touch "${pdf}.printed"
     sleep 3s
   else
