@@ -23,7 +23,7 @@ WGET="wget --output-document=- --quiet --no-check-certificate --load-cookies bb.
 
 "${0%/*}"/bblogin2.sh "$BBUSER" 1>&2 || exit 1
 
-if [ "$1" = "users" ]; then
+if [ "$1" == "users" ]; then
     echo 1>&2 Only showing list of studentnumbers and email addresses
 
     # first sed: remove avatars and empty lines, so the studentnr follows <span class="profileCardAvatarThumb">
@@ -55,7 +55,9 @@ ASSIGNMENT_URL="${BBDOWNLOAD}?outcome_definition_id=${assignment##*|}&showAll=tr
 echo Creating grades.csv
 echo Username,\""$assignment"\" | tr '_' ' ' > grades.csv
 
-if [ "$1" == "all" ]; then
+if [ "$1" == "nodownload" ]; then
+    exit
+elif [ "$1" == "all" ]; then
     echo Fetching everything.
     $WGET "$ASSIGNMENT_URL" | sed -n '/<form/,${/nonce/s/^.*name=.\([.[:alpha:]]\+\).*value=.\([0-9a-f-]\+\).*$/\1=\2/p}; /hidden/s/^.*needs_grading\([_0-9]\+\).*value="[a-z]\+".*$/students_to_export=\1/p; /hidden/s/^.*outcome_definition_id.*value="\([^"]\+\)".*$/outcome_definition_id=\1/p' | tr '\n' '&' > bb.postdata
 else
