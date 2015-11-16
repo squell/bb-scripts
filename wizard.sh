@@ -43,12 +43,13 @@ done
 echo
 read -p "What... is your favorite editor: " -i "$EDITOR" edit
 
-grep '^email' verdeel.sh > bb.mail
+echo '# email addresses of all participating assistants' > bb.mail
+grep '^email' verdeel.sh >> bb.mail
 which "${edit:-vi}" || death
 ${edit:-vi} bb.mail
 
 MAILFMT='email\[.*]=.*@.*'
-if grep -q -v "^\($MAILFMT\|\)$" bb.mail || ! grep -q "$MAILFMT" bb.mail; then
+if grep -q -v -e "^\($MAILFMT\|\)$" -e "^#" bb.mail || ! grep -q "$MAILFMT" bb.mail; then
 	death
 fi
 
