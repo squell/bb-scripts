@@ -72,6 +72,10 @@ Belangrijke onderdelen:
   - trialc: voert'n trialcompilatie uit met gcc/javac
       - jarify: probeer een .jar te maken van .java bestanden; gokt wat de juiste main() is.
 
+  - plaggen.sh/dupes.sh: generators voor .SUSPECT en .WARNING
+      * EDIT DEZE: ze moeten weten waar de practicum-templates staan
+      * voor dupes.sh heb je ook alle officiele uitwerkingen van vorig jaar nodig (zie svn)
+
   - groepjes.sh: probeert groepjes te achterhalen
       * mensen moet hiervoor de studentnummers vermelden bij het submitten
         (of in de uitwerking)
