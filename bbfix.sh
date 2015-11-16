@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
 # converteert een blackboard zip naar een directory structuur (bb 9.1)
 
@@ -23,12 +23,12 @@ for bbfile in "$TEMP"/*; do
 	bbfile="${bbfile#*/}"
 	basename="${bbfile#*attempt_20[0-9-]*_}"
 	studnr="${bbfile#*_}"
-	studnr="${studnr%%_[^0-9]*}"
+	studnr="${studnr%%_[!0-9]*}"
 	dir="${studnr}"
 	# move files that don't conform to the a seperate folder
 	if [ "${studnr##[sez]*}" ]; then
 		dir="attic"
-	elif [ "$basename" == "$bbfile" ]; then
+	elif [ "$basename" = "$bbfile" ]; then
 		basename="${dir}.txt"
 	fi
 	#echo DEBUG $bbfile -- $studnr -- $basename

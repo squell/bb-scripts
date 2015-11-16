@@ -14,7 +14,7 @@ CATDOC="$HOME/catdoc/bin/catdoc"
 
 STUDDIRS="[sez][0-9]*"
 
-declare -A unpack
+typeset -A unpack
 de.zip() { unzip -a -n -j -d "${1%/*}" "$1"; }
 de.rar() { unrar e -o- "$1" "${1%/*}"; }
 de.7z()  { 7zr e -y -o"${1%/*}" "$1"; }
@@ -52,18 +52,19 @@ done
 
 # complain about word
 echo Bashing text out of Word files \(`ls ${STUDDIRS}/*.doc ${STUDDIRS}/*.rtf ${STUDDIRS}/*.docx ${STUDDIRS}/*.odt 2> /dev/null | wc -l`\)
+if [ -x "$CATDOC" ]; then
 for doc in doc rtf; do
     for file in ${STUDDIRS}/*.$doc; do
 	[ "$file" != "${STUDDIRS}/*.$doc" ] && $CATDOC "${file}" > "${file%%.$doc}".txt
     done
 done
+fi
 for file in ${STUDDIRS}/*.docx; do
 	[ "$file" != "${STUDDIRS}/*.docx" ] && unzip -p "$file" word/document.xml | sed 's|<w:br/>|\n&|g;s|</w:p>|\n&|g;s|<[^>]*>||g' > "${file%%.docx}".txt
 done
 for file in ${STUDDIRS}/*.odt; do
 	[ "$file" != "${STUDDIRS}/*.odt" ] && unzip -p "$file" content.xml | sed 's|<text:tab/>|\t|g;s|<text:p|\n&|g;s|<[^>]*>||g' > "${file%%.odt}".txt
 done
-
 
 # kill all binaries
 echo Killing superfluous files

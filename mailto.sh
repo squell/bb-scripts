@@ -5,7 +5,7 @@ set -e
 FROM=`whoami`@science.ru.nl
 BCC="$FROM"
 
-PREFIX="BFCA-IBC001-1A-2011: [A&D]"
+PREFIX="OpenCourseWare: "
 
 USERLIST="${0%/*}/userlist"
 

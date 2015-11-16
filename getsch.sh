@@ -55,7 +55,9 @@ ASSIGNMENT_URL="${BBDOWNLOAD}?outcome_definition_id=${assignment##*|}&showAll=tr
 echo Creating grades.csv
 echo Username,\""$assignment"\" | tr '_' ' ' > grades.csv
 
-if [ "$1" == "all" ]; then
+if [ "$1" == "nodownload" ]; then
+    exit
+elif [ "$1" == "all" ]; then
     echo Fetching everything.
     $WGET "$ASSIGNMENT_URL" | sed -n '/<form/,${/nonce/s/^.*name=.\([.[:alpha:]]\+\).*value=.\([0-9a-f-]\+\).*$/\1=\2/p}; /hidden/s/^.*needs_grading\([_0-9]\+\).*value="[a-z]\+".*$/students_to_export=\1/p; /hidden/s/^.*outcome_definition_id.*value="\([^"]\+\)".*$/outcome_definition_id=\1/p' | tr '\n' '&' > bb.postdata
 else

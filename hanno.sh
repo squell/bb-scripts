@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
 # - levert feedback per mail
 # - automatiseert invoeren van grades naar Bb
