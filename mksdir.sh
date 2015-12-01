@@ -3,17 +3,29 @@
 # create a emulated s123456 directory + fake response file
 # use if someone who submitted manually :(
 
-# Usage: $ ./mksdir.sh Full Name
+# Usage: ./mksdir.sh "Student One" "Student Two"
+# works for any number of students.
 
 set -e
 
-FULLNAME="$@"
-NAME="${FULLNAME##* }"
-ASSIGNMENT="Week x"
+if [ -e "grades.csv" ]; then
+	ASSIGNMENT=$(cat grades.csv)
+	ASSIGNMENT=${ASSIGNMENT#*\"}
+	ASSIGNMENT=${ASSIGNMENT%|*}
+else
+	echo Please select an assignment first.
+	exit 1
+fi
 
-select name in $(grep -i "$NAME" "${0%/*}/userlist" | tr '\t' '|'); do
-	DIR=`echo "$name" | cut -f1 -d'|'`
-	break
+NAMELINES=
+
+for NAME in "$@"; do
+	TMP="${NAME##* }"
+	select name in $(grep -i "$TMP" "${0%/*}/userlist" | tr '\t' '|'); do
+		DIR="$(echo "$name" | cut -f1 -d'|')"
+		break
+	done
+	NAMELINES+="Name: $NAME ($DIR)"$'\n'
 done
 
 if [ -z "$DIR" ]; then
@@ -29,8 +41,7 @@ fi
 echo "creating $DIR"
 mkdir -p "$DIR"
 cat >> "$DIR/$DIR.txt" <<EOF
-Name: $FULLNAME ($DIR)
-Assignment: $ASSIGNMENT
+${NAMELINES}Assignment: $ASSIGNMENT
 Date Submitted: $(date)
 Current Grade: Not Yet Graded
 
