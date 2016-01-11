@@ -53,7 +53,7 @@ Als het misgaat zit het probleem misschien in de communicatie met BlackBoard; ee
 
 Belangrijke onderdelen:
 
-  - bblogin2: logt in op Bb met wget, nothing else.
+  - bblogin2: logt in op Bb met curl, nothing else.
 
   - getsch: scraper/downloader; produceert ook een stub grades.csv (nodig voor feedback)
       * getsch.sh users: produceer een userlist; 
