@@ -30,7 +30,7 @@ b64_uni() {
 trap "rm -f bb.$$" EXIT
 umask 077
 
-if [ ! -e bb.cookie ] || ! $WGET "$BBPORTAL" | grep -q '</iframe>'; then
+if [ ! -e bb.cookie ] || $WGET "$BBPORTAL" | grep -q 'LoadLoginPage()'; then
 	if [ -z "$BBUSER" ]; then
 		read -p "User: " BBUSER
 	fi
