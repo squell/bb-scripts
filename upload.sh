@@ -29,7 +29,7 @@ export BBCOURSEID
 "${0%/*}"/bblogin2.sh "$BBUSER" 1>&2 || exit 1
 
 nonce() {
-	sed -n '/<form/,${/nonce/s/^.*name=.\([.[:alpha:]]\+\).*value=.\([0-9a-f-]\+\).*$/\1=\2/p;q}' 
+	sed -n '/uploadGradebookForm2/,${/nonce/s/^.*name=.\([.[:alpha:]]\+\).*value=.\([0-9a-f-]\+\).*$/\1=\2/p;q}' 
 }
 
 NONCE=`$CURL "$BBUPLOAD" | nonce`
