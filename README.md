@@ -3,11 +3,14 @@ bb-scripts
 
 bash scripts for the ELO of RU
 
-(c) Marc Schoolderman 2007-2014; see LICENSE for licensing details
+(c) Marc Schoolderman 2007-2016; see LICENSE for licensing details
 
-this repository is documented by oral tradition.
+the astute reader may have noticed a file called "LEESMIJ.TXT"
 
-if you need to know anything, you will know whom to get this information from
+it may contain useful information.
 
-if you do not, you do not.
+it is in the nature of these scripts that they break occassionally. when they do, you can either
 
+1. give up and become a bitter person
+
+2. use the issue tracker and contribute
