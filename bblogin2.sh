@@ -13,9 +13,8 @@
 BBUSER="$1"
 
 BBLOGIN="https://blackboard.ru.nl/webapps/login/"
-BBPORTAL="https://blackboard.ru.nl/webapps/portal/frameset.jsp"
 
-CURL="curl --silent --cookie bb.cookie --cookie-jar bb.cookie"
+CURL="curl --silent --cookie bb.cookie --cookie-jar bb.cookie --location"
 
 BASE64="base64 -w0"
 
@@ -29,7 +28,7 @@ b64_uni() {
 
 umask 077
 
-if [ ! -e bb.cookie ] || $CURL "$BBPORTAL" | grep -q 'LoadLoginPage()'; then
+if [ ! -e bb.cookie ] || $CURL "$BBLOGIN" | grep -q 'loadLoginPage()'; then
 	if [ -z "$BBUSER" ]; then
 		read -p "User: " BBUSER
 	fi
