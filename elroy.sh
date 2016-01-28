@@ -105,7 +105,7 @@ echo Randomly distributing workload
 
 hak2.sh "${!email[@]}"
 
-humor=$(boeket.sh)
+humor=$(ambrose.sh)
 #humor=$(iching.sh)
 for ta in "${!email[@]}"
 do
