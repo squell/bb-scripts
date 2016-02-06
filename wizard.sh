@@ -45,7 +45,7 @@ echo
 read -p "What... is your favorite editor: " -i "$EDITOR" edit
 
 echo '# email addresses of all participating assistants' > bb.mail
-grep '^email' verdeel.sh >> bb.mail
+grep '^email' elroy.sh >> bb.mail
 which "${edit:-vi}" || death
 ${edit:-vi} bb.mail
 
@@ -54,11 +54,15 @@ if grep -q -v -e "^\($MAILFMT\|\)$" -e "^#" bb.mail || ! grep -q "$MAILFMT" bb.m
 	death
 fi
 
-sed -i "/^email/d;/^typeset -A email/rbb.mail" verdeel.sh
-sed -i "/^BBUSER=.*$/s//BBUSER=$BBUSER/" verdeel.sh
-sed -i "/^BBCOURSEID=[0-9]*$/s//BBCOURSEID=$BBCOURSEID/" verdeel.sh upload.sh
+sed -i "/^email/d;/^typeset -A email/rbb.mail" elroy.sh
+sed -i "/^BBUSER=.*$/s//BBUSER=$BBUSER/" elroy.sh
+sed -i "/^BBCOURSEID=[0-9]*$/s//BBCOURSEID=$BBCOURSEID/" elroy.sh upload.sh
 sed -i "/BBCOURSEID:=[0-9]*/s//BBCOURSEID:=$BBCOURSEID/" getsch.sh
-sed -i "/^SUBJECT=.*$/s//SUBJECT=\"${course%|*}: \"/" verdeel.sh
+sed -i "/^SUBJECT=.*$/s//SUBJECT=\"${course%|*}: \"/" elroy.sh
 
 echo Go on. Off you go.
 rm -f bb.mail
+
+echo You still have to set up Clean and edit trial.sh, plaggen.sh, dupes.sh
+echo
+death
