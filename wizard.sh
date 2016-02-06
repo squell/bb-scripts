@@ -11,7 +11,7 @@ echo ere the other side he see.
 echo
 echo What... is your username?
 read -p "User: " BBUSER 
-bblogin2.sh "$BBUSER"
+./bblogin2.sh "$BBUSER"
 
 death() {
 	echo "What... is the airspeed-velocity of an unladen swallow?"
