@@ -3,6 +3,7 @@
 # configuration wizard for bb-scripts
 
 set -e
+cd "${0%/*}"
 
 echo Stop! 
 echo
