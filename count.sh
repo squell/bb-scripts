@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # count maakt het toedelen van punten makkelijker.
 # Vul je feedback met dingen als -4 om punten af te trekken. Draai
