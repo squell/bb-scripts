@@ -25,24 +25,27 @@ for NAME in "$@"; do
 		DIR="$(echo "$name" | cut -f1 -d'|')"
 		break
 	done
+
+	if [ -z "$DIR" ]; then
+		echo "User $NAME not found."
+		continue
+	fi
+
+	if [ -e "$DIR" ]; then
+		echo "$DIR" already exists!
+		continue
+	fi
+
 	NAMELINES+="Name: $NAME ($DIR)"$'\n'
-done
 
-if [ -z "$DIR" ]; then
-	echo User not found.
-	exit 1
-fi
-
-if [ -e "$DIR" ]; then
-	echo "$DIR" already exists!
-	exit 1
-fi
-
-echo "creating $DIR"
-mkdir -p "$DIR"
-cat >> "$DIR/$DIR.txt" <<EOF
-${NAMELINES}Assignment: $ASSIGNMENT
-Date Submitted: $(date)
-Current Grade: Not Yet Graded
-
+	echo "creating $DIR"
+	mkdir -p "$DIR"
+	cat >> "$DIR/$DIR.txt" <<EOF
+	${NAMELINES}Assignment: $ASSIGNMENT
+	Date Submitted: $(date)
+	Current Grade: Needs Grading
+	
 EOF
+
+	unset DIR
+done
