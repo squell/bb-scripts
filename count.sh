@@ -37,7 +37,7 @@ for f in "$@"; do
     if [ $? -eq 0 ]; then
         head -n -3 "$f" | sponge "$f"
     fi
-    echo -e "\nPoints: $SUM = $GRADE.\n" >> "$f"
+    `which echo` -e "\nPoints: $SUM = $GRADE.\n" >> "$f"
 
     # Overwrite grade
     sed "s/Current Grade:.*/Current Grade: $GRADE/g" "$f" | sponge "$f"
