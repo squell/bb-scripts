@@ -5,14 +5,14 @@
 UITWERKINGEN=$HOME/FP2013/Uitwerkingen
 CLEANDIR="$HOME/Clean/clean64"
 LIB="${CLEANDIR}/lib"
-CLM="${CLEANDIR}/bin/clm -h 64m -s 8m"
+CLM="${CLEANDIR}/bin/clm -h 64m -s 8m -dynamics"
 
 if [ -z "$1" ]; then
 	echo "usage: trial.sh dir"
 	exit
 fi
 
-export CLEANPATH="${LIB}/StdEnv:${LIB}/StdLib:${LIB}/Gast:${LIB}/Generics:${LIB}/MersenneTwister"
+export CLEANPATH="${LIB}/StdEnv:${LIB}/StdLib:${LIB}/Gast:${LIB}/Generics:${LIB}/MersenneTwister:${LIB}/Dynamics"
 
 gast_test()
 {
@@ -52,7 +52,7 @@ remcom() {
 
 gen_dcl()
 {
-	remcom | sed -rn '/Start/d;s/^implementation/definition/p;/^[^:[:space:]].*::/p;/^::/s/(:?=.*)?$//p;/import/p;/instance/s/(where.*)?$//p'
+	remcom | sed -rn '/Start/d;s/^implementation/definition/p;/^[^:[:space:]][^(]*::/p;/^::/s/(:?=.*)?$//p;/import/p;/instance/s/(where.*)?$//p'
 }
 
 for dir in "$@"; do
