@@ -47,7 +47,7 @@ done
 # unpdfize stuff
 echo Extracting text from PDF files \(`ls ${STUDDIRS}/*.pdf 2> /dev/null | wc -l`\)
 for file in ${STUDDIRS}/*.pdf; do
-	[ "$file" != "${STUDDIRS}/*.pdf" ] && pdftotext -layout "$file"
+	[ "$file" != "${STUDDIRS}/*.pdf" ] && pdftotext -layout "$file" "$file.txt"
 done
 
 # complain about word
