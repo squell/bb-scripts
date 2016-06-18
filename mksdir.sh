@@ -43,6 +43,6 @@ mkdir -p "$DIR"
 cat >> "$DIR/$DIR.txt" <<EOF
 ${NAMELINES}Assignment: $ASSIGNMENT
 Date Submitted: $(date)
-Current Grade: Not Yet Graded
+Current Grade: Needs Grading
 
 EOF
