@@ -5,7 +5,7 @@
 STUDDIRS="[sez][0-9]*"
 
 for stud in $STUDDIRS; do
-    	for pdf in "$stud"/*.pdf; do
+	for pdf in "$stud"/*.[Pp][Dd][Ff]; do
 	    	if [ -e "$pdf" ] && [ ! -e "$pdf.printed" ]; then
 		    	continue 2
 		fi 

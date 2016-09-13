@@ -5,6 +5,7 @@
 set -e
 
 choose() {
+    name=""
     if [ "$#" = 1 ]; then
 	name="$1"
     else
