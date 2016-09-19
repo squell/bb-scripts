@@ -5,7 +5,7 @@
 
 EDITOR=vi
 
-VAR='^\(\$[[:alnum:][:space:]]\+\)'
+VAR='^\(\$[[:alnum:][:space:]_]\+\)'
 TEMP=`mktemp`
 sed "/${VAR}:$/",'/^\$$/!d;/^\$/{s/://;/\$$/d}' "$@" >> "$TEMP"
 grep -ho "${VAR}$" "$@" | grep -Fvxf "$TEMP" - | sort -u >> "$TEMP"
