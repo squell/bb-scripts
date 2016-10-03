@@ -96,8 +96,7 @@ for ta in "${!email[@]}"
 do
     cp grades.csv "$ta"
     cp userlist "$ta"
-    cp -n bblogin2.sh "$ta"
-    cp -n feedback.sh grades.sh "$ta"
+    cp -n bblogin2.sh feedback.sh grades.sh pol.sh stats.sh "$ta"
     sed -f - upload.sh > "${ta}/upload.sh" <<...
 /^BBCOURSEID=/c\
 BBCOURSEID=$BBCOURSEID
