@@ -51,9 +51,9 @@ fi
 
 if [ "$HIST" = true ]; then
     histmin=1
-    histmax=5
-    histstep=1
-    
+    histmax=100
+    histstep=10
+
     echo "Histogram:"
     i=$histmin
     while [ $i -le $histmax ]; do
