@@ -32,7 +32,7 @@ if [ "$1" == "users" ]; then
 
     $CURL "${BBUSERS}&showAll=true" |
     	sed 's/<img[^>]*>//g;/^[[:space:]]*$/d' | 
-	sed -n '/profileCardAvatarThumb/{N;s/.*\([suezf][0-9]\{6,7\}\).*/\1/p};/mailto:/s/[[:space:]]\|<[^>]*>//gp' | 
+	sed -n '/profileCardAvatarThumb/{N;s/.*\([usezf][0-9]\{6,7\}\).*/\1/p};/mailto:/s/[[:space:]]\|<[^>]*>//gp' | 
 	sed -n 'N;s/\n/\t/p'
     exit
 fi

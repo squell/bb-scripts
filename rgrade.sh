@@ -1,10 +1,10 @@
 #!/bin/sh
 # Becijfer een willekeurig, nog niet becijferd, groepje
 # de -pdf vlag opent pdfs ook in een grafische editor
-EDITOR="vi -p"
+[ -z "$EDITOR" ] && EDITOR="vi -p --"
 PDFVIEW="evince"
 PAT="Needs Grading"
-GLB='./[usef][0-9][0-9][0-9]*/[usef][0-9][0-9][0-9]*.txt'
+GLB='./[usef][0-9]*/[usef][0-9]*.txt'
 DIR="$(grep -Fl "$PAT" $GLB | shuf | head -1)"
 if [ -n "$DIR" ]; then
 	cd "$(dirname "$DIR")"
