@@ -26,7 +26,8 @@ for bbfile in "$TEMP"/*; do
 	studnr="${studnr%%_[!0-9]*}"
 	dir="${studnr}"
 	# move files that don't conform to the a seperate folder
-	if [ "${studnr##[sez]*}" ]; then
+
+	if [ "${studnr##[usefz]*}" ]; then
 		dir="attic"
 	elif [ "$basename" = "$bbfile" ]; then
 		basename="${dir}.txt"

@@ -36,7 +36,7 @@ for file in "$@"; do
 	fi
 
 	ASSIGNMENT=`sed -n '/^Assignment:/s///p' "$file"`
-	TOID=`sed -n '/^Name:/s/.*\([sez][0-9]\+\).*/\1/p' "$file"`
+	TOID=`sed -n '/^Name:/s/.*\([usefz][0-9]\+\).*/\1/p' "$file"`
 	GRADE=`sed -n '/^Current Grade:[[:space:]]*/s///p' "$file"`
 
 	if [ "$GRADE" = "Needs Grading" ] || ! grep -q "Feedback:" "$file" || grep -q '^\(\$[[:alnum:][:space:]_]\+\)' "$file"; then
