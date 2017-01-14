@@ -1,11 +1,23 @@
 #!/bin/sh
+# Maakt een histogram van de cijfers
 
+# De basic flag bepaalt of je de hoeveelheden ziet
 BASIC=true
+# De numeric flag bepaalt of je statistieken ziet
 NUMERIC=true
+# De uniq flag bepaalt of je de gegeven cijfers ziet
 UNIQ=true
+# De hist flag bepaalt of je het histogram ziet
 HIST=true
+# De group flag bepaalt of je per groepje of per student een cijfer ziet
+GROUP=false
 
-GRADES="$(grep 'Current Grade:' "$@" | cut -d' ' -f3)"
+if [ "$GROUP" = true ]; then
+	GRADES="$(grep -ohP '(?<=Current Grade: ).*' "$@")"
+else
+	GRADES="$(for g; do yes "$(grep -oP '(?<=Current Grade: ).*' "$g")" |\
+			head -n "$(grep -c 'Name: ' "$g")"; done)"
+fi
 
 if [ "$BASIC" = true ]; then
     count="$(echo "$GRADES" | wc -l)"
@@ -22,7 +34,7 @@ if [ "$NUMERIC" = true ]; then
     range="$((max-min))"
     avg="$(echo "$GRADES" | awk '{s+=$1}END{print s/NR}')"
     svd="$(echo "$GRADES" | awk '{sum+=$1; sumsq+=$1*$1}END{print sqrt(sumsq/NR - (sum/NR)*(sum/NR))}')"
-    
+
     echo "minimum:   $min"
     echo "maximum:   $max"
     echo "range:     $range"
@@ -33,14 +45,14 @@ fi
 
 if [ "$UNIQ" = true ]; then
     echo "Distribution:"
-    echo "$GRADES" | sort -g | uniq -c
+    echo "$GRADES" | sort -gu
     echo
 fi
 
 if [ "$HIST" = true ]; then
-    histmin=0
-    histmax=100
-    histstep=10
+    histmin=1
+    histmax=5
+    histstep=1
     
     echo "Histogram:"
     i=$histmin
