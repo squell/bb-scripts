@@ -45,7 +45,7 @@ fi
 
 if [ "$UNIQ" = true ]; then
     echo "Distribution:"
-    echo "$GRADES" | sort -gu
+    echo "$GRADES" | sort -g | uniq -c
     echo
 fi
 
