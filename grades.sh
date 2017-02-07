@@ -13,7 +13,7 @@ if [ ! -e "$USERLIST" ]; then
 fi
 
 for file in "$@"; do
-        TOID=`sed -n '/^Name:/s/.*\([sez][0-9]\+\).*/\1/p' "$file"`
+	TOID=`sed -n '/^Name:/s/.*\([usefz][0-9]\+\).*/\1/p' "$file"`
 	GRADE=`sed -n '/^Current Grade:[[:space:]]*/s///p' "$file"`
 
 	for id in $TOID; do

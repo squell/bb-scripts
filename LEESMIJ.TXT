@@ -115,6 +115,9 @@ Het kan geen kwaad dit meerdere keren te draaien.
        waarna je moet aangeven dat alles inderdaad klopt. Als alles daarna goed
        is krijg je te zien hoeveel cijfers er daadwerkelijk zijn geupload.
 
+Voor Vim gebruikers: https://github.com/camilstaps/vim-bb is een kleine Vim
+plugin voor syntax highlighting in feedback-bestanden.
+
 *** EXPERIMENTEEL ***
 
 [pol.sh]

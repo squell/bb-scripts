@@ -36,10 +36,10 @@ for file in "$@"; do
 	fi
 
 	ASSIGNMENT=`sed -n '/^Assignment:/s///p' "$file"`
-	TOID=`sed -n '/^Name:/s/.*\([sez][0-9]\+\).*/\1/p' "$file"`
+	TOID=`sed -n '/^Name:/s/.*\([usefz][0-9]\+\).*/\1/p' "$file"`
 	GRADE=`sed -n '/^Current Grade:[[:space:]]*/s///p' "$file"`
 
-	if [ "$GRADE" = "Needs Grading" ] || ! grep -q "Feedback:" "$file"; then
+	if [ "$GRADE" = "Needs Grading" ] || ! grep -q "Feedback:" "$file" || grep -q '^\(\$[[:alnum:][:space:]_]\+\)' "$file"; then
 		echo "$file" grading not finished, stopping >& 2
 		exit 1
 	fi
@@ -61,7 +61,7 @@ for file in "$@"; do
 		echo Could not find any email address for students: $TOID! >&2
 		touch "${file}.could_not_sent"
 	else
-		sed -n '/^Date/p;/^Current Grade:/p;/^Feedback:/,$p' "$file" | tr -d '\r' | mail -a "$MIME" -n -s "$SUBJECT" ${FROM:+-a "From: $FROM"} ${BCC:+-b "$BCC"} $TO && echo "$TO" > "${file}.sent"
+		sed -n '/^Date/p;/^Current Grade:/p;/^Feedback:/,$p' "$file" | tr -d '\r' | bsd-mailx -a "$MIME" -n -s "$SUBJECT" ${FROM:+-a "From: $FROM"} ${BCC:+-a "Bcc: $BCC"} ${BCC:+-b "$BCC"} $TO && echo "$TO" > "${file}.sent"
 		#sed -n '/^Date/p;/^Current Grade:/p;/^Feedback:/,$p' "$file" | tr -d '\r' | "${0%/*}"/xmail.sh -a "$MIME" -s "$SUBJECT" ${FROM:+-f "$FROM"} ${BCC:+-b "$BCC"} $TO && echo "$TO" > "${file}.sent"
 	fi
 done
