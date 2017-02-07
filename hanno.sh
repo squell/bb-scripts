@@ -18,7 +18,7 @@ if [ ! -e "${1:+$1/}grades.csv" ]; then
 fi
 
 echo May spam.
-for fulldir in "${1:+$1/}"[sez][0-9]*; do
+for fulldir in "${1:+$1/}"[usefz][0-9]*; do
 	dir="${fulldir##*/}"
 	echo "$dir"
 	"$MYDIR"/mailto.sh "${fulldir}/${dir}.txt"
