@@ -67,10 +67,10 @@ antifmt.sh
 
 echo 
 echo Trial compilation
-trialc.sh [sez][0-9]*    # reminder: this also matches 's0abc' etc.
+trialc.sh [usefz][0-9]*    # reminder: this also matches 's0abc' etc.
 
 echo Groupcheck 
-groepjes.sh [sez][0-9]* | grep "<with>" || true
+groepjes.sh [usefz][0-9]* | grep "<with>" || true
 
 echo
 

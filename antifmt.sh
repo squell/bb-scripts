@@ -75,7 +75,7 @@ exit
 # generate to-kill list
 echo ""
 echo This weeks offenders list:
-for stupid in `ls ${STUDDIRS}/*.pdf ${STUDDIRS}/*.doc* ${STUDDIRS}/*.odt ${STUDDIRS}/*.rtf 2> /dev/null | sed 's:\([sez][0-9]*\)/.*:\1/\1.txt:g' | uniq`; do
+for stupid in `ls ${STUDDIRS}/*.pdf ${STUDDIRS}/*.doc* ${STUDDIRS}/*.odt ${STUDDIRS}/*.rtf 2> /dev/null | sed 's:\([usefz][0-9]*\)/.*:\1/\1.txt:g' | uniq`; do
 	if [ -e "$stupid" ]; then
 		head -q -n1 "$stupid" | sed 's/^Name //'
 	else
