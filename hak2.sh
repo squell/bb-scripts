@@ -14,7 +14,7 @@ i=$RANDOM
 until [ -z "$1" ]; do
    mkdir -p "$1"
    # move contents of directories already present
-   for prestud in "$1"/[sez][0-9]*; do
+   for prestud in "$1"/[usefz][0-9]*; do
        stud="${prestud##*/}"
        if [ -d "$prestud" ] && [ -d "$stud" ]; then
 	   mv -u "$stud"/* "$prestud"
@@ -28,6 +28,6 @@ done
 # de 'grep' is hier slechts een extra safety; zou eigenlijk niet nodig moeten zijn.
 # als je die aanpast wil je ook in groepjes.sh waarschijnlijk even rondneuzen.
 i=0
-for stud in `ls -d [sez][0-9]* 2> /dev/null | grep "[sez][0-9]\{6,7\}" | sort -R`; do
+for stud in `ls -d [usefz][0-9]* 2> /dev/null | grep "[usefz][0-9]\{6,7\}" | sort -R`; do
    mv "$stud" "${dir[$((i++%N))]}"
 done

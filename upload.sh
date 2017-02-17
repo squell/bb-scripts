@@ -12,6 +12,9 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+# first, filter noise from grades.csv, grades entered later should override those entered earlier
+{ head -n1 "$1"; sed 1d "$1" | tac | sort -u -t',' -k1,1; } | sponge "$1"
+
 # code starts here
 
 HEAD=`head -n1 "$1" | cut -d, -f2 | tr -d '"'`
