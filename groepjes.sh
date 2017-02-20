@@ -39,7 +39,7 @@ for dir in "$@"; do
 	#TOID=`sed -n '/Name:/s/.*\([sez][0-9]\+\).*/\1/p' "$file"`
 	#TOID=`grep -oi '\<[sez]\?[0-9]\{6,7\}\>' "$file" | tr SEZ sez | sort -u`
 	#TOID=`grep -oihI '\<[usefz]\?[0-9]\{6,7\}\>' "${file%%/*}"/* | sed 's/\<[0-9]/s&/' | tr USEFZ usefz`
-	TOID=`find "${file%%/*}" -type f -not -name "*.WARNING" | xargs grep -oihI '\<[usefz]\?[0-9]\{6,7\}\>' | sed 's/\<[0-9]/s&/' | tr USEFZ usefz
+	TOID=`find "${file%%/*}" -type f -not -name "*.WARNING" | xargs grep -oihI '\<[usefz]\?[0-9]\{6,7\}\>' | sed 's/\<[0-9]/s&/' | tr USEFZ usefz`
 	for id in $TOID; do
 		grep "$id" "$USERLIST" | cut -f1,2 | sed 's/@[[:print:]]*\>//g'
 	done | sort -u | tr '\t\n' ' ' | sed 's/[^0-9] \</&<with> /g'
