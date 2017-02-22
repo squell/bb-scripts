@@ -1,7 +1,7 @@
 #! /bin/sh
 
-# - levert feedback per mail
-# - automatiseert invoeren van grades naar Bb
+# - sends provided feedback by email
+# - streamlines grade submission in Blackboard
 
 set -e
 
