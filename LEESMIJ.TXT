@@ -81,8 +81,6 @@ Belangrijke onderdelen:
 
   - iching: ter inspiratie.
 
-  - boeket: iets voor in je .bash_profile [HELAAS IS DIT STUK]
-
 
 [feedback.sh]
 Verstuurt den feedback en genereert een grades.csv.
