@@ -1,26 +1,21 @@
 #!/bin/sh
 
-# count maakt het toedelen van punten makkelijker.
-# Vul je feedback met dingen als -4 om punten af te trekken. Draai
-# dan count.sh om automatisch het aantal overgebleven punten te
-# berekenen:
-#
+# count.sh makes distributing points easier.
+# Fill your feedback with things as -4 to subtract points. Run count.sh to
+# automatically calculate the rest of the points:
 #   TOTAL=100 ./count.sh s*/s*.txt
-#
-# voor een totaal van 100 punten (de default).
-#
-# count.sh update de Current Grade regel (ook als daar al iets anders
-# stond!) en voegt een 'Points: ..' regel aan het eind van de feedback
-# toe met de berekening. Het script kan meerdere keren worden gedraaid,
-# dan wordt de oude berekening overschreven. Het is hiervoor wel nood-
-# zakelijk dat er niets onder wordt geschreven, want dit script ver-
-# wijdert simpelweg de laatste 3 regels.
-#
-# Werkt niet met decimale getallen. + wordt niet herkend om bonus-
-# punten toe te kennen.
-#
-# De regex gebruikt om punten te herkennen is \s\-\d+, dus er moet
-# whitespace voor staan.
+# 100 points is the default.
+
+# count.sh updates the Current Grade line (even when it does not say 'Needs
+# Grading'!) and adds a 'Points: ...' line at the end of the feedback with the
+# calculation. The script can be run multiple times; the old calculation will
+# be overridden. Do not write stuff below the calculation as the script will
+# just remove the last three lines.
+
+# This does not work with decimal numbers.
+# + is not recognised for bonus points, but do make a pull request.
+
+# The regex to recognise points is \s\-\d+, so include whitespace before it.
 
 if [ -z "$TOTAL" ]; then
     TOTAL="100"

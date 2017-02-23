@@ -1,13 +1,13 @@
 #!/bin/sh
 
-# Maakt een mapje met mogelijke plagiaatgevallen om aan de docent te versturen.
-# Gebruik: ./collectplag.sh s123 s456 s789
+# Makes a directory with possible plagiarism cases to send to the teacher.
+# Usage: ./collectplag.sh s123 s456 ...
 
-# Het resultaat is een map plag-s123-s456-s789 en diezelfde map ge-targz'ed.
-# De output bevat een template voor een email aan de docent, met daarin de
-# namen / nummers van de studenten en of ze al een cijfer in Blackboard hebben.
+# The result is a directory plag-s123-s456-... and a tarball of that directory.
+# The output shows a template for an email to the teacher, with a list of the
+# students concerned and whether they have a grade in blackboard or not.
 
-# Dit script neemt aan dat je de volgende setup hebt gedaan:
+# The script assumes the following setup:
 # ./getsch.sh users > userlist
 # ./getsch.sh all
 # ./bbfix.sh XXX.zip
