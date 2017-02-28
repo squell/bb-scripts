@@ -1,5 +1,5 @@
 #!/bin/sh
-# Becijfer een willekeurig, nog niet becijferd, groepje
+# Start grading a randomly chosen, ungraded submission
 [ $# != 0 ] &&  SHELL="$@" || ([ -z "$SHELL" ] && SHELL=bash)
 PAT="Needs Grading"
 GLB='./[usezf][0-9]*/[usezf][0-9]*.txt'
