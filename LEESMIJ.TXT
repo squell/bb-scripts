@@ -1,110 +1,113 @@
-=============================
-AUTOMATISCHE CONFIGURATIE
+-----------------------
+AUTOMATIC CONFIGURATION
+=======================
 
-Draai wizard.sh en beantwoord de gestelde vragen.
+Use the configuration wizard.sh
 
-=============================
 HANDMATIGE CONFIGURATIE
+=======================
 
 1. verdeel.sh
 
-Vul hier je BlackBoard-gebruikersnummer in, en de "BBCOURSEID" (zoek deze handmatig in de URL van de cursuspagina -- is niet moeilijk).
+Vul hier je BlackBoard-gebruikersnummer in, en de `BBCOURSEID` (zoek deze handmatig in de URL van de cursuspagina -- is niet moeilijk).
 
-Vul vervolgens voor elke assistent een naam + emailadres in, en pas de SUBJECT-regel aan zodat het lijkt alsof de mailtjes vanuit BlackBoard komen.
+Vul vervolgens voor elke assistent een naam + emailadres in, en pas de `SUBJECT`-regel aan zodat het lijkt alsof de mailtjes vanuit BlackBoard komen.
 
-Als je per studentassistent 'vaste' groepjes wil maken, maak dan per assistent een bestand van hetzelfde formaat als de output van "./getsch.sh users", met de naam group_<assistent>. Studenten die niet in zo'n bestand voorkomen worden willekeurig verdeeld.
+Als je per studentassistent (deels) 'vaste groepen' wil maken in plaats van een willekeurige verdeling, maak dan per assistent een bestand van hetzelfde formaat als de output van `./getsch.sh users`, met de naam `group_$assistent`. Studenten die niet in zo'n bestand voorkomen worden willekeurig verdeeld.
 
 2. bouw 'catdoc' (optioneel)
 
  http://ftp.wagner.pp.ru/pub/catdoc/catdoc-0.94.2.tar.gz
 
-...en pas CATDOC in antifmt.sh aan. Je hebt dit alleen nodig voor de .doc->.txt conversie
+...en pas `CATDOC` in antifmt.sh aan. Je hebt dit alleen nodig voor de .doc->.txt conversie
 
 3. verdere aanpassingen (development/testing only)
 
-Als je met zelf om welke reden dan ook getsch.sh wil draaien, zal je ook hier BBCOURSEID moeten aanpassen. 
+Als je met zelf om welke reden dan ook getsch.sh wil draaien, zal je ook hier `BBCOURSEID` moeten aanpassen.
 Idem met upload.sh, als je deze rechtstreeks uit je git repository wil draaien.
 
-=============================
 DISCLAIMER
+==========
 
-Hierna zou je in normaal gebruik genoeg moeten hebben aan 'verdeel.sh' en 'feedback.sh'. Gebruik de rest alleen als je weet wat ze doen.
+In normaal gebruik zou je genoeg moeten hebben aan verdeel.sh en feedback.sh. Gebruik de rest alleen als je weet wat ze doen.
 
-Als je dit op je eigen systeem wil draaien is dat op eigen risico. De scripts zijn bedoeld voor op lilo$n. Op elke andere recente Debian/Ubuntu zouden ze het ook moeten doen. Andere GNU distro's: untried (tip: het "mail" commando is de zwakke schakel)
+Als je dit op je eigen systeem wil draaien is dat op eigen risico. De scripts zijn bedoeld voor op lilo3/4/5. Op elke andere recente Debian/Ubuntu zouden ze het ook moeten doen. Andere GNU distro's: untried (tip: het `mail` commando is de zwakke schakel)
 
-BSD/OS X: werkt niet atm. verdeel.sh gebruikt een paar GNU extensies in sed; porten zou wel kunnen, maar meh. Voor 't feedbacken is wederom 'mail' de weak link.
+BSD/OS X: werkt niet atm. verdeel.sh gebruikt een paar GNU extensies in sed; porten zou wel kunnen, maar meh. Voor 't feedbacken is wederom `mail` de weak link.
 
-Als dit erg gewenst is kan ik voor'n tegenprestatie de scripts wél porten.
-
-=============================
 NOG EEN DISCLAIMER
+------------------
 
-Het BlackBoard-gedeelte van deze scripts communiceren met'n website door, basically, HTML te parseren met regexes. Just cross your fingers.
+Het BlackBoard-gedeelte van deze scripts communiceren met'n website door, basically, HTML te parseren met regexes.
 
-=============================
+
+-----------------------------
 MINI DOC
+=============================
 
 De scripts die je nodig hebt (verdeel.sh, feedback.sh) zijn semi-interactief en bedoeld om gebruiksvriendelijk te zijn. Meestal een kwestie van "gewoon draaien", dus.
 
-[verdeel.sh] 
-Regelt de workflow voor het nakijkproces. begint met't downloaden vanuit Bb, eindigt met't versturen van werk aan studentassistenten; compleet met de scripts die ze nodig hebben om feedback te kunnen geven. 
+verdeel.sh
+----------
 
-Als het misgaat zit het probleem misschien in de communicatie met BlackBoard; een alternatief is om met de hand de .zip uit Bb trekken en in de working directory zetten. Als het script een .zip vind probeert het namelijk niet zelf iets te downloaden. Meer waarschijnlijk is dat het probleem in BlackBoard zelf zit; in het verleden hebben we wel eens een submission gehad die roet in het eten gooide; als we die wisten deed Bb het weer. Onthoudt, als Bb goed werkte had je deze scripts niet nodig gehad.
+Regelt de workflow voor het nakijkproces. begint met't downloaden vanuit Bb, eindigt met't versturen van werk aan studentassistenten; compleet met de scripts die ze nodig hebben om feedback te kunnen geven.
+
+Als het misgaat zit het probleem misschien in de communicatie met BlackBoard; een alternatief is om met de hand de .zip uit Bb trekken en in de working directory zetten. Als het script een .zip vind probeert het namelijk niet zelf iets te downloaden. Het automatisch downloaden kan misgaan door upgrades/problemen (lees: upgrades=problemen) in Blackboard.
 
 Belangrijke onderdelen:
 
   - bblogin2: logt in op Bb met curl, nothing else.
 
   - getsch: scraper/downloader; produceert ook een stub grades.csv (nodig voor feedback)
-      * getsch.sh users: produceer een userlist; 
-      * getsch.sh all  : haal ook reeds nagekeken zooi binnen
+     * `getsch.sh users`: produceer een userlist;
+     * `getsch.sh all`  : haal ook reeds nagekeken zooi binnen
 
   - bbfix: correct uitpakken van de zip de je van Bb krijgt
-      * dingen die niet herkend werden worden in 'attic' geplaatst
-      * elke student wordt 1 dir, met een response file van Bb erbij
+     * dingen die niet herkend werden worden in 'attic' geplaatst
+     * elke student wordt 1 dir, met een response file van Bb erbij
 
   - antifmt: cleanup
-      * pakt zips,rars,7z,xz,tarballs uit (maakt er een log van)
-      * probeert pdf/doc/docx/rtf/odt naar text te converten 
-        ! hiervoor heb je 'catdoc' nodig
-      * delete overbodige/riskante binary data
+     * pakt zips,rars,7z,xz,tarballs uit (maakt er een log van)
+     * probeert pdf/doc/docx/rtf/odt naar text te converten  
+        **hiervoor heb je catdoc nodig**
+     * delete overbodige/riskante binary data
 
-  - trialc: voert'n trialcompilatie uit met gcc/javac
+  - trialc: voert'n trial-compilatie uit met gcc/javac
       - jarify: probeer een .jar te maken van .java bestanden; gokt wat de juiste main() is.
 
   - groepjes.sh: probeert groepjes te achterhalen
-      * mensen moeten hiervoor de studentnummers vermelden bij het submitten
-        (of in de uitwerking)
-      * doet niets anders dan extra "Name: " regels genereren
+     * mensen moeten hiervoor de studentnummers vermelden bij het submitten (of in de uitwerking)
+     * doet niets anders dan extra `Name:` regels genereren in de response files
 
   - hak2: verdeelt nakijkwerk in stapels
 
-  - iching: ter inspiratie.
+  - iching: ter inspiratie voor je feedback
 
 
-[feedback.sh]
-Verstuurt den feedback, genereert een grades.csv, en upload deze naar Bb.
+feedback.sh
+-----------
+Verstuurt de feedback, genereert een grades.csv, en upload deze naar Bb.
 
-Het is niet erg om dit in etappes te draaien (als je al een deel hebt nagekeken, maar nog niet alles); mensen krijgen de feedback niet dubbel.
+Het is niet erg om dit in etappes te draaien (als je al een deel hebt nagekeken, maar nog niet alles); mensen krijgen de feedback niet dubbel. Ook vinden er wat checks plaats om te zorgen dat je geen cijfers en/of feedback vergeet.
 
 Bij het uploaden wordt je om een bevesting gevraagd waaruit je zou moeten kunnen afleiden of het cijfers uploaden is gelukt. Als je het voor de allereerste keer draait, is het misschien een goed idee om niet te bevestigen en met de hand grades.csv in Grade Center te uploaden.
 
-  - mailto: script dat 'n responsefile vertaalt in een emailtje 
-     * meerdere recipients = meerdere "Name:" regels toevoegen.
-     * cijfers geven door "Current Grade" aan te passen
-     * feedback begin je onderaan met een "Feedback:" header.
+Belangrijke onderdelen:
 
-     * werkt op studentnummer; de lookuptable hiervoor staat in "userlist" 
-       ("getsch.sh users > userlist" wordt gedraaid als die niet bestaat)
+  - mailto: script dat 'n response file vertaalt naar een emailtje
+     * meerdere recipients = meerdere `Name:` regels toevoegen.
+     * cijfers geven door `Current Grade` aan te passen
+     * feedback begin je onderaan met een `Feedback:` header.
 
-     * je krijgt zelf BCC's van alle feedback. valt uit zetten, but don't.
+     * werkt op studentnummer; de lookuptable hiervoor staat in `userlist`  
+       (`getsch.sh users > userlist` wordt gedraaid als die niet bestaat)
+
+     * je krijgt zelf BCC's van alle feedback. valt uit zetten, but perhaps don't?
 
   - grades.sh: verzamelt de cijfers tot een .csv
+     * bevat tevens een work-around zodat 0 een valide beoordeling is ;)
 
   - upload.sh: upload een grades.csv naar BlackBoard.
-     * doe dit de eerste keer vooral zelf, met de hand, door in te loggen op
-       het grade center, zodat je weet wat er achter de schermen gebeurt.
-
      * dit script is interactief: het presenteert je met een confirmatiescherm
        waarna je moet aangeven dat alles inderdaad klopt. Als alles daarna goed
        is krijg je te zien hoeveel cijfers er daadwerkelijk zijn geupload.
@@ -112,34 +115,43 @@ Bij het uploaden wordt je om een bevesting gevraagd waaruit je zou moeten kunnen
 Voor Vim gebruikers: https://github.com/camilstaps/vim-bb is een kleine Vim
 plugin voor syntax highlighting in feedback-bestanden.
 
-=============================
 COMPLEMENTAIRE SCRIPTS
+======================
 
-Deze worden niet in de automatische workflow aangeroepen, maar zijn wel nuttig.
+Deze worden niet in de automatische workflow aangeroepen, maar zijn wel nuttig en worden meegeleverd aan alle assistenten:
 
-[rgrade.sh]
+rgrade.sh
+---------
 Een script om je stapel werk in random volgorde na te kijken (het is algemeen aangenomen door ervaren assistenten dit de fairness ten goede komt), en je bemoedigende informatie te geven hoeveel je nog te gaan hebt.
 
-Draai "./rgrade.sh" om een prompt te krijgen in een willekeurige directory, of "./rgrade.sh commando1 commando2 ..." om meerdere commandos automatisch uit te voeren. Je kan het script naturlijk ook customizen. Een suggestie voor vim-gebruikers is "./rgrade.sh 'vim -p *'".
+Draai `./rgrade.sh` om een prompt te krijgen in een willekeurige directory, of `./rgrade.sh commando1 commando2 ...` om meerdere commandos automatisch uit te voeren. Je kan het script naturlijk ook customizen.
+
+Een suggestie voor vim-gebruikers is `./rgrade.sh 'vim -p *'`
 
 
-[pol.sh]
+pol.sh
+------
 Een feedback macro *postprocessor*. Laat ergens in je feedback snippets achter van de vorm: (alles op een nieuwe regel)
 
+```
 $foo:
 Foo!
 $
 
-Dan kan je op elke andere plek 
+```
 
+Dan kan je op elke andere plek
+
+```
 $foo
+```
 
-opschrijven, en wordt dit vervangen met "Foo!". Je kan ook dit soort macros achteraf definieren; pol.sh presenteert je dan met een editor om dit te doen.
+opschrijven, en wordt dit vervangen met _Foo!_. Je kan ook dit soort macros achteraf definieren; pol.sh presenteert je dan met een editor om dit te doen.
 
-Om de macro-substituties daadwerkelijk te draaien, "./pol.sh s*/s*.txt" (of soortgelijk). Als je denkt dat alle student-assistenten snappen hoe dit werkt en het nuttig vinden zou je het aan feedback.sh kunnen toevoegen.
+Om de macro-substituties daadwerkelijk te draaien, `./pol.sh s*/s*.txt` (of soortgelijk). Als je denkt dat alle student-assistenten snappen hoe dit werkt en het nuttig vinden zouden we het aan de automatische flow van feedback.sh kunnen toevoegen.
 
-==============================
 PRAISE AND BLAME
+================
 
 That which cannot bear public examination can be directed in private to:
 
@@ -147,14 +159,15 @@ That which cannot bear public examination can be directed in private to:
 
 The following people have contributed directly to the continued existence of these scripts:
 
-   *Camil Staps*
-   *Etienne Bruines*
-   *Mart Lubbers*
-   *Jip Dekker*
-   *Lars Jellema*
-   *Steven Reitsma*
-   *Thom Wiggers*
-   *Joost Rijneveld*
+   *Camil Staps*  
+   *Etienne Bruines*  
+   *Mart Lubbers*  
+   *Jip Dekker*  
+   *Lars Jellema*  
+   *Steven Reitsma*  
+   *Thom Wiggers*  
+   *Pol Van Aubel*  
+   *Joost Rijneveld*  
    *Marc Schoolderman*
 
 Special blame should be directed at Ruben Nijveld and Marlon Baeten for suggesting the weird challenge-response Javascript-system BlackBoard used (back then) could be circumvented by using wget in a bash script. They were probably not being serious.
