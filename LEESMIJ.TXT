@@ -1,69 +1,89 @@
-=============================
-AUTOMATISCHE CONFIGURATIE
+-----------------------
+AUTOMATIC CONFIGURATION
+=======================
 
-Draai wizard.sh en beantwoord de gestelde vragen.
+Use the configuration wizard.sh
 
-=============================
 HANDMATIGE CONFIGURATIE
+=======================
 
 1. fetchprint.sh
 
-Vul hier je BlackBoard-gebruikersnummer in, de "BBCOURSEID" (zoek deze handmatig in de URL van de cursuspagina -- is niet moeilijk).
+Vul hier je BlackBoard-gebruikersnummer in, en de `BBCOURSEID` (zoek deze handmatig in de URL van de cursuspagina -- is niet moeilijk).
 
 2. verdere aanpassingen (development/testing only)
 
-Als je met zelf om welke reden dan ook getsch.sh wil draaien, zal je ook hier BBCOURSEID moeten aanpassen. 
+Als je met zelf om welke reden dan ook getsch.sh wil draaien, zal je ook hier `BBCOURSEID` moeten aanpassen.
 Idem met upload.sh, als je deze rechtstreeks uit je git repository wil draaien.
 
-=============================
 DISCLAIMER
+==========
 
 Hierna zou je in normaal gebruik genoeg moeten hebben aan 'fetchprint.sh'. Dit script download pdf'jes uit BlackBoard en print ze uit. Je kan de printer(s) waarop je het wil uitprinten als argument meegeven; anders vraagt hij erom.
 
-Als je dit op je eigen systeem wil draaien is dat op eigen risico. De scripts zijn bedoeld voor op lilo1/lilo2. Op elke andere recente Debian/Ubuntu zouden ze het ook moeten doen. Andere GNU distro's: untried (het "mail" commando is de zwakke schakel)
+Als je dit op je eigen systeem wil draaien is dat op eigen risico. De scripts zijn bedoeld voor op lilo3/4/5. Op elke andere recente Debian/Ubuntu zouden ze het ook moeten doen. Andere GNU distro's: untried (tip: het `mail` commando is de zwakke schakel)
 
-BSD/OS X: werkt niet atm. verdeel.sh gebruikt een paar GNU extensies in sed; porten zou wel kunnen, maar meh. Voor 't feedbacken is wederom 'mail' de weak link.
+BSD/OS X: werkt niet atm. verdeel.sh gebruikt een paar GNU extensies in sed; porten zou wel kunnen, maar meh. Voor 't feedbacken is wederom `mail` de weak link.
 
-Als dit erg gewenst is kan ik voor'n tegenprestatie de scripts wél porten.
-
-=============================
 NOG EEN DISCLAIMER
+------------------
 
-Het BlackBoard-gedeelte van deze scripts communiceren met'n website door, basically, HTML te parseren met regexes. Just cross your fingers.
+Het BlackBoard-gedeelte van deze scripts communiceren met'n website door, basically, HTML te parseren met regexes.
 
-=============================
+
+-----------------------------
 MINI DOC
+=============================
 
 De scripts die je nodig hebt (verdeel.sh, feedback.sh) zijn semi-interactief en bedoeld om gebruiksvriendelijk te zijn. Meestal een kwestie van "gewoon draaien", dus.
 
-[verdeel.sh] 
-Regelt de workflow voor het nakijkproces. begint met't downloaden vanuit Bb, eindigt met't versturen van werk aan studentassistenten; compleet met de scripts die ze nodig hebben om feedback te kunnen geven. 
+verdeel.sh
+----------
 
-Als het misgaat zit het probleem misschien in de communicatie met BlackBoard; een alternatief is om met de hand de .zip uit Bb trekken en in de working directory zetten. Als het script een .zip vind probeert het namelijk niet zelf iets te downloaden. Meer waarschijnlijk is dat het probleem in BlackBoard zelf zit; in het verleden hebben we wel eens een submission gehad die roet in het eten gooide; als we die wisten deed Bb het weer. Onthoudt, als Bb goed werkte had je deze scripts niet nodig gehad.
+Regelt de workflow voor het nakijkproces. begint met't downloaden vanuit Bb, eindigt met't versturen van werk aan studentassistenten; compleet met de scripts die ze nodig hebben om feedback te kunnen geven.
+
+Als het misgaat zit het probleem misschien in de communicatie met BlackBoard; een alternatief is om met de hand de .zip uit Bb trekken en in de working directory zetten. Als het script een .zip vind probeert het namelijk niet zelf iets te downloaden. Het automatisch downloaden kan misgaan door upgrades/problemen (lees: upgrades=problemen) in Blackboard.
 
 Belangrijke onderdelen:
 
   - bblogin2: logt in op Bb met curl, nothing else.
 
   - getsch: scraper/downloader; produceert ook een stub grades.csv (nodig voor feedback)
-      * getsch.sh users: produceer een userlist; 
-      * getsch.sh all  : haal ook reeds nagekeken zooi binnen
+     * `getsch.sh users`: produceer een userlist;
+     * `getsch.sh all`  : haal ook reeds nagekeken zooi binnen
 
   - bbfix: correct uitpakken van de zip de je van Bb krijgt
-      * dingen die niet herkend werden worden in 'attic' geplaatst
-      * elke student wordt 1 dir, met een response file van Bb erbij
+     * dingen die niet herkend werden worden in 'attic' geplaatst
+     * elke student wordt 1 dir, met een response file van Bb erbij
 
   - hak2: verdeelt nakijkwerk in stapels
 
-[upload.sh]
+upload.sh
+---------
 Upload een grades.csv naar BlackBoard.
 
 Dit script is interactief: het presenteert je met een confirmatiescherm
 waarna je moet aangeven dat alles inderdaad klopt. Als alles daarna goed
 is krijg je te zien hoeveel cijfers er daadwerkelijk zijn geupload.
 
-=============================
 PRAISE AND BLAME
+================
 
-m.schoolderman -at- student.science.ru.nl
+That which cannot bear public examination can be directed in private to:
 
+    m.schoolderman -at- science.ru.nl
+
+The following people have contributed directly to the continued existence of these scripts:
+
+   *Camil Staps*  
+   *Etienne Bruines*  
+   *Mart Lubbers*  
+   *Jip Dekker*  
+   *Lars Jellema*  
+   *Steven Reitsma*  
+   *Thom Wiggers*  
+   *Pol Van Aubel*  
+   *Joost Rijneveld*  
+   *Marc Schoolderman*
+
+Special blame should be directed at Ruben Nijveld and Marlon Baeten for suggesting the weird challenge-response Javascript-system BlackBoard used (back then) could be circumvented by using wget in a bash script. They were probably not being serious.

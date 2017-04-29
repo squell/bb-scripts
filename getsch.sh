@@ -2,14 +2,11 @@
 
 # Blackboard 9.1 login-en-fetch assignments script
 
-# Met veel dank aan Ruben Nijveld en Marlon Baeten voor hun
-# reverse-engineering informatie van BlackBoard;
-
-# Niet nodig om hier te zetten (maar kan ook geen kwaad)
+# Not necessary to enter here (but doesn't hurt either)
 #BBUSER=...
 
 # Voor het geval je getsch.sh met de hand wil draaien, edit deze regel!
-let ${BBCOURSEID:=107303} # FP 2013 
+let ${BBCOURSEID:=107303}
 
 BBLOGIN="https://blackboard.ru.nl/webapps/login/"
 BBGETTOKEN="https://blackboard.ru.nl/webapps/login/?action=relogin"

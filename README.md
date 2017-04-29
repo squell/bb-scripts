@@ -3,7 +3,7 @@ bb-scripts, stripped down "single TA using paper" version.
 
 bash scripts for the ELO of RU
 
-(c) Marc Schoolderman 2007-2016; see LICENSE for licensing details
+(c) Marc Schoolderman 2007-2017; see LICENSE for licensing details
 
 the astute reader may have noticed a file called "LEESMIJ.TXT"
 

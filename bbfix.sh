@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# converteert een blackboard zip naar een directory structuur (bb 9.1)
+# reconstruct a nice directory structure from a blackboard-provided zip (bb 9.1)
 
 umask 077
 
