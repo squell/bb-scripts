@@ -1,15 +1,14 @@
 #! /bin/bash
 
-# repareer alle creatieve dingen die mensen opsturen
-# - unzipped alle zips en rars (zonder dirs)
-# - convert pdfs naar text met pdftotext
-# - convert doc/rtf naar text met catdoc
-# - convert docx/odt naar text met hacks
-# - corrigeert line-endings {CR/LF, CR} -> LF
-# - print een lijstje van tekstverwerkergebruikers
+# repair all the creative stuff students submit
+# - unzip all zips en rars (w/o directory structure)
+# - convert pdfs to text using pdftotext
+# - convert doc/rtf to text using catdoc
+# - convert docx/odt to text using hacks
+# - correct line-endings {CR/LF, CR} -> LF
+# - print a list of people who think Word is an IDE
 
-# nodig: catdoc geinstalleerd, ergens
-
+# NECESSARY: catdoc built&installed, somewhere:
 CATDOC="$HOME/catdoc/bin/catdoc"
 
 STUDDIRS="[usefz][0-9]*"

@@ -1,16 +1,12 @@
 #!/bin/sh
-# Maakt een histogram van de cijfers
 
-# De basic flag bepaalt of je de hoeveelheden ziet
-BASIC=true
-# De numeric flag bepaalt of je statistieken ziet
-NUMERIC=true
-# De uniq flag bepaalt of je de gegeven cijfers ziet
-UNIQ=true
-# De hist flag bepaalt of je het histogram ziet
-HIST=true
-# De group flag bepaalt of je per groepje of per student een cijfer ziet
-GROUP=false
+# Some statistics about the grades
+
+BASIC=true    # How many students participated
+NUMERIC=true  # Min, max, range, avg, standard dev. (only for numeric grades)
+UNIQ=true     # Distribution of grades
+HIST=true     # Histogram (only for numeric grades)
+GROUP=false   # Whether grades are per group or per student
 
 if [ "$GROUP" = true ]; then
 	GRADES="$(grep -ohP '(?<=Current Grade: ).*' "$@")"
@@ -20,7 +16,7 @@ else
 fi
 
 if [ "$BASIC" = true ]; then
-    count="$(echo "$GRADES" | wc -l)"
+	count="$(grep -ohP '^Current Grade:' "$@" | wc -l)"
     countstudents="$(grep 'Name:' "$@" | wc -l)"
 
     echo "$count assignments handed in."

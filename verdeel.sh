@@ -14,8 +14,10 @@ SUBJECT="1314 Functioneel Programmeren (NWI-IBC006-2013-KW1-V):"
 
 # ---------------------- end of config -----------------------#
 
-# dit script regelt de verdeling over de assistenten,
-# en het downloaden van BB (dat laatste kan ook met de hand)
+# this script takes care of the distribution of workload over
+# all the teaching assistants, including downloading and sanitizing
+# the workload itself from Blackboard (although this latter part
+# can be performed manually if desired)
 
 set -e
 
