@@ -120,6 +120,10 @@ COMPLEMENTAIRE SCRIPTS
 
 Deze worden niet in de automatische workflow aangeroepen, maar zijn wel nuttig en worden meegeleverd aan alle assistenten:
 
+assignta.sh
+-----------
+This script makes group_ files based on a grade column in Blackboard. Some teachers like to make a grade 'group' which stores to which group people belong. This then fetches that information, and allows the distributor of the assignments to assign each group to a fixed assistant by making `group_$assistent` files.
+
 rgrade.sh
 ---------
 Een script om je stapel werk in random volgorde na te kijken (het is algemeen aangenomen door ervaren assistenten dit de fairness ten goede komt), en je bemoedigende informatie te geven hoeveel je nog te gaan hebt.
