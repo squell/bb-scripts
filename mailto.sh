@@ -36,6 +36,7 @@ for file in "$@"; do
 	fi
 
 	ASSIGNMENT=`sed -n '/^Assignment:/s///p' "$file"`
+	SUBJECT=`sed -n '/^Subject:/s///p' "$file"`
 	TOID=`sed -n '/^Name:/s/.*\([usefz][0-9]\+\).*/\1/p' "$file"`
 	GRADE=`sed -n '/^Current Grade:[[:space:]]*/s///p' "$file"`
 
@@ -44,12 +45,12 @@ for file in "$@"; do
 		exit 1
 	fi
 
-	if [ -z "${TOID}" ] || [ -z "${GRADE}" ] || [ -z "${ASSIGNMENT}" ]; then
-		echo "$file" does not appear to be a BlackBoard file, stopping >&2
+	if [ -z "${TOID}" ] || [ -z "${GRADE}" ] || [ -z "${ASSIGNMENT}${SUBJECT}" ]; then
+		echo "$file" does not appear to be a feedback template, stopping >&2
 		exit 1
 	fi
 
-	SUBJECT="$PREFIX Feedback $ASSIGNMENT"
+	SUBJECT="${SUBJECT:-$PREFIX Feedback $ASSIGNMENT}"
 
 	MIME="Content-Type: text/plain; charset=utf-8"
 	TO=`for id in $TOID; do
