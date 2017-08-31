@@ -11,7 +11,7 @@
 # NECESSARY: catdoc built&installed, somewhere:
 CATDOC="$HOME/catdoc/bin/catdoc"
 
-STUDDIRS="[usefz][0-9]*"
+STUDDIRS="${1:-[usefz][0-9]*}"
 
 typeset -A unpack
 de.zip() { unzip -a -n -j -d "${1%/*}" "$1"; }
