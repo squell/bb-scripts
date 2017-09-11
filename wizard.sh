@@ -56,7 +56,7 @@ fi
 
 sed -i "/^email/d;/^typeset -A email/rbb.mail" verdeel.sh
 sed -i "/^BBUSER=.*$/s//BBUSER=$BBUSER/" verdeel.sh
-sed -i "/^BBCOURSEID=[0-9]*$/s//BBCOURSEID=$BBCOURSEID/" verdeel.sh upload.sh
+sed -i "/^BBCOURSEID=[0-9]*/s//BBCOURSEID=$BBCOURSEID/" verdeel.sh upload.sh
 sed -i "/BBCOURSEID:=[0-9]*/s//BBCOURSEID:=$BBCOURSEID/" getsch.sh
 sed -i "/^SUBJECT=.*$/s//SUBJECT=\"${course%|*}: \"/" verdeel.sh
 

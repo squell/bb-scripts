@@ -2,7 +2,7 @@
 
 # Blackboard 9.1 upload-grades-csv script
 
-BBCOURSEID=91125 # FP 2013
+BBCOURSEID=91125
 
 # if this next variable is set, you will not be asked for your login
 #BBUSER=...
