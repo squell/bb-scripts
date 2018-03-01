@@ -55,10 +55,10 @@ if grep -q -v -e "^\($MAILFMT\|\)$" -e "^#" bb.mail || ! grep -q "$MAILFMT" bb.m
 fi
 
 sed -i "/^email/d;/^typeset -A email/rbb.mail" verdeel.sh
-sed -i "/^BBUSER=.*$/s//BBUSER=$BBUSER/" verdeel.sh
-sed -i "/^BBCOURSEID=[0-9]\+/s//BBCOURSEID=$BBCOURSEID/" verdeel.sh upload.sh
-sed -i "/BBCOURSEID:=[0-9]\+/s//BBCOURSEID:=$BBCOURSEID/" getsch.sh
-sed -i "/^SUBJECT=.*$/s//SUBJECT=\"${course%|*}: \"/" verdeel.sh
+sed -i "0,/^BBUSER=.*$/s//BBUSER=$BBUSER/" verdeel.sh
+sed -i "0,/^BBCOURSEID=[0-9]\+/s//BBCOURSEID=$BBCOURSEID/" verdeel.sh upload.sh
+sed -i "0,/BBCOURSEID:=[0-9]\+/s//BBCOURSEID:=$BBCOURSEID/" getsch.sh
+sed -i "0,/^SUBJECT=.*$/s//SUBJECT=\"${course%|*}: \"/" verdeel.sh
 
 echo Go on. Off you go.
 rm -f bb.mail
