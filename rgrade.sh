@@ -1,24 +1,13 @@
 #!/bin/sh
-# Becijfer een willekeurig, nog niet becijferd, groepje
-# de -pdf vlag opent pdfs ook in een grafische editor
-[ -z "$EDITOR" ] && EDITOR="vi -p --"
-PDFVIEW="evince"
+# Start grading a randomly chosen, ungraded submission
+[ $# != 0 ] &&  SHELL="$@" || ([ -z "$SHELL" ] && SHELL=bash)
 PAT="Needs Grading"
-GLB='./[usef][0-9]*/[usef][0-9]*.txt'
+GLB='./[usezf][0-9]*/[usezf][0-9]*.txt'
 DIR="$(grep -Fl "$PAT" $GLB | shuf | head -1)"
 if [ -n "$DIR" ]; then
+	OPWD="$(pwd)"
 	cd "$(dirname "$DIR")"
-	if [ "$1" = "-pdf" ]; then
-		PID=0
-		count=$(ls -1 | grep '\.pdf$' | wc -l)
-		if [ $count != 0 ]; then
-			$PDFVIEW *.pdf & PID=$!
-		fi
-	fi
-	$EDITOR *
-	if [ "$1" = "-pdf" ] && [ $PID != 0 ]; then
-		kill $PID 2>/dev/null
-	fi
-	cd ..
+	$SHELL
+	cd "$OPWD"
 fi
 echo "$DIR klaar. Nog $(grep -Fl "$PAT" $GLB | wc -l) te gaan..."

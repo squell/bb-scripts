@@ -14,8 +14,10 @@ SUBJECT="1314 Functioneel Programmeren (NWI-IBC006-2013-KW1-V):"
 
 # ---------------------- end of config -----------------------#
 
-# dit script regelt de verdeling over de assistenten,
-# en het downloaden van BB (dat laatste kan ook met de hand)
+# this script takes care of the distribution of workload over
+# all the teaching assistants, including downloading and sanitizing
+# the workload itself from Blackboard (although this latter part
+# can be performed manually if desired)
 
 set -e
 
@@ -67,10 +69,10 @@ antifmt.sh
 
 echo 
 echo Trial compilation
-trial.sh [sez][0-9]* > /dev/null
+trial.sh [usefz][0-9]* > /dev/null
 
 echo Groupcheck 
-groepjes.sh [sez][0-9]* | grep "<with>" || true
+groepjes.sh [usefz][0-9]* | grep "<with>" || true
 
 echo Received `find s* -name "*.icl" | wc -l` programs in `ls -d s* | wc -l` submissions by `cat s*/s*.txt | grep -hc ^Name:` students.
 echo Found `find s* -name "*.ERROR" | wc -l` compilation goofs. Tsk tsk.
