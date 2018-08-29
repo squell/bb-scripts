@@ -33,12 +33,6 @@ for stud in */; do
     mv "$stud" ."${dir[$((i++%N))]}"
 done
 
-for ((i=0; i<N; i++)); do
-    dir="${dir[$i]}"
+for dir in "${dir[@]}"; do
     mv ".$dir" "$dir"
-    cp index.html "$dir"
 done
-
-if [[ N != 0 ]]; then
-	rm -f index.html
-fi
