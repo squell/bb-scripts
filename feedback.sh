@@ -1,5 +1,8 @@
 #! /bin/sh
 
+echo feedback.sh is useless while we transition to blackboard, and will probably get deleted
+exit
+
 # - sends provided feedback by email
 # - streamlines grade submission in Blackboard
 

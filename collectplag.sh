@@ -1,5 +1,9 @@
 #!/bin/sh
 
+#TODO NEEDPORT
+echo "collectplag.sh is disabled while we transition to a new bright space"
+exit
+
 # Makes a directory with possible plagiarism cases to send to the teacher.
 # Usage: ./collectplag.sh s123 s456 ...
 

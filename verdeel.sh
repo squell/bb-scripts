@@ -1,5 +1,9 @@
 #! /bin/bash
 
+#TODO DECIDE: NEEDPORT OR DELETE?
+echo "verdeel.sh is disabled, and currently useless -- do what needs to be done manually for now/ever"
+exit
+
 # ---------------------- configuratie ------------------------#
 
 BBUSER=s0620866

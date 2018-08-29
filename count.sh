@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# TODO NEEDPORT
+echo "count.sh/stats.sh is disabled while we transition to a new bright space"
+exit
+
 # count.sh makes distributing points easier.
 # Fill your feedback with things as -4 to subtract points. Run count.sh to
 # automatically calculate the rest of the points:

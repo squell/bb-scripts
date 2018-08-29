@@ -1,5 +1,10 @@
 #! /bin/sh
 
+#TODO NEEDPORT OR DELETE?
+echo "grades.sh is disabled while we transition to a new bright space"
+exit
+
+
 if [ -z "$*" ]; then
 	echo "Usage: grades.sh s[0-9]*/s[0-9]*.txt" >& 2
 	exit

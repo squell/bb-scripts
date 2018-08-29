@@ -1,0 +1,51 @@
+
+bb-scripts => brightspace status
+
+1) Obsolete/deleted scripts
+
+These scripts interacted directly with BlackBoard (using curl/sed), and are thus so closely related to the (lack of) functionality that that system provided that they will not be useful:
+
+- bblogin2.sh
+- assignta.sh
+- getsch.sh
+- bbfix.sh
+- upload.sh
+- mksdir.sh
+- hak2.sh (replaced by hak3.sh!)
+
+Also, xmail.sh was deleted, because it was a silly script.
+
+2) Disabled scripts
+
+These scripts require the present of the "Blackboard response files" (the famed s*/s*.txt), or a list of usernames+email addresses to function.
+The functionality they provided may be quite useful, but we need to find out what a good "best practice" is with Brightspace before porting them.
+
+- antifmt.sh
+- count.sh
+- stats.sh
+- groepjes.sh
+- collectplag.sh
+
+These scripts are most likely unnecessary in the future:
+
+- verdeel.sh
+- wizard.sh
+- feedback.sh
+  - grades.sh
+  - mailto.sh
+
+3) Scripts that should work without modifications.
+
+- jarify.sh
+- iching.sh
+- pol.sh
+- rgrade.sh
+- trialc.sh
+
+4) NEW scripts
+
+- hak3.sh
+	sorts *all subdirectories* into fresh bins (hak2.sh only sorted s-directories)
+	note: this probably also need to split/distribute the index.html that brightspace gives us
+- dupes.sh 
+	finds possible duplicate handins in C++/Java code)

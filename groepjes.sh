@@ -1,5 +1,8 @@
 #! /bin/sh
 
+echo "groepjes.sh is disabled, and may be deleted"
+exit
+
 USERLIST="${0%/*}/userlist"
 
 if [ -z "$*" ]; then

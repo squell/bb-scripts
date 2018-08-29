@@ -1,5 +1,9 @@
 #!/bin/sh
 
+#TODO NEEDPORT
+echo "count.sh/stats.sh is disabled while we transition to a new bright space"
+exit
+
 # Some statistics about the grades
 
 BASIC=true    # How many students participated

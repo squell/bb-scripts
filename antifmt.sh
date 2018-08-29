@@ -1,5 +1,9 @@
 #! /bin/bash
 
+#TODO NEEDPORT
+echo "antifmt.sh is disabled while we transition to a new bright space"
+exit
+
 # repair all the creative stuff students submit
 # - unzip all zips en rars (w/o directory structure)
 # - convert pdfs to text using pdftotext

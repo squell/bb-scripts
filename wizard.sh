@@ -1,5 +1,25 @@
 #! /bin/bash
 
+cat<<EOF
+ _________________________________
+/ Are you sure you want to ask me \ 
+\ for help?                       /
+ ---------------------------------
+ \ 
+  \ 
+     __
+    /  \ 
+    |  |
+    @  @
+    |  |
+    || |/ 
+    || ||
+    |\_/|
+    \___/ 
+
+EOF
+exit
+
 # configuration wizard for bb-scripts
 
 set -e

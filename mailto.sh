@@ -1,5 +1,8 @@
 #! /bin/sh
 
+echo "mailto.sh is disabled and likely to be removed"
+exit
+
 set -e
 
 FROM=`whoami`@science.ru.nl
