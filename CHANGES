@@ -29,7 +29,6 @@ out what a good "best practice" is with Brightspace before porting them.
 
 These scripts are possibly unnecessary in the future:
 
-- verdeel.sh
 - wizard.sh
 - feedback.sh
   - mailto.sh
@@ -44,16 +43,19 @@ These scripts are possibly unnecessary in the future:
 
 4) New/ported scripts
 
+- bsunzip.sh
+	unzips a zip file downloaded from brightspace, and sorts the submission comments contained in 'index.html'
+	into the correct folders (as a .txt file)
 - hak3.sh
 	sorts *all subdirectories* into fresh bins (hak2.sh only sorted s-directories)
 	note: this probably also need to split/distribute the index.html that brightspace gives us
 - dupes.sh 
 	finds possible duplicate handins in C++/Java code
-
 - antifmt.sh
 	now expects the directories to process as arguments
 	(any arguments that are not directories will be ignored)
-
 - collectplag.sh
 	edited out the part that fetches grading/name info; substituted by simply
 	giving the directory name of the offending submission
+- verdeel.sh
+	does roughly the same thing as before, but you need to download the .zip from brightspace yourself now
