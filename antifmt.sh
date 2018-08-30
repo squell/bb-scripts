@@ -1,9 +1,5 @@
 #! /bin/bash
 
-#TODO NEEDPORT
-echo "antifmt.sh is disabled while we transition to a new bright space"
-exit
-
 # repair all the creative stuff students submit
 # - unzip all zips en rars (w/o directory structure)
 # - convert pdfs to text using pdftotext
@@ -15,7 +11,13 @@ exit
 # NECESSARY: catdoc built&installed, somewhere:
 CATDOC="$HOME/catdoc/bin/catdoc"
 
-STUDDIRS="[usefz][0-9]*"
+if [ -z "$*" ]; then
+	echo "Usage: antifmt.sh DIR1 DIR2 ..." >& 2
+	exit 1
+fi
+
+
+shopt -s nullglob
 
 typeset -A unpack
 de.zip() { unzip -a -n -j -d "${1%/*}" "$1"; }
@@ -25,65 +27,75 @@ unpack[application/zip]=de.zip
 unpack[application/x-7z-compressed]=de.7z
 unpack[application/x-rar]=de.rar
 
-# unzip & unrar
-echo UnZIP\(`ls ${STUDDIRS}/*.zip 2> /dev/null | wc -l`\)/UnRAR\(`ls ${STUDDIRS}/*.rar 2> /dev/null | wc -l`\)/Un7Z\(`ls ${STUDDIRS}/*.7z 2> /dev/null | wc -l`\)/UnTAR\(`ls ${STUDDIRS}/*.tar* ${STUDDIRS}/*.tgz 2> /dev/null | wc -l`\) nested files
-for zip in ${STUDDIRS}/*.zip ${STUDDIRS}/*.rar ${STUDDIRS}/*.7z; do
-	if [ ! -e "$zip" ]; then continue; fi
-	#7z e -y -o"${zip%/*}" "$zip" > "${zip}.contents"
-	decrunch="${unpack["`file --brief --mime-type "$zip"`"]}"
-	if [ "${zip##*.}" != "${decrunch##*.}" ]; then
-		echo "$zip" is not a "${zip##*.}" file"${decrunch:+, detected ${decrunch##*.}}"
+typeset -A stat
+
+report() {
+	for key in "${!stat[@]}"; do
+	    echo -n "$key(${stat[$key]}) "
+	done
+	echo -n $'\r'
+}
+
+# DEVELOPER NOTE:
+# any argument that is not a directory is currently ignored
+for studdir in "$@"; do
+	# unzip & unrar
+	for file in "$studdir"/*.zip "$studdir"/*.rar "$studdir"/*.7z; do
+		#7z e -y -o"${zip%/*}" "$zip" > "${zip}.contents"
+		decrunch="${unpack["`file --brief --mime-type "$file"`"]}"
+		if [ "${file##*.}" != "${decrunch##*.}" ]; then
+			echo "$file" is not a "${file##*.}" file"${decrunch:+, detected ${decrunch##*.}}"
+		fi
+		if [ "$decrunch" ]; then
+		    let "stat[${decrunch##*.}]++"
+		    $decrunch "${file}" > "${file}".contents
+		else
+		    let "stat[junk]++"
+		    mv "$file" "${file}.junk"
+		fi
+	done
+	for file in "$studdir"/*.gz "$studdir"/*.tgz; do gunzip -qf "$file"; done
+	for file in "$studdir"/*.bz2; do bunzip2 -qf "$file"; done
+	for file in "$studdir"/*.xz; do unxz -qf "$file"; done
+	for file in "$studdir"/*.tar; do
+		let "stat[tar]++"
+		tar xCfv "${file%/*}" "${file}" --xform 's!.*/!!' > "${file}.contents"
+	done
+
+	# correct msdos/mac line endings
+	#echo Converting Mac/MSDOS line-endings
+	#perl -pi -e 's/\r\n?/\n/g' "$studdir"/*.txt "$studdir"/*.[di]cl "$studdir"/*.[Cc]*
+
+	# unpdfize stuff
+	for file in "$studdir"/*.pdf; do
+		let "stat[pdf]++"
+		pdftotext -layout "$file" "$file.txt"
+	done
+
+	# complain about word
+	if [ -x "$CATDOC" ]; then
+	for type in doc rtf; do
+	    for file in "$studdir"/*.$doc; do
+		let "stat[type]++"
+		$CATDOC "${file}" > "${file%%.$doc}".txt
+	    done
+	done
 	fi
-	[ "$decrunch" ] && $decrunch "${zip}" > "${zip}".contents
-done
-for gz in ${STUDDIRS}/*.gz ${STUDDIRS}/*.tgz; do [ -e "$gz" ] && gunzip -qf "$gz"; done
-for bz in ${STUDDIRS}/*.bz2; do [ -e "$bz" ] && bunzip2 -qf "$bz"; done
-for xz in ${STUDDIRS}/*.xz; do [ -e "$xz" ] && unxz -qf "$xz"; done
-for tar in ${STUDDIRS}/*.tar; do
-	[ "$tar" != "${STUDDIRS}/*.tar" ] && tar xCfv "${tar%/*}" "${tar}" --xform 's!.*/!!' > "${tar}.contents"
+	for file in "$studdir"/*.docx; do
+		let "stat[docx]++"
+		unzip -p "$file" word/document.xml | sed 's|<w:br/>|\n&|g;s|</w:p>|\n&|g;s|<[^>]*>||g' > "${file%%.docx}".txt
+	done
+	for file in "$studdir"/*.odt; do
+		let "stat[odt]++"
+		unzip -p "$file" content.xml | sed 's|<text:tab/>|\t|g;s|<text:p|\n&|g;s|<[^>]*>||g' > "${file%%.odt}".txt
+	done
+
+	# kill all binaries
+	rm -f "$studdir"/*.o "$studdir"/*.exe "$studdir"/*.prj "$studdir"/*.abc
+	rm -f "$studdir"/*.zip "$studdir"/*.rar "$studdir"/*.7z "$studdir"/*.tar
+
+	report
 done
 
-# correct msdos/mac line endings
-#echo Converting Mac/MSDOS line-endings
-#perl -pi -e 's/\r\n?/\n/g' ${STUDDIRS}/*.txt ${STUDDIRS}/*.[di]cl s/*.[Cc]*
-
-# unpdfize stuff
-echo Extracting text from PDF files \(`ls ${STUDDIRS}/*.pdf 2> /dev/null | wc -l`\)
-for file in ${STUDDIRS}/*.pdf; do
-	[ "$file" != "${STUDDIRS}/*.pdf" ] && pdftotext -layout "$file" "$file.txt"
-done
-
-# complain about word
-echo Bashing text out of Word files \(`ls ${STUDDIRS}/*.doc ${STUDDIRS}/*.rtf ${STUDDIRS}/*.docx ${STUDDIRS}/*.odt 2> /dev/null | wc -l`\)
-if [ -x "$CATDOC" ]; then
-for doc in doc rtf; do
-    for file in ${STUDDIRS}/*.$doc; do
-	[ "$file" != "${STUDDIRS}/*.$doc" ] && $CATDOC "${file}" > "${file%%.$doc}".txt
-    done
-done
-fi
-for file in ${STUDDIRS}/*.docx; do
-	[ "$file" != "${STUDDIRS}/*.docx" ] && unzip -p "$file" word/document.xml | sed 's|<w:br/>|\n&|g;s|</w:p>|\n&|g;s|<[^>]*>||g' > "${file%%.docx}".txt
-done
-for file in ${STUDDIRS}/*.odt; do
-	[ "$file" != "${STUDDIRS}/*.odt" ] && unzip -p "$file" content.xml | sed 's|<text:tab/>|\t|g;s|<text:p|\n&|g;s|<[^>]*>||g' > "${file%%.odt}".txt
-done
-
-# kill all binaries
-echo Killing superfluous files
-rm -f ${STUDDIRS}/*.o ${STUDDIRS}/*.exe ${STUDDIRS}/*.prj ${STUDDIRS}/*.abc
-rm -f ${STUDDIRS}/*.zip ${STUDDIRS}/*.rar ${STUDDIRS}/*.7z ${STUDDIRS}/*.tar
-
-exit
-# generate to-kill list
-echo ""
-echo This weeks offenders list:
-for stupid in `ls ${STUDDIRS}/*.pdf ${STUDDIRS}/*.doc* ${STUDDIRS}/*.odt ${STUDDIRS}/*.rtf 2> /dev/null | sed 's:\([usefz][0-9]*\)/.*:\1/\1.txt:g' | uniq`; do
-	if [ -e "$stupid" ]; then
-		head -q -n1 "$stupid" | sed 's/^Name //'
-	else
-		echo "Unknown? (${stupid%%/*})"
-	fi
-	#echo "LEVER GEEN .DOC of .PDF IN!" >> "$stupid"
-done
-
+# make sure append a newline
+[[ ${#stat[@]} == 0 ]] || echo

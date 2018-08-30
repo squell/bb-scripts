@@ -17,35 +17,43 @@ Also, xmail.sh was deleted, because it was a silly script.
 
 2) Disabled scripts
 
-These scripts require the present of the "Blackboard response files" (the famed s*/s*.txt), or a list of usernames+email addresses to function.
-The functionality they provided may be quite useful, but we need to find out what a good "best practice" is with Brightspace before porting them.
+These scripts require the presence of the "Blackboard response files"
+(the famed s*/s*.txt), or a list of usernames+email addresses to function.
+The functionality they provided may be quite useful, but we need to find
+out what a good "best practice" is with Brightspace before porting them.
 
-- antifmt.sh
+- rgrade.sh
+- groepjes.sh
 - count.sh
 - stats.sh
-- groepjes.sh
-- collectplag.sh
 
-These scripts are most likely unnecessary in the future:
+These scripts are possibly unnecessary in the future:
 
 - verdeel.sh
 - wizard.sh
 - feedback.sh
-  - grades.sh
   - mailto.sh
+  - grades.sh
 
 3) Scripts that should work without modifications.
 
 - jarify.sh
 - iching.sh
 - pol.sh
-- rgrade.sh
 - trialc.sh
 
-4) NEW scripts
+4) New/ported scripts
 
 - hak3.sh
 	sorts *all subdirectories* into fresh bins (hak2.sh only sorted s-directories)
 	note: this probably also need to split/distribute the index.html that brightspace gives us
 - dupes.sh 
-	finds possible duplicate handins in C++/Java code)
+	finds possible duplicate handins in C++/Java code
+
+- antifmt.sh
+	now expects the directories to process as arguments
+	(any arguments that are not directories will be ignored)
+
+- collectplag.sh
+	edited out the part that fetches grading/name info; substituted by simply
+	giving the directory name of the offending submission

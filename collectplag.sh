@@ -1,9 +1,5 @@
 #!/bin/sh
 
-#TODO NEEDPORT
-echo "collectplag.sh is disabled while we transition to a new bright space"
-exit
-
 # Makes a directory with possible plagiarism cases to send to the teacher.
 # Usage: ./collectplag.sh s123 s456 ...
 
@@ -19,7 +15,7 @@ exit
 # ./groepjes.sh [ufsez][0-9]*
 
 dir="plag"
-for arg in $@; do
+for arg in "$@"; do
 	dir="$dir-$arg"
 done
 
@@ -29,7 +25,7 @@ if [ -e "$dir" ]; then
 fi
 mkdir "$dir"
 
-for arg in $@; do
+for arg in "$@"; do
 	cp -R "$arg" "$dir/$arg"
 done
 
@@ -37,10 +33,12 @@ tar czvf "$dir.tar.gz" "$dir"
 
 echo "--------------------"
 echo -n "Hoi,\n\nDeze groepjes hebben soortgelijke uitwerkingen ingeleverd:\n\n"
-for arg in $@; do
-	HASGRADE=""
-	grep 'Needs Grading' "$arg/$arg.txt" >/dev/null || HASGRADE=" (heeft al een cijfer)"
-	grep '^Name:' "$arg/$arg.txt" | sed "s/Name: / - /;s/$/$HASGRADE/"
+for arg in "$@"; do
+	echo "$arg"
+	#TODO: clean this up or find equivalent
+	#HASGRADE=""
+	#grep 'Needs Grading' "$arg/$arg.txt" >/dev/null || HASGRADE=" (heeft al een cijfer)"
+	#grep '^Name:' "$arg/$arg.txt" | sed "s/Name: / - /;s/$/$HASGRADE/"
 	echo
 done
 echo -n "\nDe uitwerkingen staan in de bijlage.\nIk zal wachten met becijferen totdat het is bekeken.\n\nGroet,\n"

@@ -1,4 +1,8 @@
 #!/bin/sh
+
+echo "rgrade.sh is disabled while we transition to a new bright space"
+exit
+
 # Start grading a randomly chosen, ungraded submission
 [ $# != 0 ] &&  SHELL="$@" || ([ -z "$SHELL" ] && SHELL=bash)
 PAT="Needs Grading"
