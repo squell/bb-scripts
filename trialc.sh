@@ -9,7 +9,13 @@ CXX="g++ -std=c++0x -fsyntax-only -Wall -Wextra -pedantic"
 
 MYDIR="${0%/*}"
 
+progbar() {
+	progress="${progress}#"
+	echo -n $'\r'"$progress"
+}
+
 for dir in "$@"; do
+	progbar
 	for f in "$dir"/*.[Cc] "$dir"/*.[Cc][Pp][Pp]; do
 		test -e "$f" && $CXX "${f}"
 	done 2> "$dir"/gcc.log
@@ -18,3 +24,4 @@ for dir in "$@"; do
 		test -s "$log" || rm -f "$log"
 	done
 done
+echo
