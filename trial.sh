@@ -1,83 +1,44 @@
-#! /bin/sh
+#!/bin/bash
 
-# test uitwerkingen; voer Gast-tests uit
+# Run unit tests
 
-UITWERKINGEN=$HOME/FP2013/Uitwerkingen
-CLEANDIR="$HOME/Clean/clean64"
-LIB="${CLEANDIR}/lib"
-CLM="${CLEANDIR}/bin/clm -h 64m -s 8m -dynamics"
+SUITE=../FP1-guru/programs/testsuite
+GHC="ghc -i../../FP1-guru/handout"
+SUFFIX=Test.hs
+TIMEOUT=10
 
 if [ -z "$1" ]; then
-	echo "usage: trial.sh dir"
+	echo "usage: $0 dir"
 	exit
 fi
 
-export CLEANPATH="${LIB}/StdEnv:${LIB}/StdLib:${LIB}/Gast:${LIB}/Generics:${LIB}/MersenneTwister:${LIB}/Dynamics"
-
-gast_test()
-{
-	set -m
-	suffix="Test"
-	timeout=3
-	log="${f%/*}/gast_results.txt"
-	suite="${f##*/}"
-	suite="${suite%.icl}$suffix"
-	#exe="${dir}"/a.out"$suite"
-	exe="${dir}"/"$suite"
-
-	if [ "$suffix" ] && [ -e "$UITWERKINGEN/${suite}.icl" ] && [ ! -e "${dir}/${suite}.icl" ]; then
-	    rm -rf "$UITWERKINGEN/Clean System Files"
-	    echo Gast-test "${f%.icl}"
-	    echo "[$suite]" >> "$log" 
-	    if $CLM -ms -nw -ci -b -nt -I "$dir" -I "$UITWERKINGEN" "$suite" -o "$exe" 2>> "$log"; then
-		    #($exe 2>> "$log" || echo "*** aborted") >> "$log" & pid=$!
-		    (($exe 2>> "$log" || echo "*** aborted") | sed 's/^.*\r//') >> "$log" & pid=$!
-		    sleep $timeout && kill -9 "-$pid" & w=$!
-		    if wait $pid; then
-			kill -9 -$w 2> /dev/null > /dev/null
-		    else
-			echo "*** killed (DUURT LANG)" >> "$log"
-		    fi
-	    else
-		    echo "*** not performed (compile error)" >> "$log"
-	    fi
-	    rm -f "$exe"
+hstest() {
+	if [ -f "$SUITE/$2$SUFFIX" ]; then
+		cp "$SUITE/$2$SUFFIX" "$1"
+		cd "$1"
+		log="$2".test_results
+		rm -f "$log"
+		testprog="$2$SUFFIX"
+		testmod="${testprog/.hs/}"
+		testout="$testmod.out"
+		if $GHC -main-is "$testmod" "$testprog" -o "$testout" &>> "$log"; then
+			echo >> "$log"
+			setsid bash -c "(./\"$testout\" || echo '*** aborted') |& sed 's/^.*\\x8//' &>> \"$log\"" & pid=$!
+			sleep $TIMEOUT && kill -9 "-$(ps -o pgid= $pid)" & w=$!
+			if wait $pid; then
+				kill -9 $w
+			else
+				echo "*** killed" >> "$log"
+			fi
+			rm "$testout"
+		fi
+		cd ..
 	fi
-	set +m
-}
-
-remcom() {
-    tr -cd '[:print:][:cntrl:]' | sed -rn ':0 N;${s:/\*([^*]|\*[^/])*\*/: :g;p};b0' | sed 's://.*$::'
-}
-
-gen_dcl()
-{
-	remcom | sed -rn '/Start/d;s/^implementation/definition/p;/^[^:[:space:]][^(]*::/p;/^::/s/(:?=.*)?$//p;/import/p;/instance/s/(where.*)?$//p'
 }
 
 for dir in "$@"; do
-	rm -f "$dir/gast_results.txt"
-	for f in "$dir"/*.icl; do
-		[ -f "$f" ] || break
-		#grep -q -e "^implementation" -e '^Start' "$f" || (echo ; echo "Start = undef // ADDED BY trial.sh" >> "$f")
-		if $CLM -c -I "$dir" -I "$UITWERKINGEN" "${f%.icl}" 2> "$f".ERROR; then
-			rm "$f".ERROR
-			gast_test
-		elif [ ! -e "${f%.icl}.dcl" ] && grep -q "^implementation" "$f"; then
-			dcl="${f%.icl}.dcl"
-			echo "// GENERATED FROM .icl FILE BY trial.sh" > "$dcl"
-			echo "Using an induced .dcl" > "$f".ERROR
-			gen_dcl < "$f" >> "$dcl"
-			if $CLM -c -I "$dir" -I "$UITWERKINGEN" "${f%.icl}" 2>> "$f".ERROR; then
-				echo Generated dcl for "${f%.icl}"
-				rm "$f".ERROR
-				gast_test
-			else
-				true #rm "$dcl"
-			fi
-		fi
+	for f in "$dir"/*.lhs "$dir"/*.hs; do
+		[ -f "$f" ] || continue
+		hstest "$dir" "$(basename "$f" | sed -e 's/\.l\?hs$//g')"
 	done
 done
-
-rm -rf "$UITWERKINGEN/Clean System Files"
-

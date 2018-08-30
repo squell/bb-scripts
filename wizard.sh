@@ -63,6 +63,6 @@ sed -i "0,/^SUBJECT=.*$/s//SUBJECT=\"${course%|*}: \"/" elroy.sh
 echo Go on. Off you go.
 rm -f bb.mail
 
-echo You still have to set up Clean and edit trial.sh, plaggen.sh, dupes.sh
+echo You still have to set up dupes.sh
 echo
 death
