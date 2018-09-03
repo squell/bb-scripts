@@ -28,15 +28,13 @@ done
 
 unzip -q -o -d "$DEST" "$1"
 
+ADDED="#comments.txt"
+
 for submission in "$DEST"/*/; do
 	[ "$submission" = "$DEST/*/" ] && exit
 	date="${submission%/}"
 	date="${date##*- }"
-	if [ -e "$submission"/comments.txt ]; then
-		nonce="-`shuf -i 1-10000 -n1`"
-	else
-		nonce=""
-	fi
-	grep "$date" "$DEST"/index.html | html2text | sed '1d' > "$submission"/comments"$nonce".txt
+	grep "$date" "$DEST"/index.html | html2text | sed '1d' > "${submission}${ADDED}"
+	touch -r "$DEST"/index.html "${submission}${ADDED}"
 done
 rm -f "$DEST"/index.html

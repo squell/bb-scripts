@@ -1,17 +1,29 @@
 #!/bin/sh
 
-echo "rgrade.sh is disabled while we transition to a new bright space"
-exit
+# Start grading in a randomly chosen, ungraded submission folder
+[ $# != 0 ] &&  ACTION="$@" || ACTION="${SHELL:-bash}"
 
-# Start grading a randomly chosen, ungraded submission
-[ $# != 0 ] &&  SHELL="$@" || ([ -z "$SHELL" ] && SHELL=bash)
-PAT="Needs Grading"
-GLB='./[usezf][0-9]*/[usezf][0-9]*.txt'
-DIR="$(grep -Fl "$PAT" $GLB | shuf | head -1)"
-if [ -n "$DIR" ]; then
-	OPWD="$(pwd)"
-	cd "$(dirname "$DIR")"
-	$SHELL
-	cd "$OPWD"
+if [ "$(pgrep 'rgrade.sh')" != "$$" ]; then
+	echo "You are already grading this submission, please return to it:"
+	echo "$RGRADE_DIR"
+	exit 1
 fi
-echo "$DIR klaar. Nog $(grep -Fl "$PAT" $GLB | wc -l) te gaan..."
+
+todo() {
+	ls -d */.seen */ 2> /dev/null | sed 's:/.*::' | uniq -u
+}
+
+DIR="$(todo | shuf | head -n1)"
+if [ -n "$DIR" ]; then
+	[ $# != 0 ] || echo "Type 'exit' to finish grading; use 'exit 1' to abort grading the current submission."
+	echo "Entering $DIR."
+	(cd "$DIR" && export RGRADE_DIR=`pwd` && $ACTION) && touch "$DIR"/.seen
+	count="$(todo | wc -l)"
+	if [ "$count" = 0 ]; then
+		echo "Exiting $DIR. You have finally finished!"
+	else
+		echo "Exiting $DIR. Still $count to go..."
+	fi
+else
+	echo "Nothing to do! Grab a beer."
+fi

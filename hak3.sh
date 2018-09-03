@@ -29,7 +29,7 @@ done
 # the use of 'grep' is an additional safety against mis-use of this script;
 # in case you (need to) edit it here, you should also nose around in groepjes.sh
 i=0
-for stud in */; do
+for stud in $(ls -d */ 2> /dev/null | shuf); do
     mv "$stud" ."${dir[$((i++%N))]}"
 done
 
