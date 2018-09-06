@@ -42,8 +42,17 @@ strip_cruft() {
 
 }
 
+# brightspace user comments are put in a quite unusable HTLM file
 getcomment() {
 	tr -d '\n' < "$DEST"/index.html | sed 's/<tr bgcolor=#AAAAAA>/\n&/g' | grep -F "$1" | grep -F "$2"
+}
+
+# brightspace is apparently configured to interpret the UTF8-encoded
+# names it gets from $somewhere as encoded in MS-DOS codepage 866,
+# and then converts that to UTF8. So we need to undo that.
+unmojibake() {
+        cvt="$(echo "$1"| iconv --from=utf8 --to=cp866)"
+        [ "$cvt" = "$1" ] || mv -n "$1" "$cvt"
 }
 
 for submission in "$DEST"/*/; do
@@ -63,5 +72,6 @@ for submission in "$DEST"/*/; do
 	else
 		rm -f "${submission}${ADDED}"
 	fi
+	unmojibake "$submission"
 done
 rm -f "$DEST"/index.html
