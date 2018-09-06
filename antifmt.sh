@@ -77,22 +77,23 @@ for studdir in "$@"; do
 	for type in doc rtf; do
 	    for file in "$studdir"/*.$doc; do
 		let "stat[type]++"
-		$CATDOC "${file}" > "${file%%.$doc}".txt
+		$CATDOC "${file}" > "${file}.$doc".txt
 	    done
 	done
 	fi
 	for file in "$studdir"/*.docx; do
 		let "stat[docx]++"
-		unzip -p "$file" word/document.xml | sed 's|<w:br/>|\n&|g;s|</w:p>|\n&|g;s|<[^>]*>||g' > "${file%%.docx}".txt
+		unzip -p "$file" word/document.xml | sed 's|<w:br/>|\n&|g;s|</w:p>|\n&|g;s|<[^>]*>||g' > "${file}".txt
 	done
 	for file in "$studdir"/*.odt; do
 		let "stat[odt]++"
-		unzip -p "$file" content.xml | sed 's|<text:tab/>|\t|g;s|<text:p|\n&|g;s|<[^>]*>||g' > "${file%%.odt}".txt
+		unzip -p "$file" content.xml | sed 's|<text:tab/>|\t|g;s|<text:p|\n&|g;s|<[^>]*>||g' > "${file}".txt
 	done
 
 	# kill all binaries
-	rm -f "$studdir"/*.o "$studdir"/*.exe "$studdir"/*.prj "$studdir"/*.abc
-	rm -f "$studdir"/*.zip "$studdir"/*.rar "$studdir"/*.7z "$studdir"/*.tar
+	rm -f "$studdir"/{*.o,*.obj,*.exe,*.prj,*.abc}
+	rm -f "$studdir"/{*.class,*.jar}
+	rm -f "$studdir"/{*.zip,*.rar,*.7z,*.tar}
 
 	report
 done
