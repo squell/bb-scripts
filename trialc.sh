@@ -11,11 +11,11 @@ MYDIR="${0%/*}"
 
 progbar() {
 	progress="${progress}#"
-	echo -n $'\r'"$progress"
+	echo -n "!processed $(echo -n "$progress" | wc -c)/$1" | tr '!' '\r'
 }
 
 for dir in "$@"; do
-	progbar
+	progbar "$#"
 	for f in "$dir"/*.[Cc] "$dir"/*.[Cc][Pp][Pp]; do
 		test -e "$f" && $CXX "${f}"
 	done 2> "$dir"/gcc.log
