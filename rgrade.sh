@@ -17,7 +17,7 @@ DIR="$(todo | shuf | head -n1)"
 if [ -n "$DIR" ]; then
 	[ $# != 0 ] || echo "Type 'exit' to finish grading; use 'exit 1' to abort grading the current submission."
 	echo "Entering $DIR."
-	(cd "$DIR" && export RGRADE_DIR=`pwd` && $ACTION) && touch "$DIR"/.seen
+	(cd "$DIR" && export RGRADE_DIR="`pwd`" && $ACTION) && touch "$DIR"/.seen
 	count="$(todo | wc -l)"
 	if [ "$count" = 0 ]; then
 		echo "Exiting $DIR. You have finally finished!"
