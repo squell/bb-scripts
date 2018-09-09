@@ -5,12 +5,12 @@
 umask 077
 
 if [ -z "$1" ]; then
-	echo "Usage: bsunzip.sh bestand.zip [destination folder]"
+	echo "Usage: bsunzip.sh bestand.zip [destination folder]" 1>&2
 	exit 1
 fi
 
 if [ ! -e "$1" ]; then
-	echo "Could not find $1"
+	echo "Could not find $1" 1>&2
 	exit 2
 fi
 
@@ -22,7 +22,7 @@ fi
 
 for sub in "$DEST"/*/; do
 	[ "$sub" = "$DEST/*/" ] && break
-	echo "Destination already contains subdirectories! I am refusing to create a mess."
+	echo "Destination already contains subdirectories! I am refusing to create a mess." 1>&2
 	exit 4
 done
 

@@ -28,7 +28,7 @@ filter() {
 }
 
 if [ -z "$*" ]; then
-	echo usage: dupes.sh dir
+	echo usage: dupes.sh dir >& 2
 	exit
 fi
 

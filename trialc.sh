@@ -1,7 +1,7 @@
 #! /bin/sh
 
 if [ -z "$1" ]; then
-	echo "usage: trialc.sh dir"
+	echo "usage: trialc.sh dir" 1>&2
 	exit
 fi
 
