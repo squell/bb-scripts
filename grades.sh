@@ -1,30 +1,20 @@
 #! /bin/sh
 
-#TODO NEEDPORT OR DELETE?
-echo "grades.sh is disabled while we transition to a new bright space"
-exit
-
-
 if [ -z "$*" ]; then
-	echo "Usage: grades.sh s[0-9]*/s[0-9]*.txt" >& 2
+	echo "Usage: grades.sh */file.txt" >& 2
 	exit
 fi
 
-USERLIST="${0%/*}/userlist"
-
-if [ ! -e "$USERLIST" ]; then
-        echo Cannot find "$USERLIST" file >& 2
-        exit
-fi
-
 for file in "$@"; do
-	TOID=`sed -n '/^Name:/s/.*\([usefz][0-9]\+\).*/\1/p' "$file"`
-	GRADE=`sed -n '/^Current Grade:[[:space:]]*/s///p' "$file"`
+	TOID=`sed 's/,.*//' "$(dirname "$file")/#address.txt"`
+	GRADE=`sed -n '/^Grade:[[:space:]]*/s///p' "$file"`
 
 	for id in $TOID; do
-		if [ "$GRADE" ] && grep -q "$id" "$USERLIST"; then
-			GRADE="${GRADE##0*}"
-			echo "$id,${GRADE:-0.000001}"
+		if [ "$GRADE" ]; then
+			echo "#$id,${GRADE},#"
+			#TODO do we still need this blackboard-era workaround?
+			#GRADE="${GRADE##0*}"
+			#echo "#$id,${GRADE:-0.000001},#"
 		fi
 	done
 done

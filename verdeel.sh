@@ -29,6 +29,7 @@ set -e
 MYDIR="${0%/*}"
 PATH="${PATH}:${MYDIR}"
 
+# first check whether the working dir is clean
 for ta in "${!email[@]}"; do
 	if [ ! -z "`ls "$ta" 2>/dev/null`" ]; then
 		echo $ta exists. Clean up first.
@@ -36,11 +37,13 @@ for ta in "${!email[@]}"; do
 	fi
 done
 
+# check if we have a CSV file from brightspace
 CSV=""
 for csv in *.csv; do
 	echo "Assuming student info is in $csv"
 	if [ "$CSV" ]; then
 		echo "Please select which .csv file to use."
+		CSV=""
 		select csv in *.csv; do
 			test ! -e "$csv" && continue
 			CSV="$csv"
@@ -51,8 +54,26 @@ for csv in *.csv; do
 	CSV="$csv"
 done
 
+# this macro does quote handling for CSV
+csv_to_tab() {
+	sed -nr ':l;$s/([^,"]*("[^"]*")?),/\1\t/gp;N;bl'
+}
+
+if [ "$CSV" ]; then
+	echo "Which grade are we determining?"
+	grade=$(
+		IFS=$'\n'
+		select column in `head -n1 "$CSV" | csv_to_tab | tr '\t' '\n' | grep 'Points Grade' | sed 's: *<[^>]*> *::g'`; do
+			echo "$column"
+			break
+		done
+	)
+fi
+
+# select the ZIP file (we always ask the user!)
 for zip in *.zip; do
 	echo "Which .zip file contains the assignments?"
+	zip=""
 	select zip in *.zip; do
 		test ! -e "$zip" && continue
 		echo Unbrightspacing "$zip"
@@ -67,6 +88,8 @@ if [ -z "$zip" ]; then
 	echo Please download a .zip before trying to distribute one.
 	exit 37
 fi
+
+# ----- from this point on everything is automatic -----#
 
 echo Trying to adjust for student creativity.
 "$MYDIR"/antifmt.sh */
@@ -104,12 +127,14 @@ test "${!email[@]}"
 echo Randomly distributing workload 
 "$MYDIR"/hak3.sh "${!email[@]}" 
 
+# now we have divided the workload, send it out to the ta's
 humor=$(iching.sh)
 for ta in "${!email[@]}"
 do
     cp -n "$MYDIR"/{pol.sh,rgrade.sh,collectplag.sh} "$ta"
     if [ "$CSV" ]; then
-	cp "$CSV" "$ta/grades.csv"
+	echo "OrgDefinedId,$grade,End-of-Line Indicator" > "$ta/grades.csv"
+	cp -n "$MYDIR"/{grades.sh,feedback.sh} "$ta"
 	sed -f - "$MYDIR"/mailto.sh > "${ta}/mailto.sh" <<-...
 	    /^FROM=/c\
 	    FROM="${email[$ta]}"

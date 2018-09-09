@@ -10,7 +10,7 @@ BCC="$FROM"
 PREFIX="OpenCourseWare: "
 
 if [ -z "$*" ]; then
-	echo "Usage: mailto.sh dir1/file.txt dir2/file.txt ..." 1>&2
+	echo "Usage: mailto.sh */file.txt" 1>&2
 	exit
 fi
 
