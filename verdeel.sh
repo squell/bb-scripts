@@ -63,7 +63,7 @@ if [ "$CSV" ]; then
 	echo "Which grade are we determining?"
 	grade=$(
 		IFS=$'\n'
-		select column in `head -n1 "$CSV" | csv_to_tab | tr '\t' '\n' | grep 'Points Grade' | sed 's: *<[^>]*> *::g'`; do
+		select column in `head -n1 "$CSV" | csv_to_tab | tr '\t' '\n' | grep 'Points Grade' | sed 's: *<[^>]*> *::g' | tr -d \"`; do
 			echo "$column"
 			break
 		done
