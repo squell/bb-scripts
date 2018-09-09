@@ -42,7 +42,7 @@ for dir in "$@"; do
 	name="${dir#* - }"
 	name="${name% - *}"
 	splitname "$name"
-	for id in `echo "${tussen:+$tussen }$lastname,$firstname"; collect "$dir"`; do
+	{ echo "${tussen:+$tussen }$lastname,$firstname"; collect "$dir"; } | while read id; do
 		if info="`grep -F -m1 "$id" "$CSV"`"; then
 			echo "${info#\#}" | cut -d, -f1,4
 		else
