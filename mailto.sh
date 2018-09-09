@@ -1,7 +1,6 @@
 #! /bin/sh
 
-echo "mailto.sh is disabled and likely to be removed"
-exit
+# this sends the message in dir/file.txt to the addresses in dir/#address.txt
 
 set -e
 
@@ -10,15 +9,8 @@ BCC="$FROM"
 
 PREFIX="OpenCourseWare: "
 
-USERLIST="${0%/*}/userlist"
-
 if [ -z "$*" ]; then
-	echo "Usage: mailto.sh s[0-9]*/s[0-9]*.txt" >& 2
-	exit
-fi
-
-if [ ! -e "$USERLIST" ]; then
-	echo Cannot find "$USERLIST" file >& 2
+	echo "Usage: mailto.sh dir1/file.txt dir2/file.txt ..." 1>&2
 	exit
 fi
 
@@ -38,35 +30,17 @@ for file in "$@"; do
 		iconv -c -o "$file" -f `file -b --mime-encoding "$file"` "$file"
 	fi
 
-	ASSIGNMENT=`sed -n '/^Assignment:/s///p' "$file"`
-	TOID=`sed -n '/^Name:/s/.*\([usefz][0-9]\+\).*/\1/p' "$file"`
-	GRADE=`sed -n '/^Current Grade:[[:space:]]*/s///p' "$file"`
-
-	if [ "$GRADE" = "Needs Grading" ] || ! grep -q "Feedback:" "$file" || grep -q '^\(\$[[:alnum:][:space:]_]\+\)' "$file"; then
-		echo "$file" grading not finished, stopping >& 2
-		exit 1
-	fi
-
-	if [ -z "${TOID}" ] || [ -z "${GRADE}" ] || [ -z "${ASSIGNMENT}" ]; then
-		echo "$file" does not appear to be a BlackBoard file, stopping >&2
-		exit 1
-	fi
-
 	SUBJECT="$PREFIX Feedback $ASSIGNMENT"
 
-	MIME="Content-Type: text/plain; charset=utf-8"
-	TO=`for id in $TOID; do
-		(grep "$id" "$USERLIST" || echo >&2 "$id not registered") | cut -f2 | tr -d '\r'
-	done`
+	MIME="Content-Type: $(file -b --mime "$file")"
 
 	if [ -e "${file}.sent" ]; then
 		echo Skipping $TOID. Already mailed to: `cat "${file}.sent"` >&2
-	elif [ -z "$TO" ]; then
-		echo Could not find any email address for students: $TOID! >&2
+	elif ! TO=`sed 's/.*,//' "$(dirname "$file")/#address.txt"` || [ -z "$TO" ]; then
+		echo Could not find any email address to send "$file" to >&2
 		touch "${file}.could_not_sent"
 	else
-		sed -n '/^Date/p;/^Current Grade:/p;/^Feedback:/,$p' "$file" | tr -d '\r' | bsd-mailx -a "$MIME" -n -s "$SUBJECT" ${FROM:+-a "From: $FROM"} ${BCC:+-a "Bcc: $BCC"} ${BCC:+-b "$BCC"} $TO && echo "$TO" > "${file}.sent"
-		#sed -n '/^Date/p;/^Current Grade:/p;/^Feedback:/,$p' "$file" | tr -d '\r' | "${0%/*}"/xmail.sh -a "$MIME" -s "$SUBJECT" ${FROM:+-f "$FROM"} ${BCC:+-b "$BCC"} $TO && echo "$TO" > "${file}.sent"
+		cat "$file" | tr -d '\r' | bsd-mailx -a "$MIME" -n -s "$SUBJECT" ${FROM:+-a "From: $FROM"} ${BCC:+-a "Bcc: $BCC"} ${BCC:+-b "$BCC"} $TO && echo "$TO" > "${file}.sent"
 	fi
 done
 

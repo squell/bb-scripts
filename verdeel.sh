@@ -16,13 +16,14 @@ email[marc]="mschool@science.ru.nl"
 #email[ko]="kstoffelen@science.ru.nl"
 #email[pol]="paubel@science.ru.nl"
 
-SUBJECT="`whoami` could not be bothered to configure $SUBJECT"
+SUBJECT="`whoami` could not be bothered to configure SUBJECT"
 
 # ---------------------- end of config -----------------------#
 
 # this script takes care of the distribution of workload over
 # all the teaching assistants, after downloading the zip
 
+shopt -s nullglob
 set -e
 
 MYDIR="${0%/*}"
@@ -35,18 +36,30 @@ for ta in "${!email[@]}"; do
 	fi
 done
 
-for zip in *.zip; do
-	if [ "$zip" != "*.zip" ]; then
-		echo Ah. What file should I use?
-		select zip in *.zip; do
-			test ! -e "$zip" && continue
-			echo Unbrightspacing "$zip"
-			"$MYDIR"/bsunzip.sh "$zip"
+CSV=""
+for csv in *.csv; do
+	echo "Assuming student info is in $csv"
+	if [ "$CSV" ]; then
+		echo "Please select which .csv file to use."
+		select csv in *.csv; do
+			test ! -e "$csv" && continue
+			CSV="$csv"
 			break
 		done
 		break
 	fi
-	unset zip
+	CSV="$csv"
+done
+
+for zip in *.zip; do
+	echo "Which .zip file contains the assignments?"
+	select zip in *.zip; do
+		test ! -e "$zip" && continue
+		echo Unbrightspacing "$zip"
+		"$MYDIR"/bsunzip.sh "$zip"
+		break
+	done
+	break
 done
 assignment="${zip%%Download*}"
 
@@ -58,6 +71,11 @@ fi
 echo Trying to adjust for student creativity.
 "$MYDIR"/antifmt.sh */
 
+if [ "$CSV" ]; then
+	echo Identifying submissions
+	"$MYDIR"/identify.sh "$CSV" */
+fi
+
 echo 
 echo Trial compilation
 "$MYDIR"/trialc.sh */
@@ -65,9 +83,6 @@ echo Trial compilation
 echo
 echo Doing a rough plagiarism check
 "$MYDIR"/dupes.sh */
-
-#echo Groupcheck 
-#"$MYDIR"/groepjes.sh */ | grep "<with>" || true
 
 echo
 
@@ -84,22 +99,26 @@ echo
 #    done < "$listfile"
 #done
 
+test "${!email[@]}"
+
 echo Randomly distributing workload 
 "$MYDIR"/hak3.sh "${!email[@]}" 
 
 humor=$(iching.sh)
 for ta in "${!email[@]}"
 do
-    #cp grades.csv "$ta"
     cp -n "$MYDIR"/{pol.sh,rgrade.sh,collectplag.sh} "$ta"
-    sed -f - "$MYDIR"/mailto.sh > "${ta}/mailto.sh" <<...
-/^FROM=/c\
-FROM="${email[$ta]}"
-/^PREFIX=/c\
-PREFIX="${SUBJECT}: $assignment"
-...
-    chmod +x "${ta}"/mailto.sh
-    if [ "${email[$ta]}" != "" ]; then
+    if [ "$CSV" ]; then
+	cp "$CSV" "$ta/grades.csv"
+	sed -f - "$MYDIR"/mailto.sh > "${ta}/mailto.sh" <<-...
+	    /^FROM=/c\
+	    FROM="${email[$ta]}"
+	    /^PREFIX=/c\
+	    PREFIX="${SUBJECT}: $assignment"
+	...
+	chmod +x "${ta}"/mailto.sh
+    fi
+    if [ "${email[$ta]}" ]; then
 	echo Mailing "$ta"
 	pkt="$ta-${zip%.zip}.7z"
 	7za a -ms=on -mx=9 "$pkt" "$ta" > /dev/null
