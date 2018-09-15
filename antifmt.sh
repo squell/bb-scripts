@@ -59,7 +59,7 @@ for studdir in "$@"; do
 	for file in "$studdir"/*.xz; do unxz -qf "$file"; done
 	for file in "$studdir"/*.tar; do
 		let "stat[tar]++"
-		tar xCfv "${file%/*}" "${file}" --xform 's!.*/!!' > "${file}.contents"
+		tar --force-local -xv -C "%{file%/*}" -f "${file}" --xform 's!.*/!!' > "${file}.contents"
 	done
 
 	# correct msdos/mac line endings
