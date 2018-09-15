@@ -122,7 +122,7 @@ echo
 #    done < "$listfile"
 #done
 
-test "${!email[@]}"
+test "${!email[*]}"
 
 echo Randomly distributing workload 
 "$MYDIR"/hak3.sh "${!email[@]}" 
