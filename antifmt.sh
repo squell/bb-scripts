@@ -91,7 +91,7 @@ for studdir in "$@"; do
 	done
 
 	# kill all binaries
-	rm -f "$studdir"/{*.o,*.obj,*.exe,*.prj,*.abc}
+	rm -f "$studdir"/{*.o,*.obj,*.exe,*.prj,*.prp,*.abc}
 	rm -f "$studdir"/{*.class,*.jar}
 	rm -f "$studdir"/{*.zip,*.rar,*.7z,*.tar}
 
