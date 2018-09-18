@@ -1,13 +1,17 @@
 #! /bin/bash
 
 # repair all the creative stuff students submit
-# - unzip all zips en rars (w/o directory structure)
+# - unzip all compressed files/dirs (w/o directory structure)
 # - convert pdfs to text using pdftotext
-# - convert doc/rtf to text using catdoc
-# - convert docx/odt to text using hacks
+# - convert doc/rtf/docx/odt to text using libreoffice
 # - correct line-endings {CR/LF, CR} -> LF
 # - print a list of people who think Word is an IDE
 shopt -s nullglob
+
+if [ -z "$*" ]; then
+	echo "Usage: antifmt.sh DIR1 DIR2 ..." >& 2
+	exit 1
+fi
 
 typeset -A unpack
 de.zip() { unzip -a -n -j -d "${1%/*}" "$1"; }
