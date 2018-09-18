@@ -13,6 +13,15 @@ if [ -z "$*" ]; then
 	exit 1
 fi
 
+for cmd in unzip unrar 7zr bunzip2 gunzip unxz tar pdftotext soffice; do
+	if ! command -v $cmd >/dev/null 2>&1; then
+		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
+		exit 1
+	fi
+done
+
+shopt -s nullglob
+
 typeset -A unpack
 de.zip() { unzip -a -n -j -d "${1%/*}" "$1"; }
 de.rar() { unrar e -o- "$1" "${1%/*}"; }

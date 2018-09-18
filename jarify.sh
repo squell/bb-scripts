@@ -3,6 +3,13 @@
 # convert a flat directory into a jar file
 # - when run without arguments, convert the current directory
 # - when run with argument, convert every mentioned directory
+for cmd in jar javac; do
+	if ! command -v $cmd >/dev/null 2>&1; then
+		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
+		exit 1
+	fi
+done
+
 TMPDIR=/tmp/JARIFY
 
 jarify() (

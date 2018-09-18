@@ -8,7 +8,6 @@
 #   for the user(s) that did not submit the original file
 # - assigning students to fixed TA's
 #   what is blocking: figure out how to use group info provided by BrightSpace
-
 # ---------------------- configuratie ------------------------#
 
 typeset -A email
@@ -22,6 +21,13 @@ SUBJECT="`whoami` could not be bothered to configure SUBJECT"
 
 # this script takes care of the distribution of workload over
 # all the teaching assistants, after downloading the zip
+
+for cmd in 7za mutt; do
+	if ! command -v $cmd >/dev/null 2>&1; then
+		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
+		exit 1
+	fi
+done
 
 shopt -s nullglob
 set -e
