@@ -22,14 +22,10 @@ exit
 
 # configuration wizard for bb-scripts
 
-for cmd in curl
-do
-	if ! command -v $cmd >/dev/null 2>&1
-	then
-		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
-		exit 1
-	fi
-done
+if ! command -v curl >/dev/null 2>&1; then
+	echo "Who am I? Why am I here? Am I on lilo? curl is missing!" >& 2
+	exit 1
+fi
 
 set -e
 cd "${0%/*}"

@@ -2,10 +2,8 @@
 
 # unzip a brightspace-provided file, and split the index.html it contains over the subdirectories
 
-for cmd in unzip iconv
-do
-	if ! command -v $cmd >/dev/null 2>&1
-	then
+for cmd in unzip iconv; do
+	if ! command -v $cmd >/dev/null 2>&1; then
 		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
 		exit 1
 	fi

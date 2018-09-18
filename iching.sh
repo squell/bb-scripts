@@ -1,13 +1,9 @@
 #! /bin/bash
 
-for cmd in curl
-do
-	if ! command -v $cmd >/dev/null 2>&1
-	then
-		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
-		exit 1
-	fi
-done
+if ! command -v curl >/dev/null 2>&1; then
+	echo "Who am I? Why am I here? Am I on lilo? curl is missing!" >& 2
+	exit 1
+fi
 
 url="http://www.thateden.co.uk/dirk/pred.php?ching1=$(($RANDOM%8+1))&ching2=$(($RANDOM%8+1))"
 

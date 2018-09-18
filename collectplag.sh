@@ -14,14 +14,10 @@
 # ./antifmt.sh
 # ./groepjes.sh [ufsez][0-9]*
 
-for cmd in tar
-do
-	if ! command -v $cmd >/dev/null 2>&1
-	then
-		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
-		exit 1
-	fi
-done
+if ! command -v tar >/dev/null 2>&1; then
+	echo "Who am I? Why am I here? Am I on lilo? tar is missing!" >& 2
+	exit 1
+fi
 
 dir="plag"
 for arg in "$@"; do

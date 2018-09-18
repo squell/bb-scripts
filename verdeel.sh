@@ -22,10 +22,8 @@ SUBJECT="`whoami` could not be bothered to configure SUBJECT"
 # this script takes care of the distribution of workload over
 # all the teaching assistants, after downloading the zip
 
-for cmd in 7za mutt
-do
-	if ! command -v $cmd >/dev/null 2>&1
-	then
+for cmd in 7za mutt; do
+	if ! command -v $cmd >/dev/null 2>&1; then
 		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
 		exit 1
 	fi
