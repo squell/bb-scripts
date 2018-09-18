@@ -26,20 +26,25 @@ collect() {
 # is still made a part of the surname sometimes
 splitname() {
 	lastname="${1#*  }"
+	tussen=""
 	if [ "$lastname" = "$1" ]; then
 		# name has a 'tussenvoegsel'
 		firstname="${1%% [[:lower:]]*}"
 		lastname="${name#$firstname }"
+		if [ "$name" = "$lastname" ]; then
+			firstname=""
+			return
+		fi
 		tussen="${lastname%% [[:upper:]]*}"
 		lastname="${lastname#$tussen }"
 	else
 		firstname="${1%  $lastname}"
-		tussen=""
 	fi
 }
 
 for dir in "$@"; do
-	name="${dir#* - }"
+	name="${dir%/}"
+	name="${name#* - }"
 	name="${name% - *}"
 	splitname "$name"
 	{ echo "${tussen:+$tussen }$lastname,$firstname"; collect "$dir"; } | while read id; do
