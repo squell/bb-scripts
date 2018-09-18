@@ -1,15 +1,12 @@
 #! /bin/bash
 
 # repair all the creative stuff students submit
-# - unzip all zips en rars (w/o directory structure)
+# - unzip all compressed files/dirs (w/o directory structure)
 # - convert pdfs to text using pdftotext
-# - convert doc/rtf to text using catdoc
-# - convert docx/odt to text using hacks
+# - convert doc/rtf/docx/odt to text using libreoffice
 # - correct line-endings {CR/LF, CR} -> LF
 # - print a list of people who think Word is an IDE
-
-# NECESSARY: catdoc built&installed, somewhere:
-CATDOC="$HOME/catdoc/bin/catdoc"
+shopt -s nullglob
 
 if [ -z "$*" ]; then
 	echo "Usage: antifmt.sh DIR1 DIR2 ..." >& 2
@@ -79,25 +76,15 @@ for studdir in "$@"; do
 	done
 
 	# complain about word
-	if [ -x "$CATDOC" ]; then
-	for type in doc rtf; do
+	for type in docx odt doc rtf; do
 	    for file in "$studdir"/*.$doc; do
-		let "stat[type]++"
-		$CATDOC "${file}" > "${file}.$doc".txt
+			let "stat[type]++"
+			soffice --headless --cat "$file" > "$file.txt"
 	    done
-	done
-	fi
-	for file in "$studdir"/*.docx; do
-		let "stat[docx]++"
-		unzip -p "$file" word/document.xml | sed 's|<w:br/>|\n&|g;s|</w:p>|\n&|g;s|<[^>]*>||g' > "${file}".txt
-	done
-	for file in "$studdir"/*.odt; do
-		let "stat[odt]++"
-		unzip -p "$file" content.xml | sed 's|<text:tab/>|\t|g;s|<text:p|\n&|g;s|<[^>]*>||g' > "${file}".txt
 	done
 
 	# kill all binaries
-	rm -f "$studdir"/{*.o,*.obj,*.exe,*.prj,*.abc}
+	rm -f "$studdir"/{*.o,*.obj,*.exe,*.prj,*.prp,*.abc}
 	rm -f "$studdir"/{*.class,*.jar}
 	rm -f "$studdir"/{*.zip,*.rar,*.7z,*.tar}
 
