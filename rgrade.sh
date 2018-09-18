@@ -1,6 +1,16 @@
 #!/bin/bash
 
 # Start grading in a randomly chosen, ungraded submission folder
+
+for cmd in base64 gunzip
+do
+	if ! command -v $cmd >/dev/null 2>&1
+	then
+		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
+		exit 1
+	fi
+done
+
 [ $# != 0 ] &&  ACTION="$@" || ACTION="${SHELL:-bash}"
 
 if [ "$(pgrep 'rgrade.sh')" != "$$" ]; then
@@ -46,7 +56,7 @@ if [ -n "$DIR" ]; then
 		echo "Exiting $DIR. Still $count to go..."
 	fi
 else
-	(base64 -d | gzip -d) <<-EOF
+	(base64 -d | gunzip) <<-EOF
 	H4sIANgxkVsCA1WOMQrEMAwEe79icSMXkdRHXzHouoO0ae/xtxYkJAvGywyWBWwIHsBUeu+ixl6s
 	scz5cyrBFaEm8yUxNdTxTJFy7pzxTnBcK5UZ2O0WFojMkh9dmWJcZEXZvJi0xxJiarolb+Lje15i
 	AGM9aq+PheAPNske4ukAAAA=

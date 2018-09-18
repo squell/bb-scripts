@@ -3,6 +3,15 @@
 # this script adds email addresses and student ids to folder names extracted
 # from Brightspace, given a CSV file obtained via 'Enter Grades'
 
+for cmd in curl
+do
+	if ! command -v $cmd >/dev/null 2>&1
+	then
+		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
+		exit 1
+	fi
+done
+
 if [ -z "$1" ]; then
         echo "Usage: addraddr.sh spreadsheet.csv [dir1] [dir2] ... [dirN]" 1>&2
         exit 1
