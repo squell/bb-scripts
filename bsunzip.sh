@@ -59,9 +59,9 @@ strip_cruft() {
 
 }
 
-# brightspace user comments are put in a quite unusable HTLM file
+# brightspace user comments are put in a quite unusable HTML file
 getcomment() {
-	tr -d '\n' < "$DEST"/index.html | sed 's/<tr bgcolor=#AAAAAA>/\n&/g' | grep -F "$1" | grep -F "$2"
+	tr -d '\n' < "$DEST"/index.html | sed 's/<tr bgcolor=#AAAAAA>/\n&/g' | perl -MHTML::Entities -pe 'decode_entities($_);' | grep -F "$1" | grep -F "$2"
 }
 
 for submission in "$DEST"/*/; do
