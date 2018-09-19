@@ -2,7 +2,7 @@
 
 # unzip a brightspace-provided file, and split the index.html it contains over the subdirectories
 
-if ! command -v unzip >/dev/null 2>&1; then
+if ! command -v 7za >/dev/null 2>&1; then
 	echo "Who am I? Why am I here? Am I on lilo? unzip is missing!" >& 2
 	exit 1
 elif ! perl -MHTML::Entities -e 'decode_entities($_);' > /dev/null; then
@@ -44,7 +44,10 @@ unmojibake() {
 
 # however, by running unzip in the POSIX locale, we can circumvent
 # this from even becoming a problem, and so the above macro is not called anymore
-(export LC_CTYPE=POSIX; unzip -q -o -d "$DEST" "$1")
+#(export LC_CTYPE=POSIX; unzip -q -o -d "$DEST" "$1")
+# not all systems have an unzip that does not mangle the filenames even with
+# the correct locale, therefore we fall back to 7z
+7za x -y -bd -o"$DEST" "$1"
 
 ADDED="#comments.txt"
 
