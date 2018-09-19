@@ -2,6 +2,8 @@
 
 # Start grading in a randomly chosen, ungraded submission folder
 
+shopt -s nullglob
+
 for cmd in base64 gunzip; do
 	if ! command -v $cmd >/dev/null 2>&1; then
 		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
@@ -18,10 +20,10 @@ if [ "$(pgrep 'rgrade.sh')" != "$$" ]; then
 fi
 
 todo() {
-	find . -path "*/.todo" -print0 | sed -z 's:/.todo::' | shuf -zn1
+	find . -path "*/.todo" -print0 | sed -z 's:/.todo::'
 }
 
-DIR="$(todo | shuf -n1)"
+DIR="$(todo | shuf -zn1)"
 if [ -z "$DIR" ]; then
 	echo "It seems like you are not currently grading anything; do you want to start now?"
 	select reply in yes no; do
@@ -34,7 +36,7 @@ if [ -z "$DIR" ]; then
 				fi
 				touch "${dir}.todo"
 			done
-			DIR="$(todo | shuf -n1)"
+			DIR="$(todo | shuf -zn1)"
 			break
 		else
 			echo "A wise choice."
@@ -47,7 +49,7 @@ if [ -n "$DIR" ]; then
 	[ $# != 0 ] || echo "Type 'exit' to finish grading; use 'exit 1' to abort grading the current submission."
 	echo "Entering $DIR."
 	(cd "$DIR" && export RGRADE_DIR="`pwd`" && $ACTION) && rm -f "$DIR"/.todo
-	count="$(todo | wc -l)"
+	count="$(todo | grep -c ".*")"
 	if [ "$count" = 0 ]; then
 		echo "Exiting $DIR. You have finally finished!"
 	else
