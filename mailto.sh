@@ -2,12 +2,10 @@
 
 # this sends the message in dir/file.txt to the addresses in dir/#address.txt
 
-for cmd in bsd-mailx iconv; do
-	if ! command -v $cmd >/dev/null 2>&1; then
-		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
-		exit 1
-	fi
-done
+if ! command -v bsd-mailx >/dev/null 2>&1; then
+	echo "Who am I? Why am I here? Am I on lilo? bsd-mailx is missing!" >& 2
+	exit 1
+fi
 
 set -e
 
