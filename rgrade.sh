@@ -19,6 +19,7 @@ if [ "$(pgrep 'rgrade.sh')" != "$$" ]; then
 	exit 1
 fi
 
+# note: this returns a null-separated list of items
 todo() {
 	find . -path "*/.todo" -print0 | sed -z 's:/.todo::'
 }
@@ -49,7 +50,7 @@ if [ -n "$DIR" ]; then
 	[ $# != 0 ] || echo "Type 'exit' to finish grading; use 'exit 1' to abort grading the current submission."
 	echo "Entering $DIR."
 	(cd "$DIR" && export RGRADE_DIR="`pwd`" && $ACTION) && rm -f "$DIR"/.todo
-	count="$(todo | grep -c ".*")"
+	count="$(todo | grep -zc ".*")"
 	if [ "$count" = 0 ]; then
 		echo "Exiting $DIR. You have finally finished!"
 	else
