@@ -2,8 +2,6 @@
 
 # Start grading in a randomly chosen, ungraded submission folder
 
-shopt -s nullglob
-
 for cmd in base64 gunzip; do
 	if ! command -v $cmd >/dev/null 2>&1; then
 		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
