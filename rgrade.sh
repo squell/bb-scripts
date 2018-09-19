@@ -18,7 +18,7 @@ if [ "$(pgrep 'rgrade.sh')" != "$$" ]; then
 fi
 
 todo() {
-	ls -d */.todo 2> /dev/null | sed 's:/.todo::'
+	find . -path "*/.todo" -print0 | sed -z 's:/.todo::' | shuf -zn1
 }
 
 DIR="$(todo | shuf -n1)"
