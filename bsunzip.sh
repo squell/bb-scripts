@@ -47,7 +47,7 @@ unmojibake() {
 #(export LC_CTYPE=POSIX; unzip -q -o -d "$DEST" "$1")
 # not all systems have an unzip that does not mangle the filenames even with
 # the correct locale, therefore we fall back to 7z
-7za x -bd -o"$DEST" "$1"
+7za x -y -bd -o"$DEST" "$1"
 
 ADDED="#comments.txt"
 
