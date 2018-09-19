@@ -26,6 +26,7 @@ until [ -z "$1" ]; do
     shift
 done
 
+shopt -s nullglob
 i=0
 for stud in */; do
     mv "$stud" ."${dir[$((i++%N))]}"
