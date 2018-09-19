@@ -4,6 +4,8 @@
 # if such a directory structure already exists, the existing structure will be
 # respected, and files moved accordingly (this allows non-random assignment of work to ta's)
 
+shopt -s nullglob
+
 if [ -z "$1" ]; then
     echo "usage: hak3.sh <dir1> <dir2> ... <dirN>" >&2
     exit 1
