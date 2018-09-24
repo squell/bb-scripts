@@ -1,8 +1,6 @@
 #! /bin/bash
 
-# partition AL SUBDIRECTORIES in equal parts into the folders given as arguments
-# if such a directory structure already exists, the existing structure will be
-# respected, and files moved accordingly (this allows non-random assignment of work to ta's)
+# partition ALL SUBDIRECTORIES in equal parts into the folders given as arguments
 
 shopt -s nullglob
 
@@ -15,21 +13,15 @@ N=$#
 
 i=$RANDOM
 until [ -z "$1" ]; do
+    # temporarily hide the folders we are sorting into
+    test -d "$1" && mv "$1" ".$1"
     mkdir -p ".$1"
-    # move contents of directories already present
-#   for prestud in "$1"/*/; do
-#       stud="${prestud##*/}"
-#       if [ -d "$prestud" ] && [ -d "$stud" ]; then
-#	   mv -u "$stud"/* "$prestud"
-#	   rm -rd "$stud"
-#       fi
-#   done
     dir[$((i++%N))]="$1"
     shift
 done
 
 i=0
-for stud in */; do
+shuf -ze */ | while read -d $'\0' stud; do
     mv "$stud" ."${dir[$((i++%N))]}"
 done
 
