@@ -1,0 +1,23 @@
+PRAISE AND BLAME
+================
+
+That which cannot bear public examination can be directed in private to:
+
+    m.schoolderman -at- science.ru.nl
+
+The following people have contributed directly to the continued existence of these scripts:
+
+   *Camil Staps*  
+   *Mart Lubbers*  
+   *Thom Wiggers*  
+   *Daan Sprenkels*
+   *Etienne Bruines*  
+   *Lars Jellema*  
+   *Jip Dekker*  
+   *Steven Reitsma*  
+   *Pol Van Aubel*  
+   *Joost Rijneveld*  
+   *Ward Theunisse*
+   *Marc Schoolderman*
+
+Special blame should be directed at Ruben Nijveld and Marlon Baeten for suggesting the weird challenge-response Javascript-system BlackBoard used (back then) could be circumvented by using wget in a bash script. They were probably not being serious.
