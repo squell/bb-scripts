@@ -116,24 +116,40 @@ echo Doing a rough plagiarism check
 echo
 
 test "${!email[*]}"
+declare -A ballot
 
 # since identify.sh identified groups: see if these match the names of TA's
 # and move assignments there...
 for ta in "${!email[@]}"; do
-    mkdir -p "$ta"
+    mkdir -p ".$ta"
     progbar=""
     for file in */"#group:$ta"; do
         echo -n "Distributing assigned workload to $ta: `echo $progbar | wc -c`" $'\r'
         progbar="$progbar#"
         rm -f "$file"
-        mv "${file%#group:$ta}" -t "$ta"
+        mv "${file%#group:$ta}" -t ".$ta"
     done
-    test "$progbar" && echo
+    if [ "$progbar" ]; then
+	    echo
+    else
+	    ballot["$ta"]=".$ta" # TA did not get any, so it will participate in the lottery
+    fi
 done
 
+unveil_ta() {
+    for ta in "${!email[@]}"; do mv ".$ta" "$ta"; done
+}
+
 dirs=(*/)
-echo Randomly distributing unassigned workload  "($((${#dirs[@]} - ${#email[@]})))"
-"$MYDIR"/hak3.sh "${!email[@]}" 
+echo Randomly distributing unassigned workload  "(${#dirs[@]})"
+if [ "${#ballot[@]}" -gt 0 ]; then
+    "$MYDIR"/hak3.sh "${ballot[@]}"
+    unveil_ta
+else
+    #fallback: if all TA's are assigned to groups, then all of them are also in the lottery
+    unveil_ta
+    "$MYDIR"/hak3.sh "${!email[@]}"
+fi
 
 # now we have divided the workload, send it out to the ta's
 humor=$(iching.sh)
