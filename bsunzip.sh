@@ -68,6 +68,11 @@ getcomment() {
 	tr -d '\n' < "$DEST"/index.html | sed 's/<tr bgcolor=#AAAAAA>/\n&/g' | perl -MHTML::Entities -pe 'decode_entities($_);' | grep -F "$1" | grep -F "$2"
 }
 
+# Remove the : characters
+for submission in "$DEST"/*/; do
+	mv "$submission" "$(echo -n "$submission" | tr ':' '_')"
+done
+
 for submission in "$DEST"/*/; do
         [ "$submission" = "$DEST/*/" ] && exit
         date="${submission%/}"
