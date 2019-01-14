@@ -65,17 +65,6 @@ csv_to_tab() {
         sed -nr ':l;$s/([^,"]*("[^"]*")?),/\1\t/gp;N;bl'
 }
 
-if [ "$CSV" ]; then
-        echo "Which grade are we determining?"
-        grade=$(
-                IFS=$'\n'
-                select column in `head -n1 "$CSV" | csv_to_tab | tr '\t' '\n' | grep 'Points Grade' | sed 's: *<[^>]*> *::g' | tr -d \"`; do
-                        echo "$column"
-                        break
-                done
-        )
-fi
-
 if [ -z "$1" ]; then
 	# select the ZIP file (we ask the user)
 	for zip in *.zip; do
@@ -99,6 +88,21 @@ else
 		echo Unbrightspacing "$zip"
 		"$MYDIR"/bsunzip.sh "$zip"
 	done
+fi
+
+if [ "$CSV" ]; then
+	grade_candidates=$(head -n1 "$CSV" | csv_to_tab | tr '\t' '\n' | grep 'Points Grade' | sed 's: *<[^>]*> *::g' | tr -d \")
+	if ! grade=$(echo "$grade_candidates" | grep -F "$assignment"); then
+		# something out-of-the-ordinary is happening; ask for user intervention
+		echo "Which grade are we determining?"
+		grade=$(
+			IFS=$'\n'
+			select column in `echo "$grade_candidates"`; do
+				echo "$column"
+				break
+			done
+		)
+	fi
 fi
 
 if [ -z "$zip" ]; then
