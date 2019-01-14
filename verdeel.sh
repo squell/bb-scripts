@@ -76,19 +76,30 @@ if [ "$CSV" ]; then
         )
 fi
 
-# select the ZIP file (we always ask the user!)
-for zip in *.zip; do
-        echo "Which .zip file contains the assignments?"
-        zip=""
-        select zip in *.zip; do
-                test ! -e "$zip" && continue
-                echo Unbrightspacing "$zip"
-                "$MYDIR"/bsunzip.sh "$zip"
-                break
-        done
-        break
-done
-assignment="${zip%%Download*}"
+if [ -z "$1" ]; then
+	# select the ZIP file (we ask the user)
+	for zip in *.zip; do
+		echo "Which .zip file contains the assignments?"
+		zip=""
+		select zip in *.zip; do
+			test ! -e "$zip" && continue
+			echo Unbrightspacing "$zip"
+			"$MYDIR"/bsunzip.sh "$zip"
+			break
+		done
+		break
+	done
+	assignment="${zip%%Download*}"
+else
+	# we assume that the user has supplied the exact name of the assignment,
+	# and look for zip files matching that. this allows handling multiple zips
+	# (whichis somehow needed for handling over 200 students)
+	assignment="$1"
+	for zip in "$assignment Download "*", "*.zip; do
+		echo Unbrightspacing "$zip"
+		"$MYDIR"/bsunzip.sh "$zip"
+	done
+fi
 
 if [ -z "$zip" ]; then
         echo Please download a .zip before trying to distribute one.
