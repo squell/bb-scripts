@@ -42,6 +42,8 @@ report() {
 # DEVELOPER NOTE:
 # any argument that is not a directory is currently ignored
 for studdir in "$@"; do
+	studdir="${studdir%/}" # 7z has issues with "//" in the pathname
+
 	# unzip & unrar
 	for file in "$studdir"/*.zip "$studdir"/*.rar "$studdir"/*.7z; do
 		#7z e -y -o"${zip%/*}" "$zip" > "${zip}.contents"
