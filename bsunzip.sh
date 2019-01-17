@@ -38,8 +38,8 @@ done
 # names it gets from $somewhere as encoded in MS-DOS codepage 866,
 # which unzip then converts to UTF8. So we need to undo that.
 unmojibake() {
-        cvt="$(echo "$1"| iconv --from=utf8 --to=cp866)"
-        [ "$cvt" = "$1" ] || mv -n "$1" "$cvt"
+	cvt="$(echo "$1"| iconv --from=utf8 --to=cp866)"
+	[ "$cvt" = "$1" ] || mv -n "$1" "$cvt"
 }
 
 # however, by running unzip in the POSIX locale, we can circumvent
@@ -68,18 +68,19 @@ getcomment() {
 	tr -d '\n' < "$DEST"/index.html | sed 's/<tr bgcolor=#AAAAAA>/\n&/g' | perl -MHTML::Entities -pe 'decode_entities($_);' | grep -F "$1" | grep -F "$2"
 }
 
-# Remove the : characters
 for submission in "$DEST"/*/; do
-	mv "$submission" "$(echo -n "$submission" | tr ':' '_')"
-done
-
-for submission in "$DEST"/*/; do
-        [ "$submission" = "$DEST/*/" ] && exit
-        date="${submission%/}"
+	[ "$submission" = "$DEST/*/" ] && exit
+	date="${submission%/}"
 	surname="${date% -*}"
 	surname="${surname##* }"
-        date="${date##*- }"
+	date="${date##*- }"
 	comment="$(getcomment "$date" "$surname")"
+
+	# remove the ':' character from the directory name
+	sanitized_name="$(echo -n "$submission" | tr ':' '_')"
+	mv "$submission" "$sanitized_name"
+	submission="$sanitized_name"
+
 	if echo "$comment" | grep -F -e '<script'  -e '<style'; then
 		echo "$submission: contains suspicious tags!"
 		echo "Report security problems instead of trying to exploit them. Your attempt has been flagged." >  "$submission/WARNING.TXT"
