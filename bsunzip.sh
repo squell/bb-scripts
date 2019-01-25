@@ -78,7 +78,10 @@ for submission in "$DEST"/*/; do
 
 	# remove the ':' character from the directory name
 	sanitized_name="$(echo -n "$submission" | tr ':' '_')"
-	mv "$submission" "$sanitized_name"
+	if [ "$submission" != "$sanitized_name" ]
+	then
+		mv "$submission" "$sanitized_name"
+	fi
 	submission="$sanitized_name"
 
 	if echo "$comment" | grep -F -e '<script'  -e '<style'; then
