@@ -78,8 +78,7 @@ for submission in "$DEST"/*/; do
 
 	# remove the ':' character from the directory name
 	sanitized_name="$(echo -n "$submission" | tr ':' '_')"
-	if [ "$submission" != "$sanitized_name" ]
-	then
+	if [ "$submission" != "$sanitized_name" ]; then
 		mv "$submission" "$sanitized_name"
 	fi
 	submission="$sanitized_name"
