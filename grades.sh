@@ -7,7 +7,7 @@ fi
 
 for file in "$@"; do
 	TOID=`sed 's/,.*//' "$(dirname "$file")/#address.txt"`
-	GRADE=`sed -n '/^Grade:[[:space:]]*/s///p' "$file"`
+	GRADE=`sed -n '/^Grade:[[:space:]]*/{s///p;q;}' "$file"`
 
 	for id in $TOID; do
 		if [ "$GRADE" ]; then
