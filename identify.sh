@@ -20,6 +20,11 @@ collect() {
         find "$1"/* -type f -not -name "*.WARNING" -print0 | xargs --null grep -oihI '\<[usefz]\?[0-9]\{6,7\}\>' | sed 's/\<[0-9]/#s&/' | tr USEFZ usefz
 }
 
+# some students instead put their student ids only in the *filenames* they submit
+collect_ls() {
+        find "$1"/* -type f -not -name "*.WARNING" -print | grep -oihI '[usefz]\?[0-9]\{6,7\}' | sed 's/\<[0-9]/#s&/' | tr USEFZ usefz
+}
+
 # note: column 5 is assumed to be 'OSIRIS CUR groups'
 GROUP_COLUMN=6
 group="${GROUP_COLUMN:+`head -n1 "$CSV" | sed 's/<[^>]*>//g' | cut -d, -f"$GROUP_COLUMN"`}"
@@ -41,7 +46,7 @@ for dir in "$@"; do
 		groupid="$(findstud "$name" | cut -d, -f"$GROUP_COLUMN")"
 		touch "$dir/#group:$(basename "$groupid")"
 	fi
-	{ echo "$name"; collect "$dir"; } | while read id; do
+	{ echo "$name"; collect "$dir"; collect_ls "$dir"; } | while read id; do
 		if info="$(findstud "$id")"; then
 			echo "${info#\#}" | cut -d, -f1,4
 			if [ "$group" ]; then
