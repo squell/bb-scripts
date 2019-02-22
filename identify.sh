@@ -20,49 +20,35 @@ collect() {
         find "$1"/* -type f -not -name "*.WARNING" -print0 | xargs --null grep -oihI '\<[usefz]\?[0-9]\{6,7\}\>' | sed 's/\<[0-9]/#s&/' | tr USEFZ usefz
 }
 
-
-# brightspace appears to pick "firstname[space]tussenvoegsel[space]surname]"
-# sadly, since first names can have spaces as well, and sometimes the tussenvoegsel
-# is still made a part of the surname sometimes
-splitname() {
-	lastname="${1#*  }"
-	tussen=""
-	if [ "$lastname" = "$1" ]; then
-		# name has a 'tussenvoegsel'
-		firstname="${1%% [[:lower:]]*}"
-		lastname="${name#$firstname }"
-		if [ "$name" = "$lastname" ]; then
-			firstname=""
-			return
-		fi
-		tussen="${lastname%% [[:upper:]]*}"
-		lastname="${lastname#$tussen }"
-	else
-		firstname="${1%  $lastname}"
-	fi
-}
-
 # note: column 5 is assumed to be 'OSIRIS CUR groups'
 GROUP_COLUMN=6
 group="${GROUP_COLUMN:+`head -n1 "$CSV" | sed 's/<[^>]*>//g' | cut -d, -f"$GROUP_COLUMN"`}"
+# sanity check: if this CSV field is quoted, it is not a group
 group="${group##\"*}"
+# sanity check: does this column look like an actual group, or like a grade?
+[ "$group" != "${group%Grade}" ] || group=""
+
+# find a student by name in the CSV file
+findstud() {
+	mawk -v student="$1" '$1~student || $3" "$2==student || $3"  "$2==student { print; exit }' FS=, OFS=, "$CSV"
+}
 
 for dir in "$@"; do
 	name="${dir%/}"
 	name="${name#* - }"
 	name="${name% - *}"
-	splitname "$name"
-	dirkey="${tussen:+$tussen }$lastname,$firstname"
 	if [ "$group" ]; then
-		groupid="$(grep -F -m1 "$dirkey" "$CSV" | cut -d, -f"$GROUP_COLUMN")"
+		groupid="$(findstud "$name" | cut -d, -f"$GROUP_COLUMN")"
 		touch "$dir/#group:$(basename "$groupid")"
 	fi
-	{ echo "$dirkey"; collect "$dir"; } | while read id; do
-		if info="`grep -F -m1 "$id" "$CSV"`"; then
+	{ echo "$name"; collect "$dir"; } | while read id; do
+		if info="$(findstud "$id")"; then
 			echo "${info#\#}" | cut -d, -f1,4
-			groupid2="$(echo "$info" | cut -d, -f"$GROUP_COLUMN")"
-			if [ "$groupid" != "$groupid2" ]; then
-				echo 1>&2 "$dir: conflicting groups, $groupid and $groupid2"
+			if [ "$group" ]; then
+				groupid2="$(echo "$info" | cut -d, -f"$GROUP_COLUMN")"
+				if [ "$groupid" != "$groupid2" ]; then
+					echo 1>&2 "$dir: conflicting groups, $groupid and $groupid2"
+				fi
 			fi
 		else
 			echo 1>&2 "could not find entry for student: $id"
