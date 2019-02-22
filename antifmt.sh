@@ -13,6 +13,10 @@ if [ -z "$*" ]; then
 	exit 1
 fi
 
+# this line is here for backwards compatibility; if you want to keep the
+# directory structure that students may submit in zip files, set it to empty or delete this
+#FLATTEN_ANTIFMT=yes
+
 for cmd in unzip unrar 7zr bunzip2 unxz pdftotext soffice; do
 	if ! command -v $cmd >/dev/null 2>&1; then
 		echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
@@ -23,9 +27,15 @@ done
 shopt -s nullglob
 
 typeset -A unpack
-de.zip() { unzip -a -n -j -d "${1%/*}" "$1"; }
-de.rar() { unrar e -o- "$1" "${1%/*}"; }
-de.7z()  { 7zr e -y -o"${1%/*}" "$1"; }
+if [ "$FLATTEN_ANTIFMT" ]; then
+	de.zip() { unzip -a -n -j -d "${1%/*}" "$1"; }
+	de.rar() { unrar e -o- "$1" "${1%/*}"; }
+	de.7z()  { 7zr e -y -o"${1%/*}" "$1"; }
+else
+	de.zip() { unzip -a -n -d "${1%/*}" "$1"; }
+	de.rar() { unrar x -o- "$1" "${1%/*}"; }
+	de.7z()  { 7zr x -y -o"${1%/*}" "$1"; }
+fi
 unpack[application/zip]=de.zip
 unpack[application/x-7z-compressed]=de.7z
 unpack[application/x-rar]=de.rar
@@ -64,7 +74,7 @@ for studdir in "$@"; do
 	for file in "$studdir"/*.xz; do unxz -qf "$file"; done
 	for file in "$studdir"/*.tar; do
 		let "stat[tar]++"
-		tar --force-local -xv -C "${file%/*}" -f "${file}" --xform 's!.*/!!' > "${file}.contents"
+		tar --force-local -xv -C "${file%/*}" -f "${file}" ${FLATTEN_ANTIFMT:+--xform 's!.*/!!'} > "${file}.contents"
 	done
 
 	# correct msdos/mac line endings
