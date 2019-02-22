@@ -39,9 +39,13 @@ fi
 
 declare -A sig
 
+# enable recursive globbing **/*.java
+shopt -s globstar
+
+
 echo Dupechecking
 for arg in "$@"; do
-    for file in "$arg"/*.java; do
+    for file in "$arg"/**/*.java; do
 	test -e "$file" || break
 	test -e "${file}.SUSPECT" && continue
 	code=`filter "$file"`
