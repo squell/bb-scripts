@@ -45,7 +45,9 @@ for file in "$@"; do
 		echo Could not find any email address to send "$file" to >&2
 		touch "${file}.could_not_sent"
 	else
-		cat "$file" | tr -d '\r' | bsd-mailx -a "$MIME" -n -s "$SUBJECT" ${FROM:+-a "From: $FROM"} ${BCC:+-a "Bcc: $BCC"} ${BCC:+-b "$BCC"} $TO && echo "$TO" > "${file}.sent"
+		wrap="TEXT"
+		cat "$file" | tr -d '\r' | sed "s/^[^>]/${wrap}&/" | fmt -u -c -w80 -p"$wrap" | sed "s/^${wrap}//" |
+		  bsd-mailx -a "$MIME" -n -s "$SUBJECT" ${FROM:+-a "From: $FROM"} ${BCC:+-a "Bcc: $BCC"} ${BCC:+-b "$BCC"} $TO && echo "$TO" > "${file}.sent"
 	fi
 done
 
