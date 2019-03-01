@@ -44,7 +44,7 @@ typeset -A stat
 
 report() {
 	for key in "${!stat[@]}"; do
-	    echo -n "$key(${stat[$key]}) "
+		echo -n "$key(${stat[$key]}) "
 	done
 	echo -n $'\r'
 }
@@ -54,27 +54,31 @@ report() {
 for studdir in "$@"; do
 	studdir="${studdir%/}" # 7z has issues with "//" in the pathname
 
-	# unzip & unrar
-	for file in "$studdir"/*.zip "$studdir"/*.rar "$studdir"/*.7z; do
-		#7z e -y -o"${zip%/*}" "$zip" > "${zip}.contents"
-		decrunch="${unpack["`file --brief --mime-type "$file"`"]}"
-		if [ "${file##*.}" != "${decrunch##*.}" ]; then
-			echo "$file" is not a "${file##*.}" file"${decrunch:+, detected ${decrunch##*.}}"
-		fi
-		if [ "$decrunch" ]; then
-		    let "stat[${decrunch##*.}]++"
-		    $decrunch "${file}" > "${file}".contents
-		else
-		    let "stat[junk]++"
-		    mv "$file" "${file}.junk"
-		fi
-	done
-	for file in "$studdir"/*.gz "$studdir"/*.tgz; do gunzip -qf "$file"; done
-	for file in "$studdir"/*.bz2; do bunzip2 -qf "$file"; done
-	for file in "$studdir"/*.xz; do unxz -qf "$file"; done
-	for file in "$studdir"/*.tar; do
-		let "stat[tar]++"
-		tar --force-local -xv -C "${file%/*}" -f "${file}" ${FLATTEN_ANTIFMT:+--xform 's!.*/!!'} > "${file}.contents"
+	# uncompress archives; do this twice to get nested zip files as well
+	for pass in 0 1; do
+			for file in "$studdir"/*.zip "$studdir"/*.rar "$studdir"/*.7z; do
+				#7z e -y -o"${zip%/*}" "$zip" > "${zip}.contents"
+				decrunch="${unpack["`file --brief --mime-type "$file"`"]}"
+				if [ "${file##*.}" != "${decrunch##*.}" ]; then
+					echo "$file" is not a "${file##*.}" file"${decrunch:+, detected ${decrunch##*.}}"
+				fi
+				if [ "$decrunch" ]; then
+					let "stat[${decrunch##*.}]++"
+					$decrunch "${file}" > "${file}".contents
+					rm -f "${file}"
+				else
+					let "stat[junk]++"
+					mv "$file" "${file}.junk"
+				fi
+			done
+			for file in "$studdir"/*.gz "$studdir"/*.tgz; do gunzip -qf "$file"; done
+			for file in "$studdir"/*.bz2; do bunzip2 -qf "$file"; done
+			for file in "$studdir"/*.xz; do unxz -qf "$file"; done
+			for file in "$studdir"/*.tar; do
+				let "stat[tar]++"
+				tar --force-local -xv -C "${file%/*}" -f "${file}" ${FLATTEN_ANTIFMT:+--xform 's!.*/!!'} > "${file}.contents"
+				rm -f "${file}"
+			done
 	done
 
 	# correct msdos/mac line endings
@@ -89,16 +93,15 @@ for studdir in "$@"; do
 
 	# complain about word
 	for type in docx odt doc rtf; do
-	    for file in "$studdir"/*.$doc; do
+		for file in "$studdir"/*.$doc; do
 			let "stat[type]++"
 			soffice --headless --cat "$file" > "$file.txt"
-	    done
+		done
 	done
 
 	# kill all binaries
 	rm -f "$studdir"/{*.o,*.obj,*.exe,*.prj,*.prp,*.abc}
 	rm -f "$studdir"/{*.class,*.jar}
-	rm -f "$studdir"/{*.zip,*.rar,*.7z,*.tar}
 
 	report
 done
