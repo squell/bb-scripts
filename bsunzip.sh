@@ -87,7 +87,7 @@ for submission in "$DEST"/*/; do
 		echo "$submission: contains suspicious tags!"
 		echo "Report security problems instead of trying to exploit them. Your attempt has been flagged." >  "$submission/WARNING.TXT"
 	fi
-	echo -n "$comment" | strip_cruft > "${submission}${ADDED}"
+	echo -n "$comment" | strip_cruft >> "${submission}${ADDED}"
 	if [ -s "${submission}${ADDED}" ]; then
 		touch -r "$DEST"/index.html "${submission}${ADDED}"
 	else
