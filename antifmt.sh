@@ -6,7 +6,6 @@
 # - convert doc/rtf/docx/odt to text using libreoffice
 # - correct line-endings {CR/LF, CR} -> LF
 # - print a list of people who think Word is an IDE
-shopt -s nullglob
 
 if [ -z "$*" ]; then
 	echo "Usage: antifmt.sh DIR1 DIR2 ..." >& 2
@@ -24,7 +23,7 @@ for cmd in unzip unrar 7zr bunzip2 unxz pdftotext soffice; do
 	fi
 done
 
-shopt -s nullglob
+shopt -s nullglob globstar
 
 typeset -A unpack
 if [ "$FLATTEN_ANTIFMT" ]; then
@@ -100,8 +99,8 @@ for studdir in "$@"; do
 	done
 
 	# kill all binaries
-	rm -f "$studdir"/{*.o,*.obj,*.exe,*.prj,*.prp,*.abc}
-	rm -f "$studdir"/{*.class,*.jar}
+	rm -f "$studdir"/**/{*.o,*.obj,*.exe,*.prj,*.prp,*.abc}
+	rm -f "$studdir"/**/{*.class,*.jar}
 
 	report
 done
