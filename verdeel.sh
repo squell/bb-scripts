@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# TODO: 
+# TODO:
 # - distribution of csv files to TA's is not currently handled
 #   what is blocking: figure out the best way to enter grades
 # - groepcheck is disabled
@@ -10,12 +10,18 @@
 #   what is blocking: figure out how to use group info provided by BrightSpace
 # ---------------------- configuratie ------------------------#
 
+# if using a specific distributio, make sure the sum of all fractions is 1
 typeset -A email
-email[marc]="mschool@science.ru.nl"
-#email[ko]="kstoffelen@science.ru.nl"
-#email[pol]="paubel@science.ru.nl"
+typeset -A distribution
+email[ta]="a@d.g"
+# distribution[ta]=0.25
+email[tb]="b@e.h"
+# distribution[tb]=0.50
+email[tc]="c@f.i"
+# distribution[tc]=0.25
 
-SUBJECT="`whoami` could not be bothered to configure SUBJECT"
+
+SUBJECT="Testing"
 
 # ---------------------- end of config -----------------------#
 
@@ -67,17 +73,14 @@ csv_to_tab() {
 
 if [ -z "$1" ]; then
 	# select the ZIP file (we ask the user)
-	for zip in *.zip; do
-		echo "Which .zip file contains the assignments?"
-		zip=""
-		select zip in *.zip; do
-			test ! -e "$zip" && continue
-			echo Unbrightspacing "$zip"
-			"$MYDIR"/bsunzip.sh "$zip"
-			break
-		done
-		break
-	done
+        echo "Which .zip file contains the assignments?"
+        zip=""
+        select zip in *.zip; do
+                test ! -e "$zip" && continue
+                echo Unbrightspacing "$zip"
+                "$MYDIR"/bsunzip.sh "$zip"
+                break
+        done
 	assignment="${zip%%Download*}"
 else
 	# we assume that the user has supplied the exact name of the assignment,
@@ -120,7 +123,7 @@ if [ "$CSV" ]; then
         "$MYDIR"/identify.sh "$CSV" */
 fi
 
-echo 
+echo
 echo Trial compilation
 "$MYDIR"/trialc.sh */
 
@@ -155,15 +158,34 @@ unveil_ta() {
     for ta in "${!email[@]}"; do mv ".$ta" "$ta"; done
 }
 
+join_arr(){
+    local -n a1=$1
+    local -n a2=$2
+    typeset -a res
+    for i in "${!a1[@]}"; do
+        res+=( ${a1[$i]} ${a2[$i]} )
+    done
+    echo ${res[@]}
+}
+
+
+
+if [ "${#distribution[@]}" -eq 0 ]; then
+    for e in "${!email[@]}"; do
+        distribution[$e]=$(echo "1/${#email[@]}" | bc -l)
+    done
+fi
+
 dirs=(*/)
 echo Randomly distributing unassigned workload  "(${#dirs[@]})"
 if [ "${#ballot[@]}" -gt 0 ]; then
-    "$MYDIR"/hak3.sh "${ballot[@]}"
+    # echo ${ballot[@]}
+    "$MYDIR"/hak3.sh $(join_arr ballot distribution)
     unveil_ta
 else
     #fallback: if all TA's are assigned to groups, then all of them are also in the lottery
     unveil_ta
-    "$MYDIR"/hak3.sh "${!email[@]}"
+    "$MYDIR"/hak3.sh $(join_arr email distribution)
 fi
 
 # now we have divided the workload, send it out to the ta's
@@ -186,8 +208,8 @@ do
         echo Mailing "$ta"
         pkt="$ta-${zip%.zip}.7z"
         7za a -ms=on -mx=9 "$pkt" "$ta" > /dev/null
-        #echo "$humor" | mailx -n -s "${SUBJECT} ${zip%.zip}" -a "$pkt" "${email[$ta]}" 
-        echo "$humor" | mutt -s "${SUBJECT}: ${zip%.zip}" -a "$pkt" -- "${email[$ta]}" 
+        #echo "$humor" | mailx -n -s "${SUBJECT} ${zip%.zip}" -a "$pkt" "${email[$ta]}"
+        echo "$humor" | mutt -s "${SUBJECT}: ${zip%.zip}" -a "$pkt" -- "${email[$ta]}"
         rm -f "$pkt"
     fi
 done
