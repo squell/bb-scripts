@@ -3,6 +3,11 @@
 MYDIR="${0%/*}"
 DIFF="diff --ignore-all-space --minimal --side-by-side --width=160 --left-column"
 
+# All whitelisted files should be in this directory, one level up of the current working directory.
+# It should not be in the CWD to not be confused with a student submission.
+# It is okay if this directory does not exist, the whitelist feature is then not used.
+WHITELISTDIR="../plagiarism-whitelist"
+
 author() {
     echo "${1%%/*}"
 }
@@ -37,11 +42,20 @@ if [ ! -d "$1" ]; then
         exit
 fi
 
+# the fingerprints of all student submissions
 declare -A fingerprints
+
+# the fingerprints of the whitelisted files
+declare -A whitelist
 
 # enable recursive globbing **/*.java
 shopt -s globstar
 
+for file in "$WHITELISTDIR"/**/*.java; do
+    # if there are no whitelisted files we get the glob expression, because shell programming
+    test -e "$file" || break
+    whitelist[`fingerprint "$file"`]="$file"
+done
 
 echo Dupechecking
 for arg in "$@"; do
@@ -49,7 +63,8 @@ for arg in "$@"; do
         test -e "$file" || break
         test -e "${file}.SUSPECT" && continue
         code=`fingerprint "$file"`
-        if [ "${#code}" -ge 42 ]; then
+        # only if length of fingerprint exceeds a certain size, and the file is not whitelisted
+        if [ "${#code}" -ge 42 ] && [ -z "${whitelist[$code]}" ]; then
             found="${fingerprints[$code]}"
             if [ -z "$found" ]; then
                 fingerprints[$code]="$file"
