@@ -28,13 +28,13 @@ filter() {
 }
 
 if [ -z "$*" ]; then
-	echo usage: dupes.sh dir >& 2
-	exit
+        echo usage: dupes.sh dir >& 2
+        exit
 fi
 
 if [ ! -d "$1" ]; then
-	filter "$1"
-	exit
+        filter "$1"
+        exit
 fi
 
 declare -A sig
@@ -46,28 +46,28 @@ shopt -s globstar
 echo Dupechecking
 for arg in "$@"; do
     for file in "$arg"/**/*.java; do
-	test -e "$file" || break
-	test -e "${file}.SUSPECT" && continue
-	code=`filter "$file"`
-	if [ "${#code}" -ge 42 ]; then
-	    found="${sig[$code]}"
-	    if [ -z "$found" ]; then
-		sig[$code]="$file"
-	    elif [ "${found%%/*}" = "${file%%/*}" ]; then
-		# not a duplicate, because it is from the same hand-in
-		true
-	    else
-		echo 1>&2 "$file ?= $found"
-		echo "[$found | `author "$found"`] <==> [$file | `author "$file"`]" > "${file}.WARNING"
-		$DIFF "$found" "$file" | cvt >> "${file}.WARNING"
-		echo "" >> "${file}.WARNING"
+        test -e "$file" || break
+        test -e "${file}.SUSPECT" && continue
+        code=`filter "$file"`
+        if [ "${#code}" -ge 42 ]; then
+            found="${sig[$code]}"
+            if [ -z "$found" ]; then
+                sig[$code]="$file"
+            elif [ "${found%%/*}" = "${file%%/*}" ]; then
+                # not a duplicate, because it is from the same hand-in
+                true
+            else
+                echo 1>&2 "$file ?= $found"
+                echo "[$found | `author "$found"`] <==> [$file | `author "$file"`]" > "${file}.WARNING"
+                $DIFF "$found" "$file" | cvt >> "${file}.WARNING"
+                echo "" >> "${file}.WARNING"
 
-		test -e "${found}.WARNING" && echo "===========================================" >> "${found}.WARNING"
-		echo "[$file | `author "$file"`] <==> [$found | `author "$found"`]" >> "${found}.WARNING"
-		$DIFF "$file" "$found" | cvt >> "${found}.WARNING"
-		echo "" >> "${found}.WARNING"
-	    fi
-	fi
+                test -e "${found}.WARNING" && echo "===========================================" >> "${found}.WARNING"
+                echo "[$file | `author "$file"`] <==> [$found | `author "$found"`]" >> "${found}.WARNING"
+                $DIFF "$file" "$found" | cvt >> "${found}.WARNING"
+                echo "" >> "${found}.WARNING"
+            fi
+        fi
     done
 done
 
