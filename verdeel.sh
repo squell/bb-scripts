@@ -10,12 +10,14 @@
 #   what is blocking: figure out how to use group info provided by BrightSpace
 # ---------------------- configuratie ------------------------#
 
-typeset -A email
-email[marc]="mschool@science.ru.nl"
-#email[ko]="kstoffelen@science.ru.nl"
-#email[pol]="paubel@science.ru.nl"
+if [! -f config.sh]; then
+    echo "Expecting configuration in config.sh. Refer to the template file config_template.sh"
+    exit 1
+fi
+# This will input/source the contents of the config.sh file, which
+# will not be tracked by git.
 
-SUBJECT="`whoami` could not be bothered to configure SUBJECT"
+. config.sh
 
 # ---------------------- end of config -----------------------#
 
