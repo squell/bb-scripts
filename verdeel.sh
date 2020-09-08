@@ -169,7 +169,6 @@ else
 fi
 
 # now we have divided the workload, send it out to the ta's
-humor=$(iching.sh)
 for ta in "${!email[@]}"
 do
     cp -n "$MYDIR"/{pol.sh,rgrade.sh,collectplag.sh} "$ta"
@@ -188,8 +187,8 @@ do
         echo Mailing "$ta"
         pkt="$ta-${zip%.zip}.7z"
         7za a -ms=on -mx=9 "$pkt" "$ta" > /dev/null
-        #echo "$humor" | mailx -n -s "${SUBJECT} ${zip%.zip}" -a "$pkt" "${email[$ta]}" 
-        echo "$humor" | mutt -s "${SUBJECT}: ${zip%.zip}" -a "$pkt" -- "${email[$ta]}" 
+        #echo "" | mailx -n -s "${SUBJECT} ${zip%.zip}" -a "$pkt" "${email[$ta]}" 
+        echo "" | mutt -s "${SUBJECT}: ${zip%.zip}" -a "$pkt" -- "${email[$ta]}" 
         rm -f "$pkt"
     fi
 done
