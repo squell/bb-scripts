@@ -10,12 +10,14 @@
 #   what is blocking: figure out how to use group info provided by BrightSpace
 # ---------------------- configuratie ------------------------#
 
-typeset -A email
-email[marc]="mschool@science.ru.nl"
-#email[ko]="kstoffelen@science.ru.nl"
-#email[pol]="paubel@science.ru.nl"
+if [! -f config.sh]; then
+    echo "Expecting configuration in config.sh. Refer to the template file config_template.sh"
+    exit 1
+fi
+# This will input/source the contents of the config.sh file, which
+# will not be tracked by git.
 
-SUBJECT="`whoami` could not be bothered to configure SUBJECT"
+. config.sh
 
 # ---------------------- end of config -----------------------#
 
@@ -167,7 +169,6 @@ else
 fi
 
 # now we have divided the workload, send it out to the ta's
-humor=$(iching.sh)
 for ta in "${!email[@]}"
 do
     cp -n "$MYDIR"/{pol.sh,rgrade.sh,collectplag.sh} "$ta"
@@ -186,8 +187,8 @@ do
         echo Mailing "$ta"
         pkt="$ta-${zip%.zip}.7z"
         7za a -ms=on -mx=9 "$pkt" "$ta" > /dev/null
-        #echo "$humor" | mailx -n -s "${SUBJECT} ${zip%.zip}" -a "$pkt" "${email[$ta]}" 
-        echo "$humor" | mutt -s "${SUBJECT}: ${zip%.zip}" -a "$pkt" -- "${email[$ta]}" 
+        #echo "" | mailx -n -s "${SUBJECT} ${zip%.zip}" -a "$pkt" "${email[$ta]}" 
+        echo "" | mutt -s "${SUBJECT}: ${zip%.zip}" -a "$pkt" -- "${email[$ta]}" 
         rm -f "$pkt"
     fi
 done
