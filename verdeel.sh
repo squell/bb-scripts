@@ -128,7 +128,7 @@ echo Trial compilation
 
 echo
 echo Doing a rough plagiarism check
-"$MYDIR"/dupes.sh */
+"$MYDIR"/dupes.sh */ || exit 1
 
 echo
 
