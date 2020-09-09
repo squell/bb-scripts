@@ -51,6 +51,9 @@ declare -A whitelist
 # enable recursive globbing **/*.java
 shopt -s globstar
 
+# for now, exit if plagiarism whitelist directory does not exist
+test -e "$WHITELISTDIR" || { echo "plagiarism whitelist does not exist"; exit 1; }
+
 for file in "$WHITELISTDIR"/**/*.java; do
     # if there are no whitelisted files we get the glob expression, because shell programming
     test -e "$file" || break
