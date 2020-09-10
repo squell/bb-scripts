@@ -24,13 +24,6 @@ fi
 # this script takes care of the distribution of workload over
 # all the teaching assistants, after downloading the zip
 
-for cmd in 7za mutt; do
-        if ! command -v $cmd >/dev/null 2>&1; then
-                echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
-                exit 1
-        fi
-done
-
 shopt -s nullglob
 set -e
 
@@ -122,9 +115,11 @@ if [ "$CSV" ]; then
         "$MYDIR"/identify.sh "$CSV" */
 fi
 
-echo 
-echo Trial compilation
-"$MYDIR"/trialc.sh */
+echo
+if $TRIAL_C_COMPILATION; then
+    echo Trial compilation
+    "$MYDIR"/trialc.sh */
+fi
 
 echo
 echo Doing a rough plagiarism check
@@ -168,13 +163,14 @@ else
     "$MYDIR"/hak3.sh "${!email[@]}"
 fi
 
-# now we have divided the workload, send it out to the ta's
+# deposit scripts that ta's will need in directory
 for ta in "${!email[@]}"
 do
     cp -n "$MYDIR"/{pol.sh,rgrade.sh,collectplag.sh} "$ta"
     if [ "$CSV" ]; then
         echo "OrgDefinedId,$grade,End-of-Line Indicator" > "$ta/grades.csv"
         cp -n "$MYDIR"/{grades.sh,feedback.sh} "$ta"
+	# customize mailto.sh for ta
         sed -f - "$MYDIR"/mailto.sh > "${ta}/mailto.sh" <<-...
             /^FROM=/c\
             FROM="${email[$ta]}"
@@ -183,12 +179,10 @@ do
 	...
         chmod +x "${ta}"/mailto.sh
     fi
-    if [ "${email[$ta]}" ]; then
-        echo Mailing "$ta"
-        pkt="$ta-${zip%.zip}.7z"
-        7za a -ms=on -mx=9 "$pkt" "$ta" > /dev/null
-        #echo "" | mailx -n -s "${SUBJECT} ${zip%.zip}" -a "$pkt" "${email[$ta]}" 
-        echo "" | mutt -s "${SUBJECT}: ${zip%.zip}" -a "$pkt" -- "${email[$ta]}" 
-        rm -f "$pkt"
-    fi
 done
+
+
+# now we have divided the workload, send it out to the ta's
+if $DISTRIBUTE_DIRECTY; then
+    "$MYDIR"/mail_TAs.sh
+fi
