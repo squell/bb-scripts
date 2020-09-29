@@ -10,14 +10,16 @@
 #   what is blocking: figure out how to use group info provided by BrightSpace
 # ---------------------- configuratie ------------------------#
 
-if [! -f config.sh]; then
+MYDIR="${0%/*}"
+if [ ! -f $MYDIR/config.sh ]; then
     echo "Expecting configuration in config.sh. Refer to the template file config_template.sh"
     exit 1
 fi
+
 # This will input/source the contents of the config.sh file, which
 # will not be tracked by git.
 
-. config.sh
+. $MYDIR/config.sh
 
 # ---------------------- end of config -----------------------#
 
@@ -27,7 +29,6 @@ fi
 shopt -s nullglob
 set -e
 
-MYDIR="${0%/*}"
 PATH="${PATH}:${MYDIR}"
 
 # first check whether the working dir is clean
