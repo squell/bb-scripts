@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 # repair all the creative stuff students submit
 # - unzip all compressed files/dirs (w/o directory structure)

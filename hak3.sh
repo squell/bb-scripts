@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 # partition ALL SUBDIRECTORIES in equal parts into the folders given as arguments
 

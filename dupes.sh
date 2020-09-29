@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 MYDIR="${0%/*}"
 DIFF="diff --ignore-all-space --minimal --side-by-side --width=160 --left-column"
