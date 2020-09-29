@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 if [! -f config.sh]; then
     echo "Expecting configuration in config.sh. Refer to the template file config_template.sh"

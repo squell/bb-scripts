@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 # TODO: 
 # - distribution of csv files to TA's is not currently handled
