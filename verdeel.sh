@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 # TODO: 
 # - distribution of csv files to TA's is not currently handled
@@ -10,37 +10,39 @@
 #   what is blocking: figure out how to use group info provided by BrightSpace
 # ---------------------- configuratie ------------------------#
 
-if [! -f config.sh]; then
+MYDIR="${0%/*}"
+if [ ! -f $MYDIR/config.sh ]; then
     echo "Expecting configuration in config.sh. Refer to the template file config_template.sh"
     exit 1
 fi
+
 # This will input/source the contents of the config.sh file, which
 # will not be tracked by git.
 
-. config.sh
+. $MYDIR/config.sh
 
 # ---------------------- end of config -----------------------#
 
 # this script takes care of the distribution of workload over
 # all the teaching assistants, after downloading the zip
 
-for cmd in 7za mutt; do
-        if ! command -v $cmd >/dev/null 2>&1; then
-                echo "Who am I? Why am I here? Am I on lilo? $cmd is missing!" >& 2
-                exit 1
-        fi
-done
-
 shopt -s nullglob
 set -e
 
-MYDIR="${0%/*}"
 PATH="${PATH}:${MYDIR}"
+
+if [ "$1" == "-c" ]; then
+    for ta in "${!email[@]}"; do
+	echo "Removing $ta"
+	rm -r $ta || continue
+    done
+    exit
+fi
 
 # first check whether the working dir is clean
 for ta in "${!email[@]}"; do
         if [ -d "$ta" ]; then
-                echo $ta exists. Clean up first.
+                echo $ta exists. Clean up first (Can be done by calling this script with -c as arg).
                 exit
         fi
 done
@@ -122,9 +124,11 @@ if [ "$CSV" ]; then
         "$MYDIR"/identify.sh "$CSV" */
 fi
 
-echo 
-echo Trial compilation
-"$MYDIR"/trialc.sh */
+echo
+if $TRIAL_C_COMPILATION; then
+    echo Trial compilation
+    "$MYDIR"/trialc.sh */
+fi
 
 echo
 echo Doing a rough plagiarism check
@@ -168,13 +172,14 @@ else
     "$MYDIR"/hak3.sh "${!email[@]}"
 fi
 
-# now we have divided the workload, send it out to the ta's
+# deposit scripts that ta's will need in directory
 for ta in "${!email[@]}"
 do
     cp -n "$MYDIR"/{pol.sh,rgrade.sh,collectplag.sh} "$ta"
     if [ "$CSV" ]; then
         echo "OrgDefinedId,$grade,End-of-Line Indicator" > "$ta/grades.csv"
         cp -n "$MYDIR"/{grades.sh,feedback.sh} "$ta"
+	# customize mailto.sh for ta
         sed -f - "$MYDIR"/mailto.sh > "${ta}/mailto.sh" <<-...
             /^FROM=/c\
             FROM="${email[$ta]}"
@@ -183,12 +188,10 @@ do
 	...
         chmod +x "${ta}"/mailto.sh
     fi
-    if [ "${email[$ta]}" ]; then
-        echo Mailing "$ta"
-        pkt="$ta-${zip%.zip}.7z"
-        7za a -ms=on -mx=9 "$pkt" "$ta" > /dev/null
-        #echo "" | mailx -n -s "${SUBJECT} ${zip%.zip}" -a "$pkt" "${email[$ta]}" 
-        echo "" | mutt -s "${SUBJECT}: ${zip%.zip}" -a "$pkt" -- "${email[$ta]}" 
-        rm -f "$pkt"
-    fi
 done
+
+
+# now we have divided the workload, send it out to the ta's
+if $DISTRIBUTE_DIRECTY; then
+    "$MYDIR"/mail_TAs.sh
+fi

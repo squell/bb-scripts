@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Start grading in a randomly chosen, ungraded submission folder
 
